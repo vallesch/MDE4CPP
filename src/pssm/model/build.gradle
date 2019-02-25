@@ -1,0 +1,14 @@
+plugins {
+	id "tui.sse.mde4cpp.mde4cpp-generate-plugin" version "0.4"
+}
+
+description 'Generate task for project: PSSM'
+
+task generatePSSM(type: tui.sse.mde4cpp.MDE4CPPGenerate) {
+	group 'PSSM'
+	description 'generate C++ code of PSSM.ecore model'
+	
+	modelFilePath = file('.' + File.separator + 'PSSM.ecore')
+
+	relatedModels = ['ecore', 'fUML', 'types', 'uml']
+}

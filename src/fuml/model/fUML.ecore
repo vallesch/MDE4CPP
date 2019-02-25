@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fUML" nsURI="http://www.eclipse.org/emf/2002/fUML" nsPrefix="fUML">
   <eClassifiers xsi:type="ecore:EClass" name="Locus">
     <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
-      <details key="includes" value="#include &lt;algorithm>&#xD;&#xA;#include &quot;uml/Classifier.hpp&quot;&#xD;&#xA;#include &quot;uml/Behavior.hpp&quot;&#xD;&#xA;#include &quot;uml/Class.hpp&quot;&#xD;&#xA;#include &quot;fUML/FUMLFactory.hpp&quot;&#xD;&#xA;#include &quot;fUML/ExecutionFactory.hpp&quot;&#xD;&#xA;#include &quot;fUML/ExtensionalValue.hpp&quot;&#xD;&#xA;#include &quot;fUML/Executor.hpp&quot;&#xD;&#xA;#include &quot;fUML/Object.hpp&quot;&#xD;&#xA;#include &quot;fUML/Execution.hpp&quot;&#xD;&#xA;"/>
+      <details key="includes" value="#include &lt;algorithm>&#xA;#include &quot;uml/Classifier.hpp&quot;&#xA;#include &quot;uml/Behavior.hpp&quot;&#xA;#include &quot;uml/Class.hpp&quot;&#xA;#include &quot;fUML/FUMLFactory.hpp&quot;&#xA;#include &quot;fUML/ExecutionFactory.hpp&quot;&#xA;#include &quot;fUML/ExtensionalValue.hpp&quot;&#xA;#include &quot;fUML/Executor.hpp&quot;&#xA;#include &quot;fUML/Object.hpp&quot;&#xA;#include &quot;fUML/Execution.hpp&quot;&#xA;"/>
     </eAnnotations>
     <eOperations name="conforms" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
@@ -44,7 +44,7 @@
     </eOperations>
     <eOperations name="instantiate" ordered="false" lowerBound="1" eType="#//Object">
       <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
-        <details key="body" value="std::shared_ptr&lt;fUML::Object> object = nullptr;&#xD;&#xA;&#x9;std::shared_ptr&lt;uml::Behavior> behavior = std::dynamic_pointer_cast&lt;uml::Behavior>(type);&#xD;&#xA;    if(behavior != nullptr)&#xD;&#xA;    {&#xD;&#xA;    &#x9;std::shared_ptr&lt;fUML::Object>  context = nullptr;&#xD;&#xA;        object = std::dynamic_pointer_cast&lt;Object>(this->getFactory()->createExecution(behavior, nullptr));&#xD;&#xA;    }&#xD;&#xA;    else&#xD;&#xA;    {&#xD;&#xA;        object = FUMLFactory::eInstance()->createObject();&#xD;&#xA;        object->getTypes()->push_back(type);&#xD;&#xA;        object->createFeatureValues();&#xD;&#xA;        this->add(object);&#xD;&#xA;    }&#xD;&#xA;    &#xD;&#xA;    return object;"/>
+        <details key="body" value="std::shared_ptr&lt;fUML::Object> object = nullptr;&#xA;&#x9;std::shared_ptr&lt;uml::Behavior> behavior = std::dynamic_pointer_cast&lt;uml::Behavior>(type);&#xA;    if(behavior != nullptr)&#xA;    {&#xA;    &#x9;std::shared_ptr&lt;fUML::Object>  context = nullptr;&#xA;        object = std::dynamic_pointer_cast&lt;Object>(this->getFactory()->createExecution(behavior, nullptr));&#xA;    }&#xA;    else&#xA;    {&#xA;        object = FUMLFactory::eInstance()->createObject();&#xA;        object->getTypes()->push_back(type);&#xA;        object->createFeatureValues();&#xA;        this->add(object);&#xA;    }&#xA;    &#xA;    return object;"/>
       </eAnnotations>
       <eParameters name="type" ordered="false" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Class"/>
     </eOperations>

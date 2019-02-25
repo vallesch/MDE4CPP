@@ -1227,9 +1227,12 @@
         </eOperations>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="SM_Locus">
+        <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+          <details key="includes" value="#include &lt;algorithm>&#xA;#include &quot;uml/Classifier.hpp&quot;&#xA;#include &quot;uml/Behavior.hpp&quot;&#xA;#include &quot;uml/Class.hpp&quot;&#xA;#include &quot;fUML/FUMLFactory.hpp&quot;&#xA;#include &quot;fUML/ExecutionFactory.hpp&quot;&#xA;#include &quot;fUML/ExtensionalValue.hpp&quot;&#xA;#include &quot;fUML/Executor.hpp&quot;&#xA;#include &quot;fUML/Object.hpp&quot;&#xA;#include &quot;fUML/Execution.hpp&quot;&#xA;"/>
+        </eAnnotations>
         <eOperations name="instantiate" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//Object">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="body" value="// Behaves like in fUML except that type instance are not&#xA;// Object_ but SM_Object.&#xA;Object_ object = null;&#xA;if (type instanceof Behavior) {&#xA;&#x9;object = super.instantiate(type);&#xA;} else {&#xA;&#x9;object = new SM_Object();&#xA;&#x9;object.types.add(type);&#xA;&#x9;object.createFeatureValues();&#xA;&#x9;this.add(object);&#xA;}&#xA;return object;&#xA;"/>
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+            <details key="body" value="// Behaves like in fUML except that type instance are not&#xA;// Object_ but SM_Object.&#xA;//Object_ object = null;&#xA;//if (type instanceof Behavior) {&#xA;//&#x9;object = super.instantiate(type);&#xA;//} else {&#xA;//&#x9;object = new SM_Object();&#xA;//&#x9;object.types.add(type);&#xA;//&#x9;object.createFeatureValues();&#xA;//&#x9;this.add(object);&#xA;//}&#xA;//return object;&#xA;&#xA;std::shared_ptr&lt;PSSM::SM_Object> object = nullptr;&#xA;&#x9;std::shared_ptr&lt;uml::Behavior> behavior = std::dynamic_pointer_cast&lt;uml::Behavior>(type);&#xA;    if(behavior != nullptr)&#xA;    {&#xA;    &#x9;std::shared_ptr&lt;PSSM::SM_Object>  context = nullptr;&#xA;        object = std::dynamic_pointer_cast&lt;Object>(this->getFactory()->createExecution(behavior, nullptr));&#xA;    }&#xA;    else&#xA;    {&#xA;        object = PSSMFactory::eInstance()->createObject();&#xA;        object->getTypes()->push_back(type);&#xA;        object->createFeatureValues();&#xA;        this->add(object);&#xA;    }&#xA;    &#xA;    return object;"/>
           </eAnnotations>
           <eParameters name="type" ordered="false" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Class"/>
         </eOperations>
