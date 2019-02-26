@@ -59,6 +59,8 @@ void PSSMPackageImpl::initializePackageContents()
 	m_localTransitionActivation_EClass->getESuperTypes()->push_back(getTransitionActivation_EClass());
 	m_pseudostateActivation_EClass->getESuperTypes()->push_back(getVertexActivation_EClass());
 	m_regionActivation_EClass->getESuperTypes()->push_back(getStateMachineSemanticVisitor_EClass());
+	m_sM_Object_EClass->getESuperTypes()->push_back(fUML::FUMLPackage::eInstance()->getObject_EClass());
+	m_sM_ObjectActivation_EClass->getESuperTypes()->push_back(fUML::FUMLPackage::eInstance()->getObjectActivation_EClass());
 	m_shallowHistoryPseudostateActivation_EClass->getESuperTypes()->push_back(getHistoryPseudostateActivation_EClass());
 	m_stateActivation_EClass->getESuperTypes()->push_back(getVertexActivation_EClass());
 	m_terminatePseudostateActivation_EClass->getESuperTypes()->push_back(getPseudostateActivation_EClass());
@@ -1689,8 +1691,58 @@ void PSSMPackageImpl::initializeSM_LocusContent()
 	m_sM_Locus_EClass->setInterface(false);
 	
 	
+	m_sM_Locus_EReference_executor->setName("executor");
+	m_sM_Locus_EReference_executor->setEType(fUML::FUMLPackage::eInstance()->getExecutor_EClass());
+	m_sM_Locus_EReference_executor->setLowerBound(0);
+	m_sM_Locus_EReference_executor->setUpperBound(1);
+	m_sM_Locus_EReference_executor->setTransient(false);
+	m_sM_Locus_EReference_executor->setVolatile(false);
+	m_sM_Locus_EReference_executor->setChangeable(true);
+	m_sM_Locus_EReference_executor->setUnsettable(false);
+	m_sM_Locus_EReference_executor->setUnique(true);
+	m_sM_Locus_EReference_executor->setDerived(false);
+	m_sM_Locus_EReference_executor->setOrdered(false);
+	m_sM_Locus_EReference_executor->setContainment(true);
+	m_sM_Locus_EReference_executor->setResolveProxies(true);
+	{
+		std::string defaultValue = "";
+		if (!defaultValue.empty())
+		{
+			m_sM_Locus_EReference_executor->setDefaultValueLiteral(defaultValue);
+		}
+		std::shared_ptr<ecore::EReference>  otherEnd = nullptr;
+		if (otherEnd != nullptr)
+	    {
+	   		m_sM_Locus_EReference_executor->setEOpposite(otherEnd);
+	    }
+	}
+	m_sM_Locus_EReference_factory->setName("factory");
+	m_sM_Locus_EReference_factory->setEType(fUML::FUMLPackage::eInstance()->getExecutionFactory_EClass());
+	m_sM_Locus_EReference_factory->setLowerBound(1);
+	m_sM_Locus_EReference_factory->setUpperBound(1);
+	m_sM_Locus_EReference_factory->setTransient(false);
+	m_sM_Locus_EReference_factory->setVolatile(false);
+	m_sM_Locus_EReference_factory->setChangeable(true);
+	m_sM_Locus_EReference_factory->setUnsettable(false);
+	m_sM_Locus_EReference_factory->setUnique(true);
+	m_sM_Locus_EReference_factory->setDerived(false);
+	m_sM_Locus_EReference_factory->setOrdered(true);
+	m_sM_Locus_EReference_factory->setContainment(true);
+	m_sM_Locus_EReference_factory->setResolveProxies(true);
+	{
+		std::string defaultValue = "";
+		if (!defaultValue.empty())
+		{
+			m_sM_Locus_EReference_factory->setDefaultValueLiteral(defaultValue);
+		}
+		std::shared_ptr<ecore::EReference>  otherEnd = nullptr;
+		if (otherEnd != nullptr)
+	    {
+	   		m_sM_Locus_EReference_factory->setEOpposite(otherEnd);
+	    }
+	}
 	
-	m_sM_Locus_EOperation_instantiate_Class->setEType(fUML::FUMLPackage::eInstance()->getObject_EClass());
+	m_sM_Locus_EOperation_instantiate_Class->setEType(PSSM::PSSMPackage::eInstance()->getSM_Object_EClass());
 	m_sM_Locus_EOperation_instantiate_Class->setName("instantiate");
 	m_sM_Locus_EOperation_instantiate_Class->setLowerBound(1);
 	m_sM_Locus_EOperation_instantiate_Class->setUpperBound(1);

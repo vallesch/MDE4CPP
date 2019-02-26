@@ -43,7 +43,17 @@ namespace uml
 
 namespace fUML 
 {
-	class Object;
+	class ExecutionFactory;
+}
+
+namespace fUML 
+{
+	class Executor;
+}
+
+namespace PSSM::Semantics::StructuredClassifiers 
+{
+	class SM_Object;
 }
 
 // base class includes
@@ -79,7 +89,7 @@ namespace PSSM::Semantics::Loci
 			//*********************************
 			/*!
 			 */ 
-			virtual std::shared_ptr<fUML::Object> instantiate(std::shared_ptr<uml::Class>  type) = 0;
+			virtual std::shared_ptr<PSSM::Semantics::StructuredClassifiers::SM_Object> instantiate(std::shared_ptr<uml::Class>  type) = 0;
 			
 			
 			//*********************************
@@ -89,6 +99,20 @@ namespace PSSM::Semantics::Loci
 			//*********************************
 			// Reference
 			//*********************************
+			/*!
+			 */
+			virtual std::shared_ptr<fUML::Executor > getExecutor() const = 0;
+			
+			/*!
+			 */
+			virtual void setExecutor(std::shared_ptr<fUML::Executor> _executor_executor) = 0;
+			/*!
+			 */
+			virtual std::shared_ptr<fUML::ExecutionFactory > getFactory() const = 0;
+			
+			/*!
+			 */
+			virtual void setFactory(std::shared_ptr<fUML::ExecutionFactory> _factory_factory) = 0;
 			
 
 		protected:
@@ -100,6 +124,12 @@ namespace PSSM::Semantics::Loci
 			//*********************************
 			// Reference Members
 			//*********************************
+			/*!
+			 */
+			std::shared_ptr<fUML::Executor > m_executor;
+			/*!
+			 */
+			std::shared_ptr<fUML::ExecutionFactory > m_factory;
 			
 
 		public:

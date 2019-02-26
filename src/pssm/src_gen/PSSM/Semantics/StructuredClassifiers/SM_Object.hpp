@@ -42,24 +42,48 @@ namespace uml
 	class Class;
 }
 
+namespace uml 
+{
+	class Classifier;
+}
+
+namespace fUML 
+{
+	class FeatureValue;
+}
+
+namespace fUML 
+{
+	class Locus;
+}
+
+namespace fUML 
+{
+	class Object;
+}
+
+namespace fUML 
+{
+	class ObjectActivation;
+}
+
 namespace fUML 
 {
 	class ParameterValue;
 }
 
 // base class includes
+#include "fUML/Object.hpp"
 
 // enum includes
 
-#include "ecore/EObject.hpp"
 
 //*********************************
 namespace PSSM::Semantics::StructuredClassifiers 
 {
 	/*!
 	 */
-	class SM_Object : virtual public ecore::EObject 
-
+	class SM_Object:virtual public fUML::Object
 	{
 		public:
  			SM_Object(const SM_Object &) {}

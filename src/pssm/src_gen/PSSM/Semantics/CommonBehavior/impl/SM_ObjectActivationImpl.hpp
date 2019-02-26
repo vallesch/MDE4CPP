@@ -14,14 +14,12 @@
 #include "../SM_ObjectActivation.hpp"
 
 #include "PSSM/impl/PSSMFactoryImpl.hpp"
-
-#include "ecore/impl/EObjectImpl.hpp"
+#include "fUML/impl/ObjectActivationImpl.hpp"
 
 //*********************************
 namespace PSSM::Semantics::CommonBehavior 
 {
-	class SM_ObjectActivationImpl :virtual public ecore::EObjectImpl,
-virtual public SM_ObjectActivation 
+	class SM_ObjectActivationImpl :virtual public fUML::ObjectActivationImpl, virtual public SM_ObjectActivation 
 	{
 		public: 
 			SM_ObjectActivationImpl(const SM_ObjectActivationImpl & obj);

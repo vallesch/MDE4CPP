@@ -362,6 +362,8 @@ void PSSMPackageImpl::createSM_LocusContent(std::shared_ptr<ecore::EPackage> pac
 {
 	m_sM_Locus_EClass = factory->createEClass_in_EPackage(package, SM_LOCUS_ECLASS);
 	
+	m_sM_Locus_EReference_executor = factory->createEReference_in_EContainingClass(m_sM_Locus_EClass, SM_LOCUS_EREFERENCE_EXECUTOR);
+	m_sM_Locus_EReference_factory = factory->createEReference_in_EContainingClass(m_sM_Locus_EClass, SM_LOCUS_EREFERENCE_FACTORY);
 	
 	m_sM_Locus_EOperation_instantiate_Class = factory->createEOperation_in_EContainingClass(m_sM_Locus_EClass, SM_LOCUS_EOPERATION_INSTANTIATE_CLASS);
 	

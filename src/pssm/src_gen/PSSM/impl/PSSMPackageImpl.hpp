@@ -341,6 +341,8 @@ namespace PSSM
 			virtual std::shared_ptr<ecore::EClass> getSM_Locus_EClass() const ;
 			
 			
+			virtual std::shared_ptr<ecore::EReference> getSM_Locus_EReference_executor() const ;
+			virtual std::shared_ptr<ecore::EReference> getSM_Locus_EReference_factory() const ;
 			
 			virtual std::shared_ptr<ecore::EOperation> getSM_Locus_EOperation_instantiate_Class() const ;
 			
@@ -710,6 +712,8 @@ namespace PSSM
 			std::shared_ptr<ecore::EReference> m_doActivityExecutionEventAccepter_EReference_encapsulatedAccepter = nullptr;
 			std::shared_ptr<ecore::EReference> m_callEventOccurrence_EReference_execution = nullptr;
 			std::shared_ptr<ecore::EReference> m_stateMachineConfiguration_EReference_execution = nullptr;
+			std::shared_ptr<ecore::EReference> m_sM_Locus_EReference_executor = nullptr;
+			std::shared_ptr<ecore::EReference> m_sM_Locus_EReference_factory = nullptr;
 			std::shared_ptr<ecore::EReference> m_pseudostateActivation_EReference_fireableTransitions = nullptr;
 			std::shared_ptr<ecore::EReference> m_regionActivation_EReference_history = nullptr;
 			std::shared_ptr<ecore::EReference> m_vertexActivation_EReference_incomingTransitionActivations = nullptr;

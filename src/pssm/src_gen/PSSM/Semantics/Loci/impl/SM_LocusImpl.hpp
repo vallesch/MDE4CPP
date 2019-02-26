@@ -47,7 +47,7 @@ virtual public SM_Locus
 			//*********************************
 			/*!
 			 */ 
-			virtual std::shared_ptr<fUML::Object> instantiate(std::shared_ptr<uml::Class>  type) ;
+			virtual std::shared_ptr<PSSM::Semantics::StructuredClassifiers::SM_Object> instantiate(std::shared_ptr<uml::Class>  type) ;
 			
 			
 			
@@ -59,6 +59,20 @@ virtual public SM_Locus
 			//*********************************
 			// Reference
 			//*********************************
+			/*!
+			 */
+			virtual std::shared_ptr<fUML::Executor > getExecutor() const ;
+			
+			/*!
+			 */
+			virtual void setExecutor(std::shared_ptr<fUML::Executor> _executor_executor) ;
+			/*!
+			 */
+			virtual std::shared_ptr<fUML::ExecutionFactory > getFactory() const ;
+			
+			/*!
+			 */
+			virtual void setFactory(std::shared_ptr<fUML::ExecutionFactory> _factory_factory) ;
 							
 			
 			//*********************************

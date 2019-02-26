@@ -33,11 +33,21 @@
 
 #include <exception> // used in Persistence
 
+#include "fUML/ClassifierBehaviorExecution.hpp"
+
 #include "PSSM/Semantics/StateMachines/CompletionEventOccurrence.hpp"
 
 #include "PSSM/Semantics/StateMachines/DeferredEventOccurrence.hpp"
 
+#include "fUML/EventAccepter.hpp"
+
 #include "fUML/EventOccurrence.hpp"
+
+#include "fUML/Object.hpp"
+
+#include "fUML/ObjectActivation.hpp"
+
+#include "fUML/SignalInstance.hpp"
 
 #include "PSSM/Semantics/StateMachines/StateActivation.hpp"
 
@@ -94,9 +104,30 @@ SM_ObjectActivationImpl::SM_ObjectActivationImpl(const SM_ObjectActivationImpl &
 	std::shared_ptr<Bag<PSSM::Semantics::StateMachines::DeferredEventOccurrence>> _deferredEventPool = obj.getDeferredEventPool();
 	m_deferredEventPool.reset(new Bag<PSSM::Semantics::StateMachines::DeferredEventOccurrence>(*(obj.getDeferredEventPool().get())));
 
+	m_object  = obj.getObject();
+
+	std::shared_ptr<Bag<fUML::EventAccepter>> _waitingEventAccepters = obj.getWaitingEventAccepters();
+	m_waitingEventAccepters.reset(new Bag<fUML::EventAccepter>(*(obj.getWaitingEventAccepters().get())));
+
 
 	//Clone references with containment (deep copy)
 
+	std::shared_ptr<Bag<fUML::ClassifierBehaviorExecution>> _classifierBehaviorExecutionsList = obj.getClassifierBehaviorExecutions();
+	for(std::shared_ptr<fUML::ClassifierBehaviorExecution> _classifierBehaviorExecutions : *_classifierBehaviorExecutionsList)
+	{
+		this->getClassifierBehaviorExecutions()->add(std::shared_ptr<fUML::ClassifierBehaviorExecution>(std::dynamic_pointer_cast<fUML::ClassifierBehaviorExecution>(_classifierBehaviorExecutions->copy())));
+	}
+	#ifdef SHOW_SUBSET_UNION
+		std::cout << "Copying the Subset: " << "m_classifierBehaviorExecutions" << std::endl;
+	#endif
+	std::shared_ptr<Bag<fUML::SignalInstance>> _eventPoolList = obj.getEventPool();
+	for(std::shared_ptr<fUML::SignalInstance> _eventPool : *_eventPoolList)
+	{
+		this->getEventPool()->add(std::shared_ptr<fUML::SignalInstance>(std::dynamic_pointer_cast<fUML::SignalInstance>(_eventPool->copy())));
+	}
+	#ifdef SHOW_SUBSET_UNION
+		std::cout << "Copying the Subset: " << "m_eventPool" << std::endl;
+	#endif
 
 }
 
@@ -127,14 +158,64 @@ int SM_ObjectActivationImpl::getDeferredEventInsertionIndex()
 
 std::shared_ptr<PSSM::Semantics::StateMachines::CompletionEventOccurrence> SM_ObjectActivationImpl::getNextCompletionEvent()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+		// Return the next completion event available at the pool.
+	unsigned int i = 0;
+	std::shared_ptr<PSSM::Semantics::StateMachines::CompletionEventOccurrence> completionEvent = nullptr;
+
+	while(completionEvent == nullptr && i < this->m_eventPool->size()){
+		//if(std::shared_ptr<PSSM::Semantics::StateMachines::CompletionEventOccurrence> _completionEvent = std::dynamic_cast<std::shared_ptr<PSSM::Semantics::StateMachines::CompletionEventOccurrence>>(this->m_eventPool->at(i))){
+
+		std::shared_ptr<PSSM::Semantics::StateMachines::CompletionEventOccurrence> _tmp = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::CompletionEventOccurrence>(this->m_eventPool->at(i));
+
+		if( _tmp != nullptr) {
+			completionEvent = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::CompletionEventOccurrence>(this->m_eventPool->at(i));
+			this->m_eventPool->erase(this->m_eventPool->at(i));
+		}
+		i++;
+	}
+	return completionEvent;
+
+	//end of body
 }
 
 std::shared_ptr<fUML::EventOccurrence> SM_ObjectActivationImpl::getNextEvent()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Completion events are always dispatched first. They are dispatched according
+// to their order of arrival in the pool. While completion event are available at
+// the pool no other event is dispatched. If not there is no more completion event
+// to dispatch then regular events are dispatched according to the currently used
+// dispatching policy. Note that if the currently dispatched event occurrence was
+// previously deferred the it is unwrapped and it encapsulated 'deferredEventOccurrence'
+// is actually dispatched.
+//EventOccurrence nextEvent = this.getNextCompletionEvent(); 
+//if(nextEvent==null){
+//	nextEvent = super.getNextEvent();
+//	if(nextEvent instanceof DeferredEventOccurrence){
+//		nextEvent = ((DeferredEventOccurrence)nextEvent).deferredEventOccurrence;
+//	}
+//}
+//return nextEvent;
+
+	std::shared_ptr<fUML::EventOccurrence> nextEvent = std::dynamic_pointer_cast<fUML::EventOccurrence>(this->getNextCompletionEvent());
+	if(nextEvent == nullptr)
+	{
+		nextEvent = getNextEvent();
+
+		std::shared_ptr<PSSM::Semantics::StateMachines::DeferredEventOccurrence> _tmp = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::DeferredEventOccurrence>(nextEvent);
+
+		if( _tmp != nullptr)
+		{
+			nextEvent =  std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::DeferredEventOccurrence>(nextEvent)->getDeferredEventOccurrence();
+		}
+	}
+
+	return nextEvent;
+
+	//end of body
 }
 
 void SM_ObjectActivationImpl::registerCompletionEvent(std::shared_ptr<PSSM::Semantics::StateMachines::StateActivation>  stateActivation)
@@ -145,14 +226,47 @@ void SM_ObjectActivationImpl::registerCompletionEvent(std::shared_ptr<PSSM::Sema
 
 void SM_ObjectActivationImpl::registerDeferredEvent(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence,std::shared_ptr<PSSM::Semantics::StateMachines::StateActivation>  stateActivation)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// An event occurrence registered as being deferred is registered within the deferred event pool.
+//DeferredEventOccurrence deferredEventOccurrence = new DeferredEventOccurrence();
+//deferredEventOccurrence.constrainingStateActivation = deferringState;
+//deferredEventOccurrence.deferredEventOccurrence = eventOccurrence;
+//this.deferredEventPool.add(deferredEventOccurrence);
+
+//std::shared_ptr<PSSM::Semantics::StateMachines::DeferredEventOccurrence> deferredEventOccurrence = new PSSM::Semantics::StateMachines::DeferredEventOccurrence();
+//deferredEventOccurrence->setDeferredEventOccurrence(eventOccurrence);
+//this->m_deferredEventPool->add(deferredEventOccurrence);
+	//end of body
 }
 
 void SM_ObjectActivationImpl::releaseDeferredEvents(std::shared_ptr<PSSM::Semantics::StateMachines::StateActivation>  deferringState)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// The release of event occurrence(s) deferred by the deferring state includes the following step:
+// 1. Deferred events are removed from the deferred event pool 
+// 2. Deferred events return to the regular event pool. They are inserted in the pool
+//    after any existing completion event occurrence but before any other events that
+//    arrived later.
+//List<DeferredEventOccurrence> releasedEvents = new ArrayList<DeferredEventOccurrence>();
+//for(int i=0; i < this.deferredEventPool.size(); i++){
+//	DeferredEventOccurrence eventOccurrence = this.deferredEventPool.get(i);
+//	if(eventOccurrence.constrainingStateActivation == deferringState){
+//		releasedEvents.add(eventOccurrence);
+//	}
+//}
+//int insertionPoint = this.getDeferredEventInsertionIndex();
+//int i = 0;
+//while(i < releasedEvents.size()){
+//	this.eventPool.add(insertionPoint, releasedEvents.get(i));
+//	this._send(new ArrivalSignal());
+//	insertionPoint++;
+//	i++;
+//}
+//releasedEvents.clear();
+
+	//end of body
 }
 
 //*********************************
@@ -177,6 +291,7 @@ std::shared_ptr<SM_ObjectActivation> SM_ObjectActivationImpl::getThisSM_ObjectAc
 void SM_ObjectActivationImpl::setThisSM_ObjectActivationPtr(std::weak_ptr<SM_ObjectActivation> thisSM_ObjectActivationPtr)
 {
 	m_thisSM_ObjectActivationPtr = thisSM_ObjectActivationPtr;
+	setThisObjectActivationPtr(thisSM_ObjectActivationPtr);
 }
 std::shared_ptr<ecore::EObject> SM_ObjectActivationImpl::eContainer() const
 {
@@ -191,18 +306,18 @@ Any SM_ObjectActivationImpl::eGet(int featureID, bool resolve, bool coreType) co
 	switch(featureID)
 	{
 		case PSSM::PSSMPackage::SM_OBJECTACTIVATION_EREFERENCE_DEFERREDEVENTPOOL:
-			return eAny(getDeferredEventPool()); //290
+			return eAny(getDeferredEventPool()); //294
 	}
-	return ecore::EObjectImpl::eGet(featureID, resolve, coreType);
+	return fUML::ObjectActivationImpl::eGet(featureID, resolve, coreType);
 }
 bool SM_ObjectActivationImpl::internalEIsSet(int featureID) const
 {
 	switch(featureID)
 	{
 		case PSSM::PSSMPackage::SM_OBJECTACTIVATION_EREFERENCE_DEFERREDEVENTPOOL:
-			return getDeferredEventPool() != nullptr; //290
+			return getDeferredEventPool() != nullptr; //294
 	}
-	return ecore::EObjectImpl::internalEIsSet(featureID);
+	return fUML::ObjectActivationImpl::internalEIsSet(featureID);
 }
 bool SM_ObjectActivationImpl::eSet(int featureID, Any newValue)
 {
@@ -210,7 +325,7 @@ bool SM_ObjectActivationImpl::eSet(int featureID, Any newValue)
 	{
 	}
 
-	return ecore::EObjectImpl::eSet(featureID, newValue);
+	return fUML::ObjectActivationImpl::eSet(featureID, newValue);
 }
 
 //*********************************
@@ -255,14 +370,14 @@ void SM_ObjectActivationImpl::loadAttributes(std::shared_ptr<persistence::interf
 		std::cout << "| ERROR    | " <<  "Exception occurred" << std::endl;
 	}
 
-	ecore::EObjectImpl::loadAttributes(loadHandler, attr_list);
+	fUML::ObjectActivationImpl::loadAttributes(loadHandler, attr_list);
 }
 
 void SM_ObjectActivationImpl::loadNode(std::string nodeName, std::shared_ptr<persistence::interfaces::XLoadHandler> loadHandler, std::shared_ptr<PSSM::PSSMFactory> modelFactory)
 {
 
 
-	ecore::EObjectImpl::loadNode(nodeName, loadHandler, ecore::EcoreFactory::eInstance());
+	fUML::ObjectActivationImpl::loadNode(nodeName, loadHandler, fUML::FUMLFactory::eInstance());
 }
 
 void SM_ObjectActivationImpl::resolveReferences(const int featureID, std::list<std::shared_ptr<ecore::EObject> > references)
@@ -283,13 +398,14 @@ void SM_ObjectActivationImpl::resolveReferences(const int featureID, std::list<s
 			return;
 		}
 	}
-	ecore::EObjectImpl::resolveReferences(featureID, references);
+	fUML::ObjectActivationImpl::resolveReferences(featureID, references);
 }
 
 void SM_ObjectActivationImpl::save(std::shared_ptr<persistence::interfaces::XSaveHandler> saveHandler) const
 {
 	saveContent(saveHandler);
 
+	fUML::ObjectActivationImpl::saveContent(saveHandler);
 	
 	ecore::EObjectImpl::saveContent(saveHandler);
 	

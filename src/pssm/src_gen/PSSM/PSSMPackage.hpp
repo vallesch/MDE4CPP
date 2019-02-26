@@ -625,16 +625,20 @@ namespace PSSM
 			// Begin Class SM_Locus
 			//Class and Feature IDs 
 			static const unsigned int SM_LOCUS_ECLASS = 27;
-			static const unsigned int SM_LOCUS_ECLASS_FEATURE_COUNT = 0;
+			static const unsigned int SM_LOCUS_ECLASS_FEATURE_COUNT = 2;
 			static const unsigned int SM_LOCUS_ECLASS_OPERATION_COUNT = 1;
 			
+			static const int SM_LOCUS_EREFERENCE_EXECUTOR = 2700;
+			static const int SM_LOCUS_EREFERENCE_FACTORY = 2701;
 			
-			static const int SM_LOCUS_EOPERATION_INSTANTIATE_CLASS = 2700;
+			static const int SM_LOCUS_EOPERATION_INSTANTIATE_CLASS = 2702;
 			
 			//Class and Feature Getter
 			virtual std::shared_ptr<ecore::EClass> getSM_Locus_EClass() const = 0;
 			
 			
+			virtual std::shared_ptr<ecore::EReference> getSM_Locus_EReference_executor() const = 0;
+			virtual std::shared_ptr<ecore::EReference> getSM_Locus_EReference_factory() const = 0;
 			
 			virtual std::shared_ptr<ecore::EOperation> getSM_Locus_EOperation_instantiate_Class() const = 0;
 			
@@ -644,12 +648,12 @@ namespace PSSM
 			// Begin Class SM_Object
 			//Class and Feature IDs 
 			static const unsigned int SM_OBJECT_ECLASS = 28;
-			static const unsigned int SM_OBJECT_ECLASS_FEATURE_COUNT = 0;
-			static const unsigned int SM_OBJECT_ECLASS_OPERATION_COUNT = 2;
+			static const unsigned int SM_OBJECT_ECLASS_FEATURE_COUNT = 4;
+			static const unsigned int SM_OBJECT_ECLASS_OPERATION_COUNT = 29;
 			
 			
-			static const int SM_OBJECT_EOPERATION_DESTROY = 2801;
-			static const int SM_OBJECT_EOPERATION_STARTBEHAVIOR_CLASS_PARAMETERVALUE = 2800;
+			static const int SM_OBJECT_EOPERATION_DESTROY = 2832;
+			static const int SM_OBJECT_EOPERATION_STARTBEHAVIOR_CLASS_PARAMETERVALUE = 2831;
 			
 			//Class and Feature Getter
 			virtual std::shared_ptr<ecore::EClass> getSM_Object_EClass() const = 0;
@@ -665,17 +669,17 @@ namespace PSSM
 			// Begin Class SM_ObjectActivation
 			//Class and Feature IDs 
 			static const unsigned int SM_OBJECTACTIVATION_ECLASS = 29;
-			static const unsigned int SM_OBJECTACTIVATION_ECLASS_FEATURE_COUNT = 1;
-			static const unsigned int SM_OBJECTACTIVATION_ECLASS_OPERATION_COUNT = 6;
+			static const unsigned int SM_OBJECTACTIVATION_ECLASS_FEATURE_COUNT = 5;
+			static const unsigned int SM_OBJECTACTIVATION_ECLASS_OPERATION_COUNT = 15;
 			
-			static const int SM_OBJECTACTIVATION_EREFERENCE_DEFERREDEVENTPOOL = 2900;
+			static const int SM_OBJECTACTIVATION_EREFERENCE_DEFERREDEVENTPOOL = 2904;
 			
-			static const int SM_OBJECTACTIVATION_EOPERATION_GETDEFERREDEVENTINSERTIONINDEX = 2902;
-			static const int SM_OBJECTACTIVATION_EOPERATION_GETNEXTCOMPLETIONEVENT = 2901;
-			static const int SM_OBJECTACTIVATION_EOPERATION_GETNEXTEVENT = 2906;
-			static const int SM_OBJECTACTIVATION_EOPERATION_REGISTERCOMPLETIONEVENT_STATEACTIVATION = 2903;
-			static const int SM_OBJECTACTIVATION_EOPERATION_REGISTERDEFERREDEVENT_EVENTOCCURRENCE_STATEACTIVATION = 2905;
-			static const int SM_OBJECTACTIVATION_EOPERATION_RELEASEDEFERREDEVENTS_STATEACTIVATION = 2904;
+			static const int SM_OBJECTACTIVATION_EOPERATION_GETDEFERREDEVENTINSERTIONINDEX = 2915;
+			static const int SM_OBJECTACTIVATION_EOPERATION_GETNEXTCOMPLETIONEVENT = 2914;
+			static const int SM_OBJECTACTIVATION_EOPERATION_GETNEXTEVENT = 2919;
+			static const int SM_OBJECTACTIVATION_EOPERATION_REGISTERCOMPLETIONEVENT_STATEACTIVATION = 2916;
+			static const int SM_OBJECTACTIVATION_EOPERATION_REGISTERDEFERREDEVENT_EVENTOCCURRENCE_STATEACTIVATION = 2918;
+			static const int SM_OBJECTACTIVATION_EOPERATION_RELEASEDEFERREDEVENTS_STATEACTIVATION = 2917;
 			
 			//Class and Feature Getter
 			virtual std::shared_ptr<ecore::EClass> getSM_ObjectActivation_EClass() const = 0;

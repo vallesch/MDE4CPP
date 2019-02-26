@@ -14,14 +14,12 @@
 #include "../SM_Object.hpp"
 
 #include "PSSM/impl/PSSMFactoryImpl.hpp"
-
-#include "ecore/impl/EObjectImpl.hpp"
+#include "fUML/impl/ObjectImpl.hpp"
 
 //*********************************
 namespace PSSM::Semantics::StructuredClassifiers 
 {
-	class SM_ObjectImpl :virtual public ecore::EObjectImpl,
-virtual public SM_Object 
+	class SM_ObjectImpl :virtual public fUML::ObjectImpl, virtual public SM_Object 
 	{
 		public: 
 			SM_ObjectImpl(const SM_ObjectImpl & obj);

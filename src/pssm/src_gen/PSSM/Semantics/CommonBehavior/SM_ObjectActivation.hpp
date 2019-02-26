@@ -37,6 +37,11 @@ namespace PSSM
 }
 
 //Forward Declaration for used types
+namespace fUML 
+{
+	class ClassifierBehaviorExecution;
+}
+
 namespace PSSM::Semantics::StateMachines 
 {
 	class CompletionEventOccurrence;
@@ -49,7 +54,27 @@ namespace PSSM::Semantics::StateMachines
 
 namespace fUML 
 {
+	class EventAccepter;
+}
+
+namespace fUML 
+{
 	class EventOccurrence;
+}
+
+namespace fUML 
+{
+	class Object;
+}
+
+namespace fUML 
+{
+	class ObjectActivation;
+}
+
+namespace fUML 
+{
+	class SignalInstance;
 }
 
 namespace PSSM::Semantics::StateMachines 
@@ -58,18 +83,17 @@ namespace PSSM::Semantics::StateMachines
 }
 
 // base class includes
+#include "fUML/ObjectActivation.hpp"
 
 // enum includes
 
-#include "ecore/EObject.hpp"
 
 //*********************************
 namespace PSSM::Semantics::CommonBehavior 
 {
 	/*!
 	 */
-	class SM_ObjectActivation : virtual public ecore::EObject 
-
+	class SM_ObjectActivation:virtual public fUML::ObjectActivation
 	{
 		public:
  			SM_ObjectActivation(const SM_ObjectActivation &) {}
