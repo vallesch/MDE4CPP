@@ -53,6 +53,8 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
+#include "fUML/FUMLFactory.hpp"
+#include "PSSM/Semantics/CommonBehavior/SM_ObjectActivation.hpp"
 
 using namespace PSSM::Semantics::StructuredClassifiers;
 
@@ -139,8 +141,24 @@ std::shared_ptr<ecore::EClass> SM_ObjectImpl::eStaticClass() const
 //*********************************
 void SM_ObjectImpl::destroy()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// In addition to realize the normal process of stopping the object activation
+// as well as removing the current object from the locus, this destruction phase
+// also implies removal of all events remaining in the pool. This prevents the
+// dispatch loop to actually get the next event (even if at this step there is no
+// chance to match an accepter) whereas the current object is not anymore registered.
+// in the Locus.
+if(this->getObjectActivation() != nullptr)
+    {
+    	this->getObjectActivation()->stop();
+    	this->getObjectActivation()->getEventPool()->clear();
+    	this->setObjectActivation(nullptr);
+    }
+
+    this->getTypes()->clear();
+    ExtensionalValueImpl::destroy();
+	//end of body
 }
 
 void SM_ObjectImpl::startBehavior(std::shared_ptr<uml::Class>  classifier,std::shared_ptr<Bag<fUML::ParameterValue> >  inputs)
@@ -158,9 +176,8 @@ void SM_ObjectImpl::startBehavior(std::shared_ptr<uml::Class>  classifier,std::s
 
 if(this->getObjectActivation() == nullptr)
     {
-		//std::shared_ptr<PSSM::Semantics::CommonBehavior::SM_ObjectActivation> _tmp = std::shared_ptr<PSSM::Semantics::CommonBehavior::SM_ObjectActivation>(PSSM::PSSMFactory::eInstance()_>createSM_ObjectActivation());
-        //this->setObjectActivation(std::dynamic_cast<fUML::ObjectActivation>(_tmp));
-        //this->getObjectActivation()->setObject(getThisObjectPtr());
+        this->setObjectActivation(std::dynamic_pointer_cast<fUML::ObjectActivation>(PSSM::PSSMFactory::eInstance()->createSM_ObjectActivation()));
+        this->getObjectActivation()->setObject(getThisObjectPtr());
     }
 
     this->getObjectActivation()->startBehavior(classifier, inputs);

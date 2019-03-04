@@ -47,18 +47,17 @@ namespace PSSM::Semantics::StateMachines
 }
 
 // base class includes
+#include "fUML/EventOccurrence.hpp"
 
 // enum includes
 
-#include "ecore/EObject.hpp"
 
 //*********************************
 namespace PSSM::Semantics::StateMachines 
 {
 	/*!
 	 */
-	class DeferredEventOccurrence : virtual public ecore::EObject 
-
+	class DeferredEventOccurrence:virtual public fUML::EventOccurrence
 	{
 		public:
  			DeferredEventOccurrence(const DeferredEventOccurrence &) {}

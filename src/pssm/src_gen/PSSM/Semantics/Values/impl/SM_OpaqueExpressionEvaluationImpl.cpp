@@ -129,26 +129,107 @@ std::shared_ptr<ecore::EClass> SM_OpaqueExpressionEvaluationImpl::eStaticClass()
 //*********************************
 std::shared_ptr<Bag<fUML::Value> > SM_OpaqueExpressionEvaluationImpl::executeExpressionBehavior()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// An opaque expression can have an associated behavior. If this is the case
+// this behavior is executed. Values produced by the execution of the behavior
+// are the result of the evaluation of the opaque expression 
+//List<Value> evaluation = new ArrayList<Value>();
+//OpaqueExpression expression = (OpaqueExpression)this.specification;
+//Behavior behavior = expression.getBehavior();
+//if(behavior != null) {
+//	List<ParameterValue> results = this.locus.executor.execute(behavior, context, this.parameterValues);
+//	for(int i = 0; i < results.size(); i++) { // results.size should be 1
+//		ParameterValue parameterValue = results.get(i);
+//		List<Value> values = parameterValue.values;
+//		for(int j = 0; j < values.size(); j++) {
+//			evaluation.add(values.get(j));
+//		}
+//	}
+//}
+//return evaluation;
+	return nullptr;
+
+	//end of body
 }
 
 std::shared_ptr<fUML::ParameterValue> SM_OpaqueExpressionEvaluationImpl::getParameterValue(std::shared_ptr<uml::Parameter>  parameter)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Return the parameter value corresponding to the given parameter.
+// Null is returned if no parameter value associated with the parameter
+// is found.
+//int i = 0;
+//ParameterValue parameterValue = null;
+//while(parameterValue == null && i < this.parameterValues.size()){
+//	if(this.parameterValues.get(i).parameter == parameter){
+//		parameterValue = this.parameterValues.get(i);
+//	}
+//	i++;
+//}
+//return parameterValue;
+	return nullptr;
+
+	//end of body
 }
 
 void SM_OpaqueExpressionEvaluationImpl::initialize(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// The event occurrence that is about or is currently dispatched can
+// have data. In such situation if the behavior that is associated
+// to the OpaqueExpression input conforms with the proposed signal
+// event occurrence or the input parameters of the call event occurrence
+// then event occurrence data are passed to this behavior and used
+// to produce the guard verdict.
+//this.parameterValues.clear();
+//OpaqueExpression expression = (OpaqueExpression)this.specification;
+//if(expression.getBehavior().getOwnedParameters().size() > 0){
+//	Behavior behavior = expression.getBehavior();
+//	if(eventOccurrence instanceof SignalEventOccurrence){
+//		SignalEventOccurrence signalEventOccurrence = (SignalEventOccurrence) eventOccurrence;
+//		if(behavior.inputParameters().size() == 1){
+//			Parameter parameter = behavior.inputParameters().get(0);
+//			ParameterValue parameterValue = new ParameterValue();
+//			parameterValue.parameter = parameter;
+//			List<Value> values = new ArrayList<Value>();
+//			values.add(signalEventOccurrence.signalInstance);
+//			parameterValue.values = values;
+//			this.setParameterValue(parameterValue);
+//		}
+//	}else if(eventOccurrence instanceof CallEventOccurrence){
+//		CallEventOccurrence callEventOccurrence = (CallEventOccurrence) eventOccurrence;
+//		List<Parameter> behaviorInputParameters = behavior.inputParameters();
+//		List<ParameterValue> inputParameterValues = callEventOccurrence.execution.getInputParameterValues();
+//		if(behaviorInputParameters.size() == inputParameterValues.size()){
+//			int i = 1;
+//			while(i <= behaviorInputParameters.size()){
+//				ParameterValue parameterValue = new ParameterValue();
+//				parameterValue.parameter = behaviorInputParameters.get(i - 1);
+//				parameterValue.values = inputParameterValues.get(i - 1).values;
+//				this.setParameterValue(parameterValue);
+//				i++;
+//			}
+//		}
+//	}
+//}
+
+	//end of body
 }
 
 void SM_OpaqueExpressionEvaluationImpl::setParameterValue(std::shared_ptr<fUML::ParameterValue>  parameterValue)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// If this parameter value does not exist then it is added
+// to the list parameter values
+//if(this.getParameterValue(parameterValue.parameter) == null){
+//	this.parameterValues.add(parameterValue);
+//}
+
+	//end of body
 }
 
 //*********************************

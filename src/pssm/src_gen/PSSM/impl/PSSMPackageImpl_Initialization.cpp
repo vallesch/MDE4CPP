@@ -46,6 +46,7 @@ void PSSMPackageImpl::initializePackageContents()
 	m_conditionalPseudostateActivation_EClass->getESuperTypes()->push_back(getPseudostateActivation_EClass());
 	m_connectionPointActivation_EClass->getESuperTypes()->push_back(getPseudostateActivation_EClass());
 	m_deepHistoryPseudostateActivation_EClass->getESuperTypes()->push_back(getHistoryPseudostateActivation_EClass());
+	m_deferredEventOccurrence_EClass->getESuperTypes()->push_back(fUML::FUMLPackage::eInstance()->getEventOccurrence_EClass());
 	m_entryPointPseudostateActivation_EClass->getESuperTypes()->push_back(getConnectionPointActivation_EClass());
 	m_exitPointPseudostateActivation_EClass->getESuperTypes()->push_back(getConnectionPointActivation_EClass());
 	m_externalTransitionActivation_EClass->getESuperTypes()->push_back(getTransitionActivation_EClass());

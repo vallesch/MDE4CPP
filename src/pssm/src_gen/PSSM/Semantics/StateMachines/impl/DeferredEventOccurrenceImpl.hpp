@@ -14,14 +14,12 @@
 #include "../DeferredEventOccurrence.hpp"
 
 #include "PSSM/impl/PSSMFactoryImpl.hpp"
-
-#include "ecore/impl/EObjectImpl.hpp"
+#include "fUML/impl/EventOccurrenceImpl.hpp"
 
 //*********************************
 namespace PSSM::Semantics::StateMachines 
 {
-	class DeferredEventOccurrenceImpl :virtual public ecore::EObjectImpl,
-virtual public DeferredEventOccurrence 
+	class DeferredEventOccurrenceImpl :virtual public fUML::EventOccurrenceImpl, virtual public DeferredEventOccurrence 
 	{
 		public: 
 			DeferredEventOccurrenceImpl(const DeferredEventOccurrenceImpl & obj);

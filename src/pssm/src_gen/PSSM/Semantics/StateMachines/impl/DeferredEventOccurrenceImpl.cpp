@@ -42,6 +42,7 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
+#include "fUML/FUMLFactory.hpp"
 
 using namespace PSSM::Semantics::StateMachines;
 
@@ -152,6 +153,7 @@ std::shared_ptr<DeferredEventOccurrence> DeferredEventOccurrenceImpl::getThisDef
 void DeferredEventOccurrenceImpl::setThisDeferredEventOccurrencePtr(std::weak_ptr<DeferredEventOccurrence> thisDeferredEventOccurrencePtr)
 {
 	m_thisDeferredEventOccurrencePtr = thisDeferredEventOccurrencePtr;
+	setThisEventOccurrencePtr(thisDeferredEventOccurrencePtr);
 }
 std::shared_ptr<ecore::EObject> DeferredEventOccurrenceImpl::eContainer() const
 {
@@ -170,7 +172,7 @@ Any DeferredEventOccurrenceImpl::eGet(int featureID, bool resolve, bool coreType
 		case PSSM::PSSMPackage::DEFERREDEVENTOCCURRENCE_EREFERENCE_DEFERREDEVENTOCCURRENCE:
 			return eAny(getDeferredEventOccurrence()); //81
 	}
-	return ecore::EObjectImpl::eGet(featureID, resolve, coreType);
+	return fUML::EventOccurrenceImpl::eGet(featureID, resolve, coreType);
 }
 bool DeferredEventOccurrenceImpl::internalEIsSet(int featureID) const
 {
@@ -181,7 +183,7 @@ bool DeferredEventOccurrenceImpl::internalEIsSet(int featureID) const
 		case PSSM::PSSMPackage::DEFERREDEVENTOCCURRENCE_EREFERENCE_DEFERREDEVENTOCCURRENCE:
 			return getDeferredEventOccurrence() != nullptr; //81
 	}
-	return ecore::EObjectImpl::internalEIsSet(featureID);
+	return fUML::EventOccurrenceImpl::internalEIsSet(featureID);
 }
 bool DeferredEventOccurrenceImpl::eSet(int featureID, Any newValue)
 {
@@ -203,7 +205,7 @@ bool DeferredEventOccurrenceImpl::eSet(int featureID, Any newValue)
 		}
 	}
 
-	return ecore::EObjectImpl::eSet(featureID, newValue);
+	return fUML::EventOccurrenceImpl::eSet(featureID, newValue);
 }
 
 //*********************************
@@ -255,14 +257,14 @@ void DeferredEventOccurrenceImpl::loadAttributes(std::shared_ptr<persistence::in
 		std::cout << "| ERROR    | " <<  "Exception occurred" << std::endl;
 	}
 
-	ecore::EObjectImpl::loadAttributes(loadHandler, attr_list);
+	fUML::EventOccurrenceImpl::loadAttributes(loadHandler, attr_list);
 }
 
 void DeferredEventOccurrenceImpl::loadNode(std::string nodeName, std::shared_ptr<persistence::interfaces::XLoadHandler> loadHandler, std::shared_ptr<PSSM::PSSMFactory> modelFactory)
 {
 
 
-	ecore::EObjectImpl::loadNode(nodeName, loadHandler, ecore::EcoreFactory::eInstance());
+	fUML::EventOccurrenceImpl::loadNode(nodeName, loadHandler, fUML::FUMLFactory::eInstance());
 }
 
 void DeferredEventOccurrenceImpl::resolveReferences(const int featureID, std::list<std::shared_ptr<ecore::EObject> > references)
@@ -293,13 +295,14 @@ void DeferredEventOccurrenceImpl::resolveReferences(const int featureID, std::li
 			return;
 		}
 	}
-	ecore::EObjectImpl::resolveReferences(featureID, references);
+	fUML::EventOccurrenceImpl::resolveReferences(featureID, references);
 }
 
 void DeferredEventOccurrenceImpl::save(std::shared_ptr<persistence::interfaces::XSaveHandler> saveHandler) const
 {
 	saveContent(saveHandler);
 
+	fUML::EventOccurrenceImpl::saveContent(saveHandler);
 	
 	ecore::EObjectImpl::saveContent(saveHandler);
 	

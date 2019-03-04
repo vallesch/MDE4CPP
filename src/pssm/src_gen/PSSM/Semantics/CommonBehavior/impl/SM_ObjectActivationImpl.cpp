@@ -57,6 +57,8 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
+#include "fUML/FUMLFactory.hpp"
+#include "PSSM/Semantics/StructuredClassifiers/SM_Object.hpp"
 
 using namespace PSSM::Semantics::CommonBehavior;
 
@@ -220,8 +222,10 @@ std::shared_ptr<fUML::EventOccurrence> SM_ObjectActivationImpl::getNextEvent()
 
 void SM_ObjectActivationImpl::registerCompletionEvent(std::shared_ptr<PSSM::Semantics::StateMachines::StateActivation>  stateActivation)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	
+	//end of body
 }
 
 void SM_ObjectActivationImpl::registerDeferredEvent(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence,std::shared_ptr<PSSM::Semantics::StateMachines::StateActivation>  stateActivation)
