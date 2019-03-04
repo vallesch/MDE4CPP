@@ -606,11 +606,11 @@ namespace PSSM
 			// Begin Class SM_ExecutionFactory
 			//Class and Feature IDs 
 			static const unsigned int SM_EXECUTIONFACTORY_ECLASS = 26;
-			static const unsigned int SM_EXECUTIONFACTORY_ECLASS_FEATURE_COUNT = 0;
-			static const unsigned int SM_EXECUTIONFACTORY_ECLASS_OPERATION_COUNT = 1;
+			static const unsigned int SM_EXECUTIONFACTORY_ECLASS_FEATURE_COUNT = 4;
+			static const unsigned int SM_EXECUTIONFACTORY_ECLASS_OPERATION_COUNT = 14;
 			
 			
-			static const int SM_EXECUTIONFACTORY_EOPERATION_INSTANTIATEVISITOR_ELEMENT = 2600;
+			static const int SM_EXECUTIONFACTORY_EOPERATION_INSTANTIATEVISITOR_ELEMENT = 2617;
 			
 			//Class and Feature Getter
 			virtual std::shared_ptr<ecore::EClass> getSM_ExecutionFactory_EClass() const = 0;
@@ -625,20 +625,16 @@ namespace PSSM
 			// Begin Class SM_Locus
 			//Class and Feature IDs 
 			static const unsigned int SM_LOCUS_ECLASS = 27;
-			static const unsigned int SM_LOCUS_ECLASS_FEATURE_COUNT = 2;
-			static const unsigned int SM_LOCUS_ECLASS_OPERATION_COUNT = 1;
+			static const unsigned int SM_LOCUS_ECLASS_FEATURE_COUNT = 3;
+			static const unsigned int SM_LOCUS_ECLASS_OPERATION_COUNT = 8;
 			
-			static const int SM_LOCUS_EREFERENCE_EXECUTOR = 2700;
-			static const int SM_LOCUS_EREFERENCE_FACTORY = 2701;
 			
-			static const int SM_LOCUS_EOPERATION_INSTANTIATE_CLASS = 2702;
+			static const int SM_LOCUS_EOPERATION_INSTANTIATE_CLASS = 2710;
 			
 			//Class and Feature Getter
 			virtual std::shared_ptr<ecore::EClass> getSM_Locus_EClass() const = 0;
 			
 			
-			virtual std::shared_ptr<ecore::EReference> getSM_Locus_EReference_executor() const = 0;
-			virtual std::shared_ptr<ecore::EReference> getSM_Locus_EReference_factory() const = 0;
 			
 			virtual std::shared_ptr<ecore::EOperation> getSM_Locus_EOperation_instantiate_Class() const = 0;
 			

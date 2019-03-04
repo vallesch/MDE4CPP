@@ -53,7 +53,6 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
-#include "fUML/FUMLFactory.hpp"
 #include "PSSM/Semantics/CommonBehavior/SM_ObjectActivation.hpp"
 
 using namespace PSSM::Semantics::StructuredClassifiers;

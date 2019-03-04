@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "ecore/EFactory.hpp"
+#include "fUML/Locus.hpp"
 
 namespace PSSM 
 {
@@ -149,6 +150,9 @@ namespace PSSM
 			virtual std::shared_ptr<PSSM::Semantics::StateMachines::RegionActivation> createRegionActivation() const = 0;
 			
 			virtual std::shared_ptr<PSSM::Semantics::Loci::SM_ExecutionFactory> createSM_ExecutionFactory() const = 0;
+			//Add containing object
+			virtual std::shared_ptr<PSSM::Semantics::Loci::SM_ExecutionFactory> createSM_ExecutionFactory_in_Locus(std::weak_ptr<fUML::Locus > par_locus) const = 0;
+			
 			
 			virtual std::shared_ptr<PSSM::Semantics::Loci::SM_Locus> createSM_Locus() const = 0;
 			

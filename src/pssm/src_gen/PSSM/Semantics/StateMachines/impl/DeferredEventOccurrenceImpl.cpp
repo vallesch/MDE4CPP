@@ -42,7 +42,6 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
-#include "fUML/FUMLFactory.hpp"
 
 using namespace PSSM::Semantics::StateMachines;
 

@@ -74,6 +74,7 @@ namespace fUML
 
 // base class includes
 #include "fUML/Object.hpp"
+#include "fUML/FUMLFactory.hpp"
 
 // enum includes
 

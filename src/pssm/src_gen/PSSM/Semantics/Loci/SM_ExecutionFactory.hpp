@@ -43,22 +43,47 @@ namespace uml
 
 namespace fUML 
 {
+	class ExecutionFactoryL3;
+}
+
+namespace fUML 
+{
+	class Locus;
+}
+
+namespace fUML 
+{
+	class OpaqueBehaviorExecution;
+}
+
+namespace uml 
+{
+	class PrimitiveType;
+}
+
+namespace fUML 
+{
+	class SemanticStrategy;
+}
+
+namespace fUML 
+{
 	class SemanticVisitor;
 }
 
 // base class includes
+#include "fUML/ExecutionFactoryL3.hpp"
+#include "fUML/FUMLFactory.hpp"
 
 // enum includes
 
-#include "ecore/EObject.hpp"
 
 //*********************************
 namespace PSSM::Semantics::Loci 
 {
 	/*!
 	 */
-	class SM_ExecutionFactory : virtual public ecore::EObject 
-
+	class SM_ExecutionFactory:virtual public fUML::ExecutionFactoryL3
 	{
 		public:
  			SM_ExecutionFactory(const SM_ExecutionFactory &) {}

@@ -51,24 +51,33 @@ namespace fUML
 	class Executor;
 }
 
-namespace PSSM::Semantics::StructuredClassifiers 
+namespace fUML 
 {
-	class SM_Object;
+	class ExtensionalValue;
+}
+
+namespace fUML 
+{
+	class Locus;
+}
+
+namespace fUML 
+{
+	class Object;
 }
 
 // base class includes
+#include "fUML/Locus.hpp"
 
 // enum includes
 
-#include "ecore/EObject.hpp"
 
 //*********************************
 namespace PSSM::Semantics::Loci 
 {
 	/*!
 	 */
-	class SM_Locus : virtual public ecore::EObject 
-
+	class SM_Locus:virtual public fUML::Locus
 	{
 		public:
  			SM_Locus(const SM_Locus &) {}
@@ -89,7 +98,7 @@ namespace PSSM::Semantics::Loci
 			//*********************************
 			/*!
 			 */ 
-			virtual std::shared_ptr<PSSM::Semantics::StructuredClassifiers::SM_Object> instantiate(std::shared_ptr<uml::Class>  type) = 0;
+			virtual std::shared_ptr<fUML::Object> instantiate(std::shared_ptr<uml::Class>  type) = 0;
 			
 			
 			//*********************************
@@ -99,20 +108,6 @@ namespace PSSM::Semantics::Loci
 			//*********************************
 			// Reference
 			//*********************************
-			/*!
-			 */
-			virtual std::shared_ptr<fUML::Executor > getExecutor() const = 0;
-			
-			/*!
-			 */
-			virtual void setExecutor(std::shared_ptr<fUML::Executor> _executor_executor) = 0;
-			/*!
-			 */
-			virtual std::shared_ptr<fUML::ExecutionFactory > getFactory() const = 0;
-			
-			/*!
-			 */
-			virtual void setFactory(std::shared_ptr<fUML::ExecutionFactory> _factory_factory) = 0;
 			
 
 		protected:
@@ -124,12 +119,6 @@ namespace PSSM::Semantics::Loci
 			//*********************************
 			// Reference Members
 			//*********************************
-			/*!
-			 */
-			std::shared_ptr<fUML::Executor > m_executor;
-			/*!
-			 */
-			std::shared_ptr<fUML::ExecutionFactory > m_factory;
 			
 
 		public:

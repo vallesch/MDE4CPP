@@ -617,14 +617,6 @@ std::shared_ptr<ecore::EClass> PSSMPackageImpl::getSM_Locus_EClass() const
 }
 
 
-std::shared_ptr<ecore::EReference> PSSMPackageImpl::getSM_Locus_EReference_executor() const
-{
-	return m_sM_Locus_EReference_executor;
-}
-std::shared_ptr<ecore::EReference> PSSMPackageImpl::getSM_Locus_EReference_factory() const
-{
-	return m_sM_Locus_EReference_factory;
-}
 
 std::shared_ptr<ecore::EOperation> PSSMPackageImpl::getSM_Locus_EOperation_instantiate_Class() const
 {

@@ -14,14 +14,12 @@
 #include "../SM_ExecutionFactory.hpp"
 
 #include "PSSM/impl/PSSMFactoryImpl.hpp"
-
-#include "ecore/impl/EObjectImpl.hpp"
+#include "fUML/impl/ExecutionFactoryL3Impl.hpp"
 
 //*********************************
 namespace PSSM::Semantics::Loci 
 {
-	class SM_ExecutionFactoryImpl :virtual public ecore::EObjectImpl,
-virtual public SM_ExecutionFactory 
+	class SM_ExecutionFactoryImpl :virtual public fUML::ExecutionFactoryL3Impl, virtual public SM_ExecutionFactory 
 	{
 		public: 
 			SM_ExecutionFactoryImpl(const SM_ExecutionFactoryImpl & obj);
@@ -35,6 +33,10 @@ virtual public SM_ExecutionFactory
 			SM_ExecutionFactoryImpl();
 			virtual std::shared_ptr<SM_ExecutionFactory> getThisSM_ExecutionFactoryPtr() const;
 			virtual void setThisSM_ExecutionFactoryPtr(std::weak_ptr<SM_ExecutionFactory> thisSM_ExecutionFactoryPtr);
+
+			//Additional constructors for the containments back reference
+			SM_ExecutionFactoryImpl(std::weak_ptr<fUML::Locus > par_locus);
+
 
 
 

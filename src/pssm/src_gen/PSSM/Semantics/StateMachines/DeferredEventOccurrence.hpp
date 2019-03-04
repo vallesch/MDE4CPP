@@ -48,6 +48,7 @@ namespace PSSM::Semantics::StateMachines
 
 // base class includes
 #include "fUML/EventOccurrence.hpp"
+#include "fUML/FUMLFactory.hpp"
 
 // enum includes
 

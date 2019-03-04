@@ -18,6 +18,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "abstractDataTypes/Bag.hpp"
 
 #include "abstractDataTypes/SubsetUnion.hpp"
 #include "ecore/EAnnotation.hpp"
@@ -33,6 +34,16 @@
 #include <exception> // used in Persistence
 
 #include "uml/Element.hpp"
+
+#include "fUML/ExecutionFactoryL3.hpp"
+
+#include "fUML/Locus.hpp"
+
+#include "fUML/OpaqueBehaviorExecution.hpp"
+
+#include "uml/PrimitiveType.hpp"
+
+#include "fUML/SemanticStrategy.hpp"
 
 #include "fUML/SemanticVisitor.hpp"
 
@@ -70,6 +81,16 @@ SM_ExecutionFactoryImpl::~SM_ExecutionFactoryImpl()
 }
 
 
+//Additional constructor for the containments back reference
+			SM_ExecutionFactoryImpl::SM_ExecutionFactoryImpl(std::weak_ptr<fUML::Locus > par_locus)
+			:SM_ExecutionFactoryImpl()
+			{
+			    m_locus = par_locus;
+			}
+
+
+
+
 
 
 SM_ExecutionFactoryImpl::SM_ExecutionFactoryImpl(const SM_ExecutionFactoryImpl & obj):SM_ExecutionFactoryImpl()
@@ -81,6 +102,17 @@ SM_ExecutionFactoryImpl::SM_ExecutionFactoryImpl(const SM_ExecutionFactoryImpl &
 
 	//copy references with no containment (soft copy)
 	
+	std::shared_ptr<Bag<uml::PrimitiveType>> _builtInTypes = obj.getBuiltInTypes();
+	m_builtInTypes.reset(new Bag<uml::PrimitiveType>(*(obj.getBuiltInTypes().get())));
+
+	m_locus  = obj.getLocus();
+
+	std::shared_ptr<Bag<fUML::OpaqueBehaviorExecution>> _primitiveBehaviorPrototypes = obj.getPrimitiveBehaviorPrototypes();
+	m_primitiveBehaviorPrototypes.reset(new Bag<fUML::OpaqueBehaviorExecution>(*(obj.getPrimitiveBehaviorPrototypes().get())));
+
+	std::shared_ptr<Bag<fUML::SemanticStrategy>> _strategies = obj.getStrategies();
+	m_strategies.reset(new Bag<fUML::SemanticStrategy>(*(obj.getStrategies().get())));
+
 
 	//Clone references with containment (deep copy)
 
@@ -128,9 +160,14 @@ std::shared_ptr<SM_ExecutionFactory> SM_ExecutionFactoryImpl::getThisSM_Executio
 void SM_ExecutionFactoryImpl::setThisSM_ExecutionFactoryPtr(std::weak_ptr<SM_ExecutionFactory> thisSM_ExecutionFactoryPtr)
 {
 	m_thisSM_ExecutionFactoryPtr = thisSM_ExecutionFactoryPtr;
+	setThisExecutionFactoryL3Ptr(thisSM_ExecutionFactoryPtr);
 }
 std::shared_ptr<ecore::EObject> SM_ExecutionFactoryImpl::eContainer() const
 {
+	if(auto wp = m_locus.lock())
+	{
+		return wp;
+	}
 	return nullptr;
 }
 
@@ -142,14 +179,14 @@ Any SM_ExecutionFactoryImpl::eGet(int featureID, bool resolve, bool coreType) co
 	switch(featureID)
 	{
 	}
-	return ecore::EObjectImpl::eGet(featureID, resolve, coreType);
+	return fUML::ExecutionFactoryL3Impl::eGet(featureID, resolve, coreType);
 }
 bool SM_ExecutionFactoryImpl::internalEIsSet(int featureID) const
 {
 	switch(featureID)
 	{
 	}
-	return ecore::EObjectImpl::internalEIsSet(featureID);
+	return fUML::ExecutionFactoryL3Impl::internalEIsSet(featureID);
 }
 bool SM_ExecutionFactoryImpl::eSet(int featureID, Any newValue)
 {
@@ -157,7 +194,7 @@ bool SM_ExecutionFactoryImpl::eSet(int featureID, Any newValue)
 	{
 	}
 
-	return ecore::EObjectImpl::eSet(featureID, newValue);
+	return fUML::ExecutionFactoryL3Impl::eSet(featureID, newValue);
 }
 
 //*********************************
@@ -183,27 +220,37 @@ void SM_ExecutionFactoryImpl::load(std::shared_ptr<persistence::interfaces::XLoa
 void SM_ExecutionFactoryImpl::loadAttributes(std::shared_ptr<persistence::interfaces::XLoadHandler> loadHandler, std::map<std::string, std::string> attr_list)
 {
 
-	ecore::EObjectImpl::loadAttributes(loadHandler, attr_list);
+	fUML::ExecutionFactoryL3Impl::loadAttributes(loadHandler, attr_list);
 }
 
 void SM_ExecutionFactoryImpl::loadNode(std::string nodeName, std::shared_ptr<persistence::interfaces::XLoadHandler> loadHandler, std::shared_ptr<PSSM::PSSMFactory> modelFactory)
 {
 
 
-	ecore::EObjectImpl::loadNode(nodeName, loadHandler, ecore::EcoreFactory::eInstance());
+	fUML::ExecutionFactoryL3Impl::loadNode(nodeName, loadHandler, fUML::FUMLFactory::eInstance());
 }
 
 void SM_ExecutionFactoryImpl::resolveReferences(const int featureID, std::list<std::shared_ptr<ecore::EObject> > references)
 {
-	ecore::EObjectImpl::resolveReferences(featureID, references);
+	fUML::ExecutionFactoryL3Impl::resolveReferences(featureID, references);
 }
 
 void SM_ExecutionFactoryImpl::save(std::shared_ptr<persistence::interfaces::XSaveHandler> saveHandler) const
 {
 	saveContent(saveHandler);
 
+	fUML::ExecutionFactoryL3Impl::saveContent(saveHandler);
+	
+	fUML::ExecutionFactoryL2Impl::saveContent(saveHandler);
+	
+	fUML::ExecutionFactoryL1Impl::saveContent(saveHandler);
+	
+	fUML::ExecutionFactoryImpl::saveContent(saveHandler);
 	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
+	
+	
 	
 }
 

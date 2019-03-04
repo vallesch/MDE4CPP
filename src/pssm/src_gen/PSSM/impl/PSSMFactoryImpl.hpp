@@ -80,6 +80,9 @@ namespace PSSM
 			virtual std::shared_ptr<PSSM::Semantics::StateMachines::RegionActivation> createRegionActivation() const ;
 			
 			virtual std::shared_ptr<PSSM::Semantics::Loci::SM_ExecutionFactory> createSM_ExecutionFactory() const ;
+			//Add containing object
+			virtual std::shared_ptr<PSSM::Semantics::Loci::SM_ExecutionFactory> createSM_ExecutionFactory_in_Locus(std::weak_ptr<fUML::Locus > par_locus) const ;
+			
 			
 			virtual std::shared_ptr<PSSM::Semantics::Loci::SM_Locus> createSM_Locus() const ;
 			

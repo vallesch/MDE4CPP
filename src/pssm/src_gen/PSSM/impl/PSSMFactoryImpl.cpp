@@ -226,8 +226,16 @@ std::shared_ptr<ecore::EObject> PSSMFactoryImpl::create(const unsigned int class
 		}
 		case PSSMPackage::SM_EXECUTIONFACTORY_ECLASS:
 		{
+			if (nullptr == container)
+			{
 				return this->createSM_ExecutionFactory();
-			
+			}
+			else
+			{
+				std::weak_ptr<fUML::Locus > castedContainer = std::dynamic_pointer_cast<fUML::Locus>(container);
+				assert(castedContainer);
+				return std::shared_ptr<PSSM::Semantics::Loci::SM_ExecutionFactory>(this->createSM_ExecutionFactory_in_Locus(castedContainer));
+			}
 		}
 		case PSSMPackage::SM_LOCUS_ECLASS:
 		{
@@ -483,6 +491,18 @@ std::shared_ptr<PSSM::Semantics::Loci::SM_ExecutionFactory> PSSMFactoryImpl::cre
 	element->setThisSM_ExecutionFactoryPtr(element);
 	return element;
 }
+std::shared_ptr<PSSM::Semantics::Loci::SM_ExecutionFactory> PSSMFactoryImpl::createSM_ExecutionFactory_in_Locus(std::weak_ptr<fUML::Locus > par_locus) const
+{
+	std::shared_ptr<PSSM::Semantics::Loci::SM_ExecutionFactoryImpl> element(new PSSM::Semantics::Loci::SM_ExecutionFactoryImpl(par_locus));
+	if(auto wp = par_locus.lock())
+	{
+			wp->setFactory(element);
+	}
+	element->setThisSM_ExecutionFactoryPtr(element);
+	return element;
+	
+}
+
 std::shared_ptr<PSSM::Semantics::Loci::SM_Locus> PSSMFactoryImpl::createSM_Locus() const
 {
 	std::shared_ptr<PSSM::Semantics::Loci::SM_LocusImpl> element(new PSSM::Semantics::Loci::SM_LocusImpl());
