@@ -46,6 +46,7 @@ int main()
 
 	std::shared_ptr<PSSM::Semantics::Loci::SM_Locus> locus(factory->createSM_Locus());
 
+	std::shared_ptr<PSSM::Semantics::StateMachines::RegionActivation> region = factory->createRegionActivation();
 
 
     return 0;

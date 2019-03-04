@@ -56,6 +56,9 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
+#include "PSSM/Semantics/StateMachines/StateMachineExecution.hpp"
+#include "PSSM/Semantics/StateMachines/ExitPointPseudostateActivation.hpp"
+#include "PSSM/Semantics/StateMachines/EntryPointPseudostateActivation.hpp"
 
 using namespace PSSM::Semantics::StateMachines;
 
@@ -144,14 +147,40 @@ void StateMachineSemanticVisitorImpl::activateTransitions()
 
 std::shared_ptr<Bag<fUML::SemanticVisitor> > StateMachineSemanticVisitorImpl::getContextChain()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	// Return the hierarchy of visitors that need to be traversed to access
+	// the visitor that called context chain. The caller is part of the returned
+	// context chain.
+//	List<SemanticVisitor> contextChain = new ArrayList<SemanticVisitor>();
+//	if(!(this instanceof ExitPointPseudostateActivation) && !(this instanceof EntryPointPseudostateActivation)){
+//		contextChain.add(this);
+//	}
+//	if(this.parent!=null){
+//		if(this.parent instanceof StateMachineExecution){
+//			contextChain.add(this.parent);
+//		}else{
+//			contextChain.addAll(((StateMachineSemanticVisitor)this.parent).getContextChain());
+//		}
+//	}
+//	return contextChain;
+	std::shared_ptr<Bag<fUML::SemanticVisitor>> contextChain = std::shared_ptr<Bag<fUML::SemanticVisitor>>();
+
+//	std::shared_ptr<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation> exitPseudoState = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation>(this);
+//	std::shared_ptr<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation> entryPseudoState = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation>(this);
+//	if(exitPseudoState == nullptr && entryPseudoState == nullptr)
+//	{
+//		contextChain->add(std::dynamic_pointer_cast<fUML::SemanticVisitor>(this));
+//	}
+//	else
+//	{
+//		contextChain->insert((std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::StateMachineSemanticVisitor>(this->m_parent))->getContextChain());
+//	}
+
+	return contextChain;
 }
 
 std::shared_ptr<fUML::Object> StateMachineSemanticVisitorImpl::getExecutionContext()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	return this->getStateMachineExecution()->getContext();
 }
 
 Any StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavior>  behavior,std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
@@ -162,8 +191,7 @@ Any StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavi
 
 std::shared_ptr<fUML::Locus> StateMachineSemanticVisitorImpl::getExecutionLocus()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	return this->getStateMachineExecution()->getLocus();
 }
 
 
@@ -172,8 +200,15 @@ std::shared_ptr<fUML::Locus> StateMachineSemanticVisitorImpl::getExecutionLocus(
 
 std::shared_ptr<fUML::Execution> StateMachineSemanticVisitorImpl::getStateMachineExecution()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	std::shared_ptr<PSSM::Semantics::StateMachines::StateMachineExecution> exec = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::StateMachineExecution>(this->m_parent);
+
+	if(this->m_parent != nullptr && exec != nullptr)
+	{
+		return std::dynamic_pointer_cast<fUML::Execution>(this->m_parent);
+	} else
+	{
+		return (std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::StateMachineSemanticVisitor>(this->m_parent))->getStateMachineExecution();
+	}
 }
 
 bool StateMachineSemanticVisitorImpl::isVisitorFor(std::shared_ptr<uml::NamedElement>  node)

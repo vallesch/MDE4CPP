@@ -275,14 +275,15 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="history" ordered="false"
             eType="#//Semantics/StateMachines/StateActivation"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="StateMachineSemanticVisitor" abstract="true">
+      <eClassifiers xsi:type="ecore:EClass" name="StateMachineSemanticVisitor" abstract="true"
+          eSuperTypes="../../fuml/model/fUML.ecore#//SemanticVisitor">
         <eOperations name="activate" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// This operation is intended to be overridden by sub-classes. For required sub-classes&#xA;// (e.g., RegionActivation, StateActivation) it will initiate the instantiation phase of&#xA;// child semantic visitors. By default activate does nothing.&#xA;return;&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="activateTransitions" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// ActivateTransition is intended to be overridden by sub-classes. It will capture the instantiation&#xA;// of transitions visitors as well as the linking between these visitors and the required vertices&#xA;// activation. By default activate does nothing.&#xA;return;&#xA;"/>
           </eAnnotations>
         </eOperations>
@@ -295,8 +296,8 @@
           </eAnnotations>
         </eOperations>
         <eOperations name="getExecutionLocus" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//Locus">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="body" value="return this.getStateMachineExecution().locus;&#xA;"/>
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+            <details key="body" value="return this->getStateMachineExecution()->getLocus();"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="getParent" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//SemanticVisitor">
@@ -308,8 +309,8 @@
           </eAnnotations>
         </eOperations>
         <eOperations name="getExecutionContext" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//Object">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="body" value="return this.getStateMachineExecution().context;&#xA;"/>
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+            <details key="body" value="return this->getStateMachineExecution()->getContext();"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="setParent" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//SemanticVisitor">
@@ -332,30 +333,30 @@
         </eOperations>
         <eOperations name="getStateMachineExecution" ordered="false" lowerBound="1"
             eType="ecore:EClass ../../fuml/model/fUML.ecore#//Execution">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="body" value="// Return the state-machine execution from which the caller of this operation belongs&#xA;if(this.parent!=null &amp;&amp; this.parent instanceof StateMachineExecution){&#xA;&#x9;return (Execution)this.parent;&#xA;}else{&#xA;&#x9;return ((StateMachineSemanticVisitor)this.parent).getStateMachineExecution();&#xA;}&#xA;"/>
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+            <details key="body" value="// Return the state-machine execution from which the caller of this operation belongs&#xA;//if(this.parent!=null &amp;&amp; this.parent instanceof StateMachineExecution){&#xA;//&#x9;return (Execution)this.parent;&#xA;//}else{&#xA;//&#x9;return ((StateMachineSemanticVisitor)this.parent).getStateMachineExecution();&#xA;//}&#xA;&#xA;&#x9;std::shared_ptr&lt;PSSM::Semantics::StateMachines::StateMachineExecution> exec = std::dynamic_pointer_cast&lt;PSSM::Semantics::StateMachines::StateMachineExecution>(this->m_parent);&#xA;&#xA;&#x9;if(this->m_parent != nullptr &amp;&amp; exec != nullptr)&#xA;&#x9;{&#xA;&#x9;&#x9;return std::dynamic_pointer_cast&lt;fUML::Execution>(this->m_parent);&#xA;&#x9;} else&#xA;&#x9;{&#xA;&#x9;&#x9;return (std::dynamic_pointer_cast&lt;PSSM::Semantics::StateMachines::StateMachineSemanticVisitor>(this->m_parent))->getStateMachineExecution();&#xA;&#x9;}&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="getContextChain" ordered="false" upperBound="-1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//SemanticVisitor">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-            <details key="body" value="// Return the hierarchy of visitors that need to be traversed to access&#xA;// the visitor that called context chain. The caller is part of the returned&#xA;// context chain.&#xA;List&lt;SemanticVisitor> contextChain = new ArrayList&lt;SemanticVisitor>();&#xA;if(!(this instanceof ExitPointPseudostateActivation) &amp;&amp; !(this instanceof EntryPointPseudostateActivation)){&#xA;&#x9;contextChain.add(this);&#xA;}&#xA;if(this.parent!=null){&#xA;&#x9;if(this.parent instanceof StateMachineExecution){&#xA;&#x9;&#x9;contextChain.add(this.parent);&#xA;&#x9;}else{&#xA;&#x9;&#x9;contextChain.addAll(((StateMachineSemanticVisitor)this.parent).getContextChain());&#xA;&#x9;}&#xA;}&#xA;return contextChain;&#xA;"/>
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+            <details key="body" value="&#x9;// Return the hierarchy of visitors that need to be traversed to access&#xA;&#x9;// the visitor that called context chain. The caller is part of the returned&#xA;&#x9;// context chain.&#xA;//&#x9;List&lt;SemanticVisitor> contextChain = new ArrayList&lt;SemanticVisitor>();&#xA;//&#x9;if(!(this instanceof ExitPointPseudostateActivation) &amp;&amp; !(this instanceof EntryPointPseudostateActivation)){&#xA;//&#x9;&#x9;contextChain.add(this);&#xA;//&#x9;}&#xA;//&#x9;if(this.parent!=null){&#xA;//&#x9;&#x9;if(this.parent instanceof StateMachineExecution){&#xA;//&#x9;&#x9;&#x9;contextChain.add(this.parent);&#xA;//&#x9;&#x9;}else{&#xA;//&#x9;&#x9;&#x9;contextChain.addAll(((StateMachineSemanticVisitor)this.parent).getContextChain());&#xA;//&#x9;&#x9;}&#xA;//&#x9;}&#xA;//&#x9;return contextChain;&#xA;&#x9;std::shared_ptr&lt;Bag&lt;fUML::SemanticVisitor>> contextChain = std::shared_ptr&lt;Bag&lt;fUML::SemanticVisitor>>();&#xA;&#xA;//&#x9;std::shared_ptr&lt;PSSM::Semantics::StateMachines::ExitPointPseudostateActivation> exitPseudoState = std::dynamic_pointer_cast&lt;PSSM::Semantics::StateMachines::ExitPointPseudostateActivation>(this);&#xA;//&#x9;std::shared_ptr&lt;PSSM::Semantics::StateMachines::EntryPointPseudostateActivation> entryPseudoState = std::dynamic_pointer_cast&lt;PSSM::Semantics::StateMachines::EntryPointPseudostateActivation>(this);&#xA;//&#x9;if(exitPseudoState == nullptr &amp;&amp; entryPseudoState == nullptr)&#xA;//&#x9;{&#xA;//&#x9;&#x9;contextChain->add(std::dynamic_pointer_cast&lt;fUML::SemanticVisitor>(this));&#xA;//&#x9;}&#xA;//&#x9;else&#xA;//&#x9;{&#xA;//&#x9;&#x9;contextChain->insert((std::dynamic_pointer_cast&lt;PSSM::Semantics::StateMachines::StateMachineSemanticVisitor>(this->m_parent))->getContextChain());&#xA;//&#x9;}&#xA;&#xA;&#x9;return contextChain;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="isVisitorFor" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/uml2/5.0.0/Types#//Boolean">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// A visitor is the interpreter for a model if the node given as parameter is the&#xA;// this model element.&#xA;return this.node == node;&#xA;"/>
           </eAnnotations>
           <eParameters name="node" ordered="false" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//NamedElement"/>
         </eOperations>
         <eOperations name="match" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/uml2/5.0.0/Types#//Boolean">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Check if the event occurrence matches one of the trigger in the list.&#xA;// The matching rule are the following:&#xA;// &#x9;&#x9;1. If the event occurrence is a signal event occurrence then type&#xA;//&#x9;&#x9;   of the signal must conforms to the type referenced by the event&#xA;//&#x9;&#x9;   In addition, if the trigger defines ports through wich the event occurrence&#xA;//         is allowed to arrive then the arrival port of the event occurrence&#xA;//&#x9;&#x9;   must be one the referenced port.&#xA;// &#x9;&#x9;2. If the event occurrence is a call event occurrence then the operation&#xA;// &#x9;&#x9;   that is referenced must be the same than the one specified in the call&#xA;//&#x9;&#x9;   event.&#xA;// NOTE: CallEventOccurrence are not related to an arrival port. This limitation is&#xA;// introduced by a limitation in the current PSCS semantic model.&#xA;// &#xA;// If a match is found then true is returned, false otherwise.&#xA;boolean match = false;&#xA;int i = 0;&#xA;while(!match &amp;&amp; i &lt; triggers.size()){&#xA;&#x9;Trigger trigger = triggers.get(i);&#xA;&#x9;if(eventOccurrence instanceof SignalEventOccurrence&#xA;&#x9;&#x9;&#x9;&amp;&amp; trigger.getEvent() instanceof SignalEvent){&#xA;&#x9;&#x9;SignalEventOccurrence signalEventOccurrence = (SignalEventOccurrence) eventOccurrence;&#xA;&#x9;&#x9;SignalEvent event = (SignalEvent) trigger.getEvent();&#xA;&#x9;&#x9;if(event.getSignal() == signalEventOccurrence.signalInstance.type){&#xA;&#x9;&#x9;&#x9;match = true;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;if(match  &amp;&amp; trigger.getPorts().size() > 0){&#xA;&#x9;&#x9;&#x9;int j = 0;&#xA;&#x9;&#x9;&#x9;boolean matchingPort = false; &#xA;&#x9;&#x9;&#x9;while(j &lt; trigger.getPorts().size() &amp; !matchingPort){&#xA;&#x9;&#x9;&#x9;&#x9;if(((CS_SignalInstance)signalEventOccurrence.signalInstance).interactionPoint.definingPort == trigger.getPorts().get(j)){&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;matchingPort = true;&#xA;&#x9;&#x9;&#x9;&#x9;} &#xA;&#x9;&#x9;&#x9;&#x9;j = j + 1;&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;if(!matchingPort){&#xA;&#x9;&#x9;&#x9;&#x9;match = matchingPort;&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;}&#xA;&#x9;}else if(eventOccurrence instanceof CallEventOccurrence&#xA;&#x9;&#x9;&#x9;&amp;&amp; trigger.getEvent() instanceof CallEvent){&#xA;&#x9;&#x9;CallEvent event = (CallEvent) trigger.getEvent();&#xA;&#x9;&#x9;CallEventOccurrence callEventOccurrence = (CallEventOccurrence) eventOccurrence;&#xA;&#x9;&#x9;if(event.getOperation() == callEventOccurrence.execution.operation){&#xA;&#x9;&#x9;&#x9;match = true;&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;&#x9;i++;&#xA;}&#xA;return match;&#xA;"/>
           </eAnnotations>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
           <eParameters name="triggers" ordered="false" upperBound="-1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Trigger"/>
         </eOperations>
         <eOperations name="getExecutionFor" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Create an Execution for the specified behavior. In addition to the creation of this&#xA;// Execution, if the behavior execution is triggered by the dispatching of an event (i.e.&#xA;// a CallEvent or a SignalEvent) then an EventTriggeredExecution is provided. This&#xA;// execution wraps the original execution and ensures passing of event data to the&#xA;// wrapped execution.&#xA;Execution execution = null;&#xA;if(behavior != null){&#xA;&#x9;Execution originalExecution = this.getExecutionLocus().factory.createExecution(behavior, this.getExecutionContext());&#xA;&#x9;if(eventOccurrence != null){&#xA;&#x9;&#x9;EventTriggeredExecution containerExecution = new EventTriggeredExecution();&#xA;&#x9;&#x9;containerExecution.triggeringEventOccurrence = eventOccurrence;&#xA;&#x9;&#x9;containerExecution.wrappedExecution = originalExecution;&#xA;&#x9;&#x9;containerExecution.context = originalExecution.context;&#xA;&#x9;&#x9;execution = containerExecution;&#xA;&#x9;}else{&#xA;&#x9;&#x9;execution = originalExecution;&#xA;&#x9;}&#xA;}&#xA;return execution;&#xA;"/>
           </eAnnotations>
           <eParameters name="behavior" ordered="false" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Behavior"/>
