@@ -225,7 +225,10 @@ void ChoicePseudostateActivationImpl::save(std::shared_ptr<persistence::interfac
 	
 	StateMachineSemanticVisitorImpl::saveContent(saveHandler);
 	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
+	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
 	
 	
 	

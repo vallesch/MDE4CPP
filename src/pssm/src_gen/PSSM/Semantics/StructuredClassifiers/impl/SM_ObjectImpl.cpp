@@ -24,6 +24,8 @@
 #include "ecore/EAnnotation.hpp"
 #include "ecore/EClass.hpp"
 #include "PSSM/impl/PSSMPackageImpl.hpp"
+#include "fUML/FUMLFactory.hpp"
+#include "PSSM/Semantics/CommonBehavior/SM_ObjectActivation.hpp"
 
 //Forward declaration includes
 #include "persistence/interfaces/XLoadHandler.hpp" // used for Persistence
@@ -53,7 +55,6 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
-#include "PSSM/Semantics/CommonBehavior/SM_ObjectActivation.hpp"
 
 using namespace PSSM::Semantics::StructuredClassifiers;
 

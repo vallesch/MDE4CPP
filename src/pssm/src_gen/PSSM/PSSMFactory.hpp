@@ -11,7 +11,12 @@
 #include <memory>
 
 #include "ecore/EFactory.hpp"
-#include "fUML/Locus.hpp"
+
+namespace fUML
+{
+	class Locus;
+}
+
 
 namespace PSSM 
 {

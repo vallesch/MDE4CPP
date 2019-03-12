@@ -226,7 +226,10 @@ void ExternalTransitionActivationImpl::save(std::shared_ptr<persistence::interfa
 	
 	StateMachineSemanticVisitorImpl::saveContent(saveHandler);
 	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
+	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
 	
 	
 }

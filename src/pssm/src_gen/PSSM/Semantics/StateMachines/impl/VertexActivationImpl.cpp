@@ -466,7 +466,10 @@ void VertexActivationImpl::save(std::shared_ptr<persistence::interfaces::XSaveHa
 
 	StateMachineSemanticVisitorImpl::saveContent(saveHandler);
 	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
+	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
 	
 }
 

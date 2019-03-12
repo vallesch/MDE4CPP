@@ -73,7 +73,6 @@ namespace fUML
 
 // base class includes
 #include "fUML/ExecutionFactoryL3.hpp"
-#include "fUML/FUMLFactory.hpp"
 
 // enum includes
 

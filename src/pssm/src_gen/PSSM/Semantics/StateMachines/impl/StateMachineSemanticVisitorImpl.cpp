@@ -48,6 +48,8 @@
 
 #include "fUML/SemanticVisitor.hpp"
 
+#include "fUML/FUMLFactory.hpp"
+
 #include "uml/Trigger.hpp"
 
 #include "ecore/EcorePackage.hpp"
@@ -57,8 +59,6 @@
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
 #include "PSSM/Semantics/StateMachines/StateMachineExecution.hpp"
-#include "PSSM/Semantics/StateMachines/ExitPointPseudostateActivation.hpp"
-#include "PSSM/Semantics/StateMachines/EntryPointPseudostateActivation.hpp"
 
 using namespace PSSM::Semantics::StateMachines;
 
@@ -135,19 +135,33 @@ std::shared_ptr<ecore::EClass> StateMachineSemanticVisitorImpl::eStaticClass() c
 //*********************************
 void StateMachineSemanticVisitorImpl::activate()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// This operation is intended to be overridden by sub-classes. For required sub-classes
+// (e.g., RegionActivation, StateActivation) it will initiate the instantiation phase of
+// child semantic visitors. By default activate does nothing.
+return;
+
+	//end of body
 }
 
 void StateMachineSemanticVisitorImpl::activateTransitions()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// ActivateTransition is intended to be overridden by sub-classes. It will capture the instantiation
+// of transitions visitors as well as the linking between these visitors and the required vertices
+// activation. By default activate does nothing.
+return;
+
+	//end of body
 }
 
 std::shared_ptr<Bag<fUML::SemanticVisitor> > StateMachineSemanticVisitorImpl::getContextChain()
 {
-	// Return the hierarchy of visitors that need to be traversed to access
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+		// Return the hierarchy of visitors that need to be traversed to access
 	// the visitor that called context chain. The caller is part of the returned
 	// context chain.
 //	List<SemanticVisitor> contextChain = new ArrayList<SemanticVisitor>();
@@ -176,22 +190,51 @@ std::shared_ptr<Bag<fUML::SemanticVisitor> > StateMachineSemanticVisitorImpl::ge
 //	}
 
 	return contextChain;
+	//end of body
 }
 
 std::shared_ptr<fUML::Object> StateMachineSemanticVisitorImpl::getExecutionContext()
 {
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
 	return this->getStateMachineExecution()->getContext();
+	//end of body
 }
 
 Any StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavior>  behavior,std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Create an Execution for the specified behavior. In addition to the creation of this
+// Execution, if the behavior execution is triggered by the dispatching of an event (i.e.
+// a CallEvent or a SignalEvent) then an EventTriggeredExecution is provided. This
+// execution wraps the original execution and ensures passing of event data to the
+// wrapped execution.
+//Execution execution = null;
+//if(behavior != null){
+//	Execution originalExecution = this.getExecutionLocus().factory.createExecution(behavior, this.getExecutionContext());
+//	if(eventOccurrence != null){
+//		EventTriggeredExecution containerExecution = new EventTriggeredExecution();
+//		containerExecution.triggeringEventOccurrence = eventOccurrence;
+//		containerExecution.wrappedExecution = originalExecution;
+//		containerExecution.context = originalExecution.context;
+//		execution = containerExecution;
+//	}else{
+//		execution = originalExecution;
+//	}
+//}
+//return execution;
+	return nullptr;
+
+	//end of body
 }
 
 std::shared_ptr<fUML::Locus> StateMachineSemanticVisitorImpl::getExecutionLocus()
 {
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
 	return this->getStateMachineExecution()->getLocus();
+	//end of body
 }
 
 
@@ -200,6 +243,15 @@ std::shared_ptr<fUML::Locus> StateMachineSemanticVisitorImpl::getExecutionLocus(
 
 std::shared_ptr<fUML::Execution> StateMachineSemanticVisitorImpl::getStateMachineExecution()
 {
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Return the state-machine execution from which the caller of this operation belongs
+//if(this.parent!=null && this.parent instanceof StateMachineExecution){
+//	return (Execution)this.parent;
+//}else{
+//	return ((StateMachineSemanticVisitor)this.parent).getStateMachineExecution();
+//}
+
 	std::shared_ptr<PSSM::Semantics::StateMachines::StateMachineExecution> exec = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::StateMachineExecution>(this->m_parent);
 
 	if(this->m_parent != nullptr && exec != nullptr)
@@ -209,18 +261,78 @@ std::shared_ptr<fUML::Execution> StateMachineSemanticVisitorImpl::getStateMachin
 	{
 		return (std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::StateMachineSemanticVisitor>(this->m_parent))->getStateMachineExecution();
 	}
+
+	//end of body
 }
 
 bool StateMachineSemanticVisitorImpl::isVisitorFor(std::shared_ptr<uml::NamedElement>  node)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// A visitor is the interpreter for a model if the node given as parameter is the
+// this model element.
+//return this.node == node;
+	return false;
+
+	//end of body
 }
 
 bool StateMachineSemanticVisitorImpl::match(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence,std::shared_ptr<Bag<uml::Trigger> >  triggers)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Check if the event occurrence matches one of the trigger in the list.
+// The matching rule are the following:
+// 		1. If the event occurrence is a signal event occurrence then type
+//		   of the signal must conforms to the type referenced by the event
+//		   In addition, if the trigger defines ports through wich the event occurrence
+//         is allowed to arrive then the arrival port of the event occurrence
+//		   must be one the referenced port.
+// 		2. If the event occurrence is a call event occurrence then the operation
+// 		   that is referenced must be the same than the one specified in the call
+//		   event.
+// NOTE: CallEventOccurrence are not related to an arrival port. This limitation is
+// introduced by a limitation in the current PSCS semantic model.
+// 
+// If a match is found then true is returned, false otherwise.
+//boolean match = false;
+//int i = 0;
+//while(!match && i < triggers.size()){
+//	Trigger trigger = triggers.get(i);
+//	if(eventOccurrence instanceof SignalEventOccurrence
+//			&& trigger.getEvent() instanceof SignalEvent){
+//		SignalEventOccurrence signalEventOccurrence = (SignalEventOccurrence) eventOccurrence;
+//		SignalEvent event = (SignalEvent) trigger.getEvent();
+//		if(event.getSignal() == signalEventOccurrence.signalInstance.type){
+//			match = true;
+//		}
+//		if(match  && trigger.getPorts().size() > 0){
+//			int j = 0;
+//			boolean matchingPort = false;
+//			while(j < trigger.getPorts().size() & !matchingPort){
+//				if(((CS_SignalInstance)signalEventOccurrence.signalInstance).interactionPoint.definingPort == trigger.getPorts().get(j)){
+//					matchingPort = true;
+//				}
+//				j = j + 1;
+//			}
+//			if(!matchingPort){
+//				match = matchingPort;
+//			}
+//		}
+//	}else if(eventOccurrence instanceof CallEventOccurrence
+//			&& trigger.getEvent() instanceof CallEvent){
+//		CallEvent event = (CallEvent) trigger.getEvent();
+//		CallEventOccurrence callEventOccurrence = (CallEventOccurrence) eventOccurrence;
+//		if(event.getOperation() == callEventOccurrence.execution.operation){
+//			match = true;
+//		}
+//	}
+//	i++;
+//}
+//return match;
+	return true;
+
+	//end of body
 }
 
 
@@ -262,6 +374,7 @@ std::shared_ptr<StateMachineSemanticVisitor> StateMachineSemanticVisitorImpl::ge
 void StateMachineSemanticVisitorImpl::setThisStateMachineSemanticVisitorPtr(std::weak_ptr<StateMachineSemanticVisitor> thisStateMachineSemanticVisitorPtr)
 {
 	m_thisStateMachineSemanticVisitorPtr = thisStateMachineSemanticVisitorPtr;
+	setThisSemanticVisitorPtr(thisStateMachineSemanticVisitorPtr);
 }
 std::shared_ptr<ecore::EObject> StateMachineSemanticVisitorImpl::eContainer() const
 {
@@ -280,7 +393,7 @@ Any StateMachineSemanticVisitorImpl::eGet(int featureID, bool resolve, bool core
 		case PSSM::PSSMPackage::STATEMACHINESEMANTICVISITOR_EREFERENCE_PARENT:
 			return eAny(getParent()); //391
 	}
-	return ecore::EObjectImpl::eGet(featureID, resolve, coreType);
+	return fUML::SemanticVisitorImpl::eGet(featureID, resolve, coreType);
 }
 bool StateMachineSemanticVisitorImpl::internalEIsSet(int featureID) const
 {
@@ -291,7 +404,7 @@ bool StateMachineSemanticVisitorImpl::internalEIsSet(int featureID) const
 		case PSSM::PSSMPackage::STATEMACHINESEMANTICVISITOR_EREFERENCE_PARENT:
 			return getParent() != nullptr; //391
 	}
-	return ecore::EObjectImpl::internalEIsSet(featureID);
+	return fUML::SemanticVisitorImpl::internalEIsSet(featureID);
 }
 bool StateMachineSemanticVisitorImpl::eSet(int featureID, Any newValue)
 {
@@ -313,7 +426,7 @@ bool StateMachineSemanticVisitorImpl::eSet(int featureID, Any newValue)
 		}
 	}
 
-	return ecore::EObjectImpl::eSet(featureID, newValue);
+	return fUML::SemanticVisitorImpl::eSet(featureID, newValue);
 }
 
 //*********************************
@@ -365,14 +478,14 @@ void StateMachineSemanticVisitorImpl::loadAttributes(std::shared_ptr<persistence
 		std::cout << "| ERROR    | " <<  "Exception occurred" << std::endl;
 	}
 
-	ecore::EObjectImpl::loadAttributes(loadHandler, attr_list);
+	fUML::SemanticVisitorImpl::loadAttributes(loadHandler, attr_list);
 }
 
 void StateMachineSemanticVisitorImpl::loadNode(std::string nodeName, std::shared_ptr<persistence::interfaces::XLoadHandler> loadHandler, std::shared_ptr<PSSM::PSSMFactory> modelFactory)
 {
 
 
-	ecore::EObjectImpl::loadNode(nodeName, loadHandler, ecore::EcoreFactory::eInstance());
+	fUML::SemanticVisitorImpl::loadNode(nodeName, loadHandler, fUML::FUMLFactory::eInstance());
 }
 
 void StateMachineSemanticVisitorImpl::resolveReferences(const int featureID, std::list<std::shared_ptr<ecore::EObject> > references)
@@ -403,13 +516,14 @@ void StateMachineSemanticVisitorImpl::resolveReferences(const int featureID, std
 			return;
 		}
 	}
-	ecore::EObjectImpl::resolveReferences(featureID, references);
+	fUML::SemanticVisitorImpl::resolveReferences(featureID, references);
 }
 
 void StateMachineSemanticVisitorImpl::save(std::shared_ptr<persistence::interfaces::XSaveHandler> saveHandler) const
 {
 	saveContent(saveHandler);
 
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
 	
 	ecore::EObjectImpl::saveContent(saveHandler);
 	

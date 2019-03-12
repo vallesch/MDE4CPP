@@ -578,7 +578,10 @@ void StateActivationImpl::save(std::shared_ptr<persistence::interfaces::XSaveHan
 	
 	StateMachineSemanticVisitorImpl::saveContent(saveHandler);
 	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
+	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
 	
 	
 }

@@ -65,8 +65,6 @@ using namespace PSSM::Semantics::StructuredClassifiers;
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
-#include "PSSM/Semantics/CommonBehavior/SM_ObjectActivation.hpp"
-#include "fUML/ObjectActivation.hpp"
 
 using namespace PSSM::Semantics::Loci;
 
@@ -170,11 +168,12 @@ std::shared_ptr<fUML::Object> SM_LocusImpl::instantiate(std::shared_ptr<uml::Cla
 //}
 //return object;
 
-std::shared_ptr<fUML::Object> object = nullptr;
+std::shared_ptr<SM_Object> object = nullptr;
 	std::shared_ptr<uml::Behavior> behavior = std::dynamic_pointer_cast<uml::Behavior>(type);
     if(behavior != nullptr)
     {
-       object = this->getFactory()->createExecution(behavior, nullptr);
+    	std::shared_ptr<SM_Object>  context = nullptr;
+       object = std::dynamic_pointer_cast<SM_Object>(this->getFactory()->createExecution(behavior, nullptr));
     }
     else
     {

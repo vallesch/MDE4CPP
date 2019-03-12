@@ -80,18 +80,17 @@ namespace uml
 }
 
 // base class includes
+#include "fUML/SemanticVisitor.hpp"
 
 // enum includes
 
-#include "ecore/EObject.hpp"
 
 //*********************************
 namespace PSSM::Semantics::StateMachines 
 {
 	/*!
 	 */
-	class StateMachineSemanticVisitor : virtual public ecore::EObject 
-
+	class StateMachineSemanticVisitor:virtual public fUML::SemanticVisitor
 	{
 		public:
  			StateMachineSemanticVisitor(const StateMachineSemanticVisitor &) {}

@@ -149,7 +149,6 @@ std::shared_ptr<Bag<fUML::Value> > SM_OpaqueExpressionEvaluationImpl::executeExp
 //}
 //return evaluation;
 
-	return nullptr;
 	//end of body
 }
 
@@ -170,7 +169,6 @@ std::shared_ptr<fUML::ParameterValue> SM_OpaqueExpressionEvaluationImpl::getPara
 //}
 //return parameterValue;
 
-	return nullptr;
 	//end of body
 }
 

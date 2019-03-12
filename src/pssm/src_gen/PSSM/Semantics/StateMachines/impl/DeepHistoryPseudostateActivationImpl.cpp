@@ -232,7 +232,10 @@ void DeepHistoryPseudostateActivationImpl::save(std::shared_ptr<persistence::int
 	
 	StateMachineSemanticVisitorImpl::saveContent(saveHandler);
 	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
+	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
 	
 	
 	

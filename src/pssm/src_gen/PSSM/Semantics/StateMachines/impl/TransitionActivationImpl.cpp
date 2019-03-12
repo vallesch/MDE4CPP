@@ -637,7 +637,10 @@ void TransitionActivationImpl::save(std::shared_ptr<persistence::interfaces::XSa
 
 	StateMachineSemanticVisitorImpl::saveContent(saveHandler);
 	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
+	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
 	
 }
 

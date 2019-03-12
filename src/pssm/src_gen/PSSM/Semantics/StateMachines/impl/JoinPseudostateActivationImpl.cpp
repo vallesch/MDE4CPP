@@ -232,7 +232,10 @@ void JoinPseudostateActivationImpl::save(std::shared_ptr<persistence::interfaces
 	
 	StateMachineSemanticVisitorImpl::saveContent(saveHandler);
 	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
+	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
 	
 	
 	

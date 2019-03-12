@@ -14,14 +14,12 @@
 #include "../StateMachineSemanticVisitor.hpp"
 
 #include "PSSM/impl/PSSMFactoryImpl.hpp"
-
-#include "ecore/impl/EObjectImpl.hpp"
+#include "fUML/impl/SemanticVisitorImpl.hpp"
 
 //*********************************
 namespace PSSM::Semantics::StateMachines 
 {
-	class StateMachineSemanticVisitorImpl :virtual public ecore::EObjectImpl,
-virtual public StateMachineSemanticVisitor 
+	class StateMachineSemanticVisitorImpl :virtual public fUML::SemanticVisitorImpl, virtual public StateMachineSemanticVisitor 
 	{
 		public: 
 			StateMachineSemanticVisitorImpl(const StateMachineSemanticVisitorImpl & obj);

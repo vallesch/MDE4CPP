@@ -37,6 +37,9 @@
     <eSubpackages name="StructuredClassifiers" nsURI="http:///PSSM/Semantics/StructuredClassifiers.ecore"
         nsPrefix="PSSM.Semantics.StructuredClassifiers">
       <eClassifiers xsi:type="ecore:EClass" name="SM_Object" eSuperTypes="../../fuml/model/fUML.ecore#//Object">
+        <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+          <details key="includes" value="#include &quot;fUML/FUMLFactory.hpp&quot;&#xA;#include &quot;PSSM/Semantics/CommonBehavior/SM_ObjectActivation.hpp&quot;"/>
+        </eAnnotations>
         <eOperations name="startBehavior" ordered="false" lowerBound="1">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// The behavior captured here is almost identical to the one provide by Object_.&#xA;// Instead of using a simple ObjectActivation we use a StateMachineObjectActivation.&#xA;// This specialized kind of ObjectActivation allows the registering of completion events.&#xA;//if (this.objectActivation == null) {&#xA;//&#x9;this.objectActivation = new SM_ObjectActivation();&#xA;//&#x9;this.objectActivation.object = this;&#xA;//}&#xA;//this.objectActivation.startBehavior(classifier, inputs);&#xA;&#xA;if(this->getObjectActivation() == nullptr)&#xA;    {&#xA;        this->setObjectActivation(std::dynamic_pointer_cast&lt;fUML::ObjectActivation>(PSSM::PSSMFactory::eInstance()->createSM_ObjectActivation()));&#xA;        this->getObjectActivation()->setObject(getThisObjectPtr());&#xA;    }&#xA;&#xA;    this->getObjectActivation()->startBehavior(classifier, inputs);"/>
@@ -70,6 +73,9 @@
     <eSubpackages name="CommonBehavior" nsURI="http:///PSSM/Semantics/CommonBehavior.ecore"
         nsPrefix="PSSM.Semantics.CommonBehavior">
       <eClassifiers xsi:type="ecore:EClass" name="SM_ObjectActivation" eSuperTypes="../../fuml/model/fUML.ecore#//ObjectActivation">
+        <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+          <details key="includes" value="#include &quot;fUML/FUMLFactory.hpp&quot;"/>
+        </eAnnotations>
         <eOperations name="getNextCompletionEvent" ordered="false" lowerBound="1"
             eType="#//Semantics/StateMachines/CompletionEventOccurrence">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
@@ -277,6 +283,7 @@
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="StateMachineSemanticVisitor" abstract="true"
           eSuperTypes="../../fuml/model/fUML.ecore#//SemanticVisitor">
+        <eAnnotations source="http://sse.tu-ilmenau.de/codegen"/>
         <eOperations name="activate" ordered="false" lowerBound="1">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// This operation is intended to be overridden by sub-classes. For required sub-classes&#xA;// (e.g., RegionActivation, StateActivation) it will initiate the instantiation phase of&#xA;// child semantic visitors. By default activate does nothing.&#xA;return;&#xA;"/>
@@ -1215,6 +1222,9 @@
       <eClassifiers xsi:type="ecore:EClass" name="ShallowHistoryPseudostateActivation"
           eSuperTypes="#//Semantics/StateMachines/HistoryPseudostateActivation"/>
       <eClassifiers xsi:type="ecore:EClass" name="DeferredEventOccurrence" eSuperTypes="../../fuml/model/fUML.ecore#//EventOccurrence">
+        <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+          <details key="includes" value="#include &quot;fUML/EventOccurrence.hpp&quot;&#xA;#include &quot;fUML/FUMLFactory.hpp&quot;&#xA;"/>
+        </eAnnotations>
         <eStructuralFeatures xsi:type="ecore:EReference" name="constrainingStateActivation"
             ordered="false" lowerBound="1" eType="#//Semantics/StateMachines/StateActivation"/>
         <eStructuralFeatures xsi:type="ecore:EReference" name="deferredEventOccurrence"
@@ -1223,6 +1233,9 @@
     </eSubpackages>
     <eSubpackages name="Loci" nsURI="http:///PSSM/Semantics/Loci.ecore" nsPrefix="PSSM.Semantics.Loci">
       <eClassifiers xsi:type="ecore:EClass" name="SM_ExecutionFactory" eSuperTypes="../../fuml/model/fUML.ecore#//ExecutionFactoryL3">
+        <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+          <details key="includes" value="&#xA;#include &quot;fUML/FUMLFactory.hpp&quot;&#xA;"/>
+        </eAnnotations>
         <eOperations name="instantiateVisitor" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//SemanticVisitor">
           <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="body" value="// Return the semantic visitor corresponding to the given model element.&#xA;// If no visitor can be created for this model element then null is &#xA;// returned.&#xA;SemanticVisitor visitor = null ;&#xA;if(element instanceof StateMachine){&#xA;&#x9;visitor = new StateMachineExecution();&#xA;}else if (element instanceof Pseudostate) {&#xA;&#x9;Pseudostate pseudostate = (Pseudostate) element;&#xA;&#x9;switch(pseudostate.getKind()){&#xA;&#x9;&#x9;case INITIAL_LITERAL: visitor = new InitialPseudostateActivation(); break;&#xA;&#x9;&#x9;case ENTRY_POINT_LITERAL: visitor = new EntryPointPseudostateActivation(); break;&#xA;&#x9;&#x9;case EXIT_POINT_LITERAL: visitor = new ExitPointPseudostateActivation(); break;&#xA;&#x9;&#x9;case CHOICE_LITERAL: visitor = new ChoicePseudostateActivation(); break;&#xA;&#x9;&#x9;case FORK_LITERAL: visitor = new ForkPseudostateActivation(); break;&#xA;&#x9;&#x9;case JOIN_LITERAL: visitor = new JoinPseudostateActivation(); break;&#xA;&#x9;&#x9;case TERMINATE_LITERAL: visitor = new TerminatePseudostateActivation(); break;&#xA;&#x9;&#x9;case DEEP_HISTORY_LITERAL: visitor = new DeepHistoryPseudostateActivation(); break;&#xA;&#x9;&#x9;case SHALLOW_HISTORY_LITERAL: visitor = new ShallowHistoryPseudostateActivation(); break;&#xA;&#x9;&#x9;case JUNCTION_LITERAL: visitor = new JunctionPseudostateActivation(); break;&#xA;&#x9;}&#xA;}else if (element instanceof State) {&#xA;&#x9;if(element instanceof FinalState){&#xA;&#x9;&#x9;visitor = new FinalStateActivation();&#xA;&#x9;}else{&#xA;&#x9;&#x9;visitor = new StateActivation() ;&#xA;&#x9;}&#xA;}else if (element instanceof Transition) {&#xA;&#x9;Transition transition = (Transition) element;&#xA;&#x9;switch(transition.getKind()){&#xA;&#x9;&#x9;case EXTERNAL_LITERAL: visitor = new ExternalTransitionActivation(); break;&#xA;&#x9;&#x9;case INTERNAL_LITERAL: visitor = new InternalTransitionActivation(); break;&#xA;&#x9;&#x9;case LOCAL_LITERAL: visitor = new LocalTransitionActivation(); break;&#xA;&#x9;}&#xA;}else if (element instanceof Region) {&#xA;&#x9;visitor = new RegionActivation();&#xA;}else if(element instanceof OpaqueExpression) {&#xA;&#x9;visitor = new SM_OpaqueExpressionEvaluation();&#xA;}else if(element instanceof ReadSelfAction){&#xA;&#x9;visitor = new SM_ReadSelfActionActivation();&#xA;}else {&#xA;&#x9;visitor = super.instantiateVisitor(element);&#xA;}&#xA;return visitor;&#xA;"/>

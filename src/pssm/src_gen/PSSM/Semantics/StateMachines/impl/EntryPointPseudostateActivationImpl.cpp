@@ -234,7 +234,10 @@ void EntryPointPseudostateActivationImpl::save(std::shared_ptr<persistence::inte
 	
 	StateMachineSemanticVisitorImpl::saveContent(saveHandler);
 	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
+	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
 	
 	
 	

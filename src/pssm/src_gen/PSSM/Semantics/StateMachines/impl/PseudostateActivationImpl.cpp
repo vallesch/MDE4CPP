@@ -278,7 +278,10 @@ void PseudostateActivationImpl::save(std::shared_ptr<persistence::interfaces::XS
 	
 	StateMachineSemanticVisitorImpl::saveContent(saveHandler);
 	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
+	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
 	
 	
 }
