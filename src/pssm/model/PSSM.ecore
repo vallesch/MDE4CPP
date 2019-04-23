@@ -283,7 +283,9 @@
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="StateMachineSemanticVisitor" abstract="true"
           eSuperTypes="../../fuml/model/fUML.ecore#//SemanticVisitor">
-        <eAnnotations source="http://sse.tu-ilmenau.de/codegen"/>
+        <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+          <details key="includes" value="#include &quot;fUML/Execution.hpp&quot;&#xA;#include &quot;PSSM/Semantics/CommonBehavior/EventTriggeredExecution.hpp&quot;"/>
+        </eAnnotations>
         <eOperations name="activate" ordered="false" lowerBound="1">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// This operation is intended to be overridden by sub-classes. For required sub-classes&#xA;// (e.g., RegionActivation, StateActivation) it will initiate the instantiation phase of&#xA;// child semantic visitors. By default activate does nothing.&#xA;return;&#xA;"/>
@@ -351,7 +353,7 @@
         </eOperations>
         <eOperations name="isVisitorFor" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/uml2/5.0.0/Types#//Boolean">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
-            <details key="body" value="// A visitor is the interpreter for a model if the node given as parameter is the&#xA;// this model element.&#xA;return this.node == node;&#xA;"/>
+            <details key="body" value="//return this.node == node;&#xA;&#x9;return this->m_node == node;"/>
           </eAnnotations>
           <eParameters name="node" ordered="false" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//NamedElement"/>
         </eOperations>
@@ -364,7 +366,7 @@
         </eOperations>
         <eOperations name="getExecutionFor" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
-            <details key="body" value="// Create an Execution for the specified behavior. In addition to the creation of this&#xA;// Execution, if the behavior execution is triggered by the dispatching of an event (i.e.&#xA;// a CallEvent or a SignalEvent) then an EventTriggeredExecution is provided. This&#xA;// execution wraps the original execution and ensures passing of event data to the&#xA;// wrapped execution.&#xA;Execution execution = null;&#xA;if(behavior != null){&#xA;&#x9;Execution originalExecution = this.getExecutionLocus().factory.createExecution(behavior, this.getExecutionContext());&#xA;&#x9;if(eventOccurrence != null){&#xA;&#x9;&#x9;EventTriggeredExecution containerExecution = new EventTriggeredExecution();&#xA;&#x9;&#x9;containerExecution.triggeringEventOccurrence = eventOccurrence;&#xA;&#x9;&#x9;containerExecution.wrappedExecution = originalExecution;&#xA;&#x9;&#x9;containerExecution.context = originalExecution.context;&#xA;&#x9;&#x9;execution = containerExecution;&#xA;&#x9;}else{&#xA;&#x9;&#x9;execution = originalExecution;&#xA;&#x9;}&#xA;}&#xA;return execution;&#xA;"/>
+            <details key="body" value="// Execution, if the behavior execution is triggered by the dispatching of an event (i.e.&#xA;// a CallEvent or a SignalEvent) then an EventTriggeredExecution is provided. This&#xA;// execution wraps the original execution and ensures passing of event data to the&#xA;// wrapped execution.&#xA;//Execution execution = null;&#xA;//if(behavior != null){&#xA;//&#x9;Execution originalExecution = this.getExecutionLocus().factory.createExecution(behavior, this.getExecutionContext());&#xA;//&#x9;if(eventOccurrence != null){&#xA;//&#x9;&#x9;EventTriggeredExecution containerExecution = new EventTriggeredExecution();&#xA;//&#x9;&#x9;containerExecution.triggeringEventOccurrence = eventOccurrence;&#xA;//&#x9;&#x9;containerExecution.wrappedExecution = originalExecution;&#xA;//&#x9;&#x9;containerExecution.context = originalExecution.context;&#xA;//&#x9;&#x9;execution = containerExecution;&#xA;//&#x9;}else{&#xA;//&#x9;&#x9;execution = originalExecution;&#xA;//&#x9;}&#xA;//}&#xA;// return execution;"/>
           </eAnnotations>
           <eParameters name="behavior" ordered="false" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Behavior"/>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>

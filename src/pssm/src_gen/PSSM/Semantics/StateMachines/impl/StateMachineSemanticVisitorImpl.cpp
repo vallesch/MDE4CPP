@@ -25,6 +25,8 @@
 #include "ecore/EAnnotation.hpp"
 #include "ecore/EClass.hpp"
 #include "PSSM/impl/PSSMPackageImpl.hpp"
+#include "fUML/Execution.hpp"
+#include "PSSM/Semantics/CommonBehavior/EventTriggeredExecution.hpp"
 
 //Forward declaration includes
 #include "persistence/interfaces/XLoadHandler.hpp" // used for Persistence
@@ -48,8 +50,6 @@
 
 #include "fUML/SemanticVisitor.hpp"
 
-#include "fUML/FUMLFactory.hpp"
-
 #include "uml/Trigger.hpp"
 
 #include "ecore/EcorePackage.hpp"
@@ -58,6 +58,9 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
+
+#include "fUML/FUMLFactory.hpp"
+
 #include "PSSM/Semantics/StateMachines/StateMachineExecution.hpp"
 
 using namespace PSSM::Semantics::StateMachines;
@@ -223,7 +226,7 @@ Any StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavi
 //		execution = originalExecution;
 //	}
 //}
-//return execution;
+// return execution;
 	return nullptr;
 
 	//end of body
@@ -271,8 +274,8 @@ bool StateMachineSemanticVisitorImpl::isVisitorFor(std::shared_ptr<uml::NamedEle
 	//generated from body annotation
 	// A visitor is the interpreter for a model if the node given as parameter is the
 // this model element.
-//return this.node == node;
-	return false;
+	//return this.node == node;
+	return this->m_node == node;
 
 	//end of body
 }
@@ -329,8 +332,7 @@ bool StateMachineSemanticVisitorImpl::match(std::shared_ptr<fUML::EventOccurrenc
 //	}
 //	i++;
 //}
-//return match;
-	return true;
+return false;
 
 	//end of body
 }

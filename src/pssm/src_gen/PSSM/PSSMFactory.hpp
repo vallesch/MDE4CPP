@@ -16,8 +16,6 @@ namespace fUML
 {
 	class Locus;
 }
-
-
 namespace PSSM 
 {
 	class PSSMPackage;
