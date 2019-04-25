@@ -115,7 +115,7 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="deferredEventPool"
             ordered="false" upperBound="-1" eType="#//Semantics/StateMachines/DeferredEventOccurrence"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="EventTriggeredExecution">
+      <eClassifiers xsi:type="ecore:EClass" name="EventTriggeredExecution" eSuperTypes="../../fuml/model/fUML.ecore#//Execution">
         <eOperations name="finalize" ordered="false" lowerBound="1">
           <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
             <details key="body" value="// Transfer output parameter values (produced by the wrapped execution) back to&#xA;// the execution associated t the call event.&#xA;// If an effect, entry or exit Behavior is not just input-conforming, then the&#xA;// values of its output Parameters are passed out of its Behavior Execution on&#xA;// its completion as potential values for the output Parameters of the called &#xA;// Operation.&#xA;// &#xA;// Notes: &#xA;//    If the CallEvent is for a synchronous call, then the call ends at the end&#xA;//    of the triggered run-to-completion (RTC) step. If the called Operation has&#xA;//    output Parameters, then the values returned for those parameters are those&#xA;//    produced by the last effect, entry or exit Behavior to complete its execution&#xA;//    during the RTC step. Since some or all of those Behaviors may execute concurrently,&#xA;//    which one completes last may be only partially determined by the specified semantics.&#xA;//    The values returned may legally be those produced any Behavior that produces potential&#xA;//    output values and is the last to complete in any execution trace for the RTC&#xA;//    step consistent with the specified StateMachine semantics.&#xA;this._beginIsolation();&#xA;if(this.triggeringEventOccurrence instanceof CallEventOccurrence){&#xA;&#x9;CallEventOccurrence callEventOccurrence = (CallEventOccurrence) this.triggeringEventOccurrence;&#xA;&#x9;Behavior behavior = this.wrappedExecution.getBehavior();&#xA;&#x9;List&lt;ParameterValue> outputParameterValues = this.wrappedExecution.getOutputParameterValues();&#xA;&#x9;if(behavior.outputParameters().size() == outputParameterValues.size()){&#xA;&#x9;&#x9;int i = 1;&#xA;&#x9;&#x9;List&lt;Parameter> behaviorOutputParameters = callEventOccurrence.execution.getBehavior().outputParameters();&#xA;&#x9;&#x9;while(i &lt;= behaviorOutputParameters.size()){&#xA;&#x9;&#x9;&#x9;ParameterValue parameterValue = new ParameterValue();&#xA;&#x9;&#x9;&#x9;parameterValue.parameter = behaviorOutputParameters.get(i - 1);&#xA;&#x9;&#x9;&#x9;parameterValue.values = outputParameterValues.get(i - 1).values;&#xA;&#x9;&#x9;&#x9;callEventOccurrence.execution.setParameterValue(parameterValue);&#xA;&#x9;&#x9;&#x9;i++;&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;}&#xA;this._endIsolation();&#xA;"/>
@@ -148,20 +148,20 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="triggeringEventOccurrence"
             ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="CallEventExecution">
+      <eClassifiers xsi:type="ecore:EClass" name="CallEventExecution" eSuperTypes="../../fuml/model/fUML.ecore#//Execution">
         <eOperations name="_send" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Place the call event occurrence within the event pool of&#xA;// the target object&#xA;if(this.context.objectActivation != null){&#xA;&#x9;this.context.objectActivation.eventPool.add(eventOccurrence);&#xA;&#x9;this.context.objectActivation._send(new ArrivalSignal());&#xA;}&#xA;"/>
           </eAnnotations>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="#//Semantics/CommonBehavior/CallEventOccurrence"/>
         </eOperations>
         <eOperations name="_suspend" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="while(this.callerSuspended);&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="execute" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="documentation" value="Execute the behavior given by the type of this execution. &#xD;&#xA;The parameterValues for any input (in or in-out) parameters of the behavior should be set before the execution.&#xD;&#xA;The parameteValues for any output (in-out, out or return) parameters of the behavior will be set by the execution.&#xD;&#xA;"/>
             <details key="body" value="// The execution consists in placing a new CallEventOccurrence&#xA;// within the event pool of the target active object. Not that&#xA;// the call will not be executed if the target is not an active&#xA;// object. This is due to the fact that the call event could&#xA;// not placed anywhere since a passive object has no event pool.&#xA;// The caller is expected to be suspended until the RTC step using&#xA;// the event occurrence terminates.&#xA;CallEventOccurrence eventOccurrence = new CallEventOccurrence();&#xA;eventOccurrence.execution = this;&#xA;this.callerSuspended = true;&#xA;this._send(eventOccurrence);&#xA;this._suspend();&#xA;&#xA;"/>
           </eAnnotations>
@@ -175,19 +175,19 @@
           </eAnnotations>
         </eOperations>
         <eOperations name="new_" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//Value">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="documentation" value="Create a new execution with no behavior or parameterValues.&#xD;&#xA;"/>
             <details key="body" value="return new CallEventExecution();&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="releaseCaller" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="this.callerSuspended = false;&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="getInputParameterValues" ordered="false" upperBound="-1"
             eType="ecore:EClass ../../fuml/model/fUML.ecore#//ParameterValue">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Return input parameter values for this execution&#xA;List&lt;ParameterValue> parameterValues = new ArrayList&lt;ParameterValue>();&#xA;for(int i=0; i &lt; this.parameterValues.size(); i++){&#xA;&#x9;ParameterValue parameterValue = this.parameterValues.get(i);&#xA;&#x9;if(parameterValue.parameter.getDirection() == ParameterDirectionKind.IN_LITERAL&#xA;&#x9;&#x9;&#x9;| parameterValue.parameter.getDirection() == ParameterDirectionKind.INOUT_LITERAL){&#xA;&#x9;&#x9;parameterValues.add(parameterValue);&#xA;&#x9;}&#xA;}&#xA;return parameterValues;&#xA;"/>
           </eAnnotations>
         </eOperations>
@@ -200,7 +200,7 @@
         <eStructuralFeatures xsi:type="ecore:EReference" name="behavior" ordered="false"
             lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Behavior"/>
       </eClassifiers>
-      <eClassifiers xsi:type="ecore:EClass" name="CallEventOccurrence">
+      <eClassifiers xsi:type="ecore:EClass" name="CallEventOccurrence" eSuperTypes="../../fuml/model/fUML.ecore#//EventOccurrence">
         <eStructuralFeatures xsi:type="ecore:EReference" name="execution" ordered="false"
             lowerBound="1" eType="#//Semantics/CommonBehavior/CallEventExecution"/>
       </eClassifiers>
@@ -284,7 +284,7 @@
       <eClassifiers xsi:type="ecore:EClass" name="StateMachineSemanticVisitor" abstract="true"
           eSuperTypes="../../fuml/model/fUML.ecore#//SemanticVisitor">
         <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
-          <details key="includes" value="#include &quot;fUML/Execution.hpp&quot;&#xA;#include &quot;PSSM/Semantics/CommonBehavior/EventTriggeredExecution.hpp&quot;&#xA;#include &quot;fUML/FUMLFactory.hpp&quot;&#xA;#include &quot;PSSM/Semantics/StateMachines/StateMachineExecution.hpp&quot;"/>
+          <details key="includes" value="#include &quot;fUML/Execution.hpp&quot;&#xA;#include &quot;PSSM/Semantics/CommonBehavior/EventTriggeredExecution.hpp&quot;&#xA;#include &quot;fUML/FUMLFactory.hpp&quot;&#xA;#include &quot;PSSM/Semantics/StateMachines/StateMachineExecution.hpp&quot;&#xA;#include &quot;uml/CallEvent.hpp&quot;"/>
         </eAnnotations>
         <eOperations name="activate" ordered="false" lowerBound="1">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
@@ -359,14 +359,14 @@
         </eOperations>
         <eOperations name="match" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/uml2/5.0.0/Types#//Boolean">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
-            <details key="body" value="// Check if the event occurrence matches one of the trigger in the list.&#xA;// The matching rule are the following:&#xA;// &#x9;&#x9;1. If the event occurrence is a signal event occurrence then type&#xA;//&#x9;&#x9;   of the signal must conforms to the type referenced by the event&#xA;//&#x9;&#x9;   In addition, if the trigger defines ports through wich the event occurrence&#xA;//         is allowed to arrive then the arrival port of the event occurrence&#xA;//&#x9;&#x9;   must be one the referenced port.&#xA;// &#x9;&#x9;2. If the event occurrence is a call event occurrence then the operation&#xA;// &#x9;&#x9;   that is referenced must be the same than the one specified in the call&#xA;//&#x9;&#x9;   event.&#xA;// NOTE: CallEventOccurrence are not related to an arrival port. This limitation is&#xA;// introduced by a limitation in the current PSCS semantic model.&#xA;// &#xA;// If a match is found then true is returned, false otherwise.&#xA;//boolean match = false;&#xA;//int i = 0;&#xA;//while(!match &amp;&amp; i &lt; triggers.size()){&#xA;//&#x9;Trigger trigger = triggers.get(i);&#xA;//&#x9;if(eventOccurrence instanceof SignalEventOccurrence&#xA;//&#x9;&#x9;&#x9;&amp;&amp; trigger.getEvent() instanceof SignalEvent){&#xA;//&#x9;&#x9;SignalEventOccurrence signalEventOccurrence = (SignalEventOccurrence) eventOccurrence;&#xA;//&#x9;&#x9;SignalEvent event = (SignalEvent) trigger.getEvent();&#xA;//&#x9;&#x9;if(event.getSignal() == signalEventOccurrence.signalInstance.type){&#xA;//&#x9;&#x9;&#x9;match = true;&#xA;//&#x9;&#x9;}&#xA;//&#x9;&#x9;if(match  &amp;&amp; trigger.getPorts().size() > 0){&#xA;//&#x9;&#x9;&#x9;int j = 0;&#xA;//&#x9;&#x9;&#x9;boolean matchingPort = false;&#xA;//&#x9;&#x9;&#x9;while(j &lt; trigger.getPorts().size() &amp; !matchingPort){&#xA;//&#x9;&#x9;&#x9;&#x9;if(((CS_SignalInstance)signalEventOccurrence.signalInstance).interactionPoint.definingPort == trigger.getPorts().get(j)){&#xA;//&#x9;&#x9;&#x9;&#x9;&#x9;matchingPort = true;&#xA;//&#x9;&#x9;&#x9;&#x9;}&#xA;//&#x9;&#x9;&#x9;&#x9;j = j + 1;&#xA;//&#x9;&#x9;&#x9;}&#xA;//&#x9;&#x9;&#x9;if(!matchingPort){&#xA;//&#x9;&#x9;&#x9;&#x9;match = matchingPort;&#xA;//&#x9;&#x9;&#x9;}&#xA;//&#x9;&#x9;}&#xA;//&#x9;}else if(eventOccurrence instanceof CallEventOccurrence&#xA;//&#x9;&#x9;&#x9;&amp;&amp; trigger.getEvent() instanceof CallEvent){&#xA;//&#x9;&#x9;CallEvent event = (CallEvent) trigger.getEvent();&#xA;//&#x9;&#x9;CallEventOccurrence callEventOccurrence = (CallEventOccurrence) eventOccurrence;&#xA;//&#x9;&#x9;if(event.getOperation() == callEventOccurrence.execution.operation){&#xA;//&#x9;&#x9;&#x9;match = true;&#xA;//&#x9;&#x9;}&#xA;//&#x9;}&#xA;//&#x9;i++;&#xA;//}&#xA;//return match;&#xA;return false;"/>
+            <details key="body" value="&#x9;// Check if the event occurrence matches one of the trigger in the list.&#xA;// The matching rule are the following:&#xA;// &#x9;&#x9;1. If the event occurrence is a signal event occurrence then type&#xA;//&#x9;&#x9;   of the signal must conforms to the type referenced by the event&#xA;//&#x9;&#x9;   In addition, if the trigger defines ports through wich the event occurrence&#xA;//         is allowed to arrive then the arrival port of the event occurrence&#xA;//&#x9;&#x9;   must be one the referenced port.&#xA;// &#x9;&#x9;2. If the event occurrence is a call event occurrence then the operation&#xA;// &#x9;&#x9;   that is referenced must be the same than the one specified in the call&#xA;//&#x9;&#x9;   event.&#xA;// NOTE: CallEventOccurrence are not related to an arrival port. This limitation is&#xA;// introduced by a limitation in the current PSCS semantic model.&#xA;// &#xA;// If a match is found then true is returned, false otherwise.&#xA;&#x9;bool match = false;&#xA;&#x9;int i = 0;&#xA;&#x9;std::shared_ptr&lt;PSSM::Semantics::CommonBehavior::CallEventOccurrence> callEventOccurrence = std::dynamic_pointer_cast&lt;PSSM::Semantics::CommonBehavior::CallEventOccurrence>(eventOccurrence);&#xA;&#x9;while(!match &amp;&amp; i &lt; triggers->size()) {&#xA;&#x9;&#x9;uml::Trigger trigger = triggers->at(i);&#xA;&#x9;&#x9;//SignalEventOccurence check&#xA;&#x9;&#x9;if(callEventOccurrence != nullptr) {&#xA;&#x9;&#x9;&#x9;std::shared_ptr&lt;uml::CallEvent> callEvent = std::dynamic_pointer_cast&lt;uml::CallEvent>(trigger.getEvent());&#xA;&#x9;&#x9;&#x9;if(callEvent != nullptr) {&#xA;&#x9;&#x9;&#x9;&#x9;if(callEvent->getOperation() == callEventOccurrence->getExecution()->getOperation()) {&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;match = true;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;i++;&#xA;&#x9;}&#xA;&#x9;return match;&#xA;//boolean match = false;&#xA;//int i = 0;&#xA;//while(!match &amp;&amp; i &lt; triggers.size()){&#xA;//&#x9;Trigger trigger = triggers.get(i);&#xA;//&#x9;if(eventOccurrence instanceof SignalEventOccurrence&#xA;//&#x9;&#x9;&#x9;&amp;&amp; trigger.getEvent() instanceof SignalEvent){&#xA;//&#x9;&#x9;SignalEventOccurrence signalEventOccurrence = (SignalEventOccurrence) eventOccurrence;&#xA;//&#x9;&#x9;SignalEvent event = (SignalEvent) trigger.getEvent();&#xA;//&#x9;&#x9;if(event.getSignal() == signalEventOccurrence.signalInstance.type){&#xA;//&#x9;&#x9;&#x9;match = true;&#xA;//&#x9;&#x9;}&#xA;//&#x9;&#x9;if(match  &amp;&amp; trigger.getPorts().size() > 0){&#xA;//&#x9;&#x9;&#x9;int j = 0;&#xA;//&#x9;&#x9;&#x9;boolean matchingPort = false;&#xA;//&#x9;&#x9;&#x9;while(j &lt; trigger.getPorts().size() &amp; !matchingPort){&#xA;//&#x9;&#x9;&#x9;&#x9;if(((CS_SignalInstance)signalEventOccurrence.signalInstance).interactionPoint.definingPort == trigger.getPorts().get(j)){&#xA;//&#x9;&#x9;&#x9;&#x9;&#x9;matchingPort = true;&#xA;//&#x9;&#x9;&#x9;&#x9;}&#xA;//&#x9;&#x9;&#x9;&#x9;j = j + 1;&#xA;//&#x9;&#x9;&#x9;}&#xA;//&#x9;&#x9;&#x9;if(!matchingPort){&#xA;//&#x9;&#x9;&#x9;&#x9;match = matchingPort;&#xA;//&#x9;&#x9;&#x9;}&#xA;//&#x9;&#x9;}&#xA;//&#x9;}else if(eventOccurrence instanceof CallEventOccurrence&#xA;//&#x9;&#x9;&#x9;&amp;&amp; trigger.getEvent() instanceof CallEvent){&#xA;//&#x9;&#x9;CallEvent event = (CallEvent) trigger.getEvent();&#xA;//&#x9;&#x9;CallEventOccurrence callEventOccurrence = (CallEventOccurrence) eventOccurrence;&#xA;//&#x9;&#x9;if(event.getOperation() == callEventOccurrence.execution.operation){&#xA;//&#x9;&#x9;&#x9;match = true;&#xA;//&#x9;&#x9;}&#xA;//&#x9;}&#xA;//&#x9;i++;&#xA;//}&#xA;//return match;"/>
           </eAnnotations>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
           <eParameters name="triggers" ordered="false" upperBound="-1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Trigger"/>
         </eOperations>
         <eOperations name="getExecutionFor" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
-            <details key="body" value="// Execution, if the behavior execution is triggered by the dispatching of an event (i.e.&#xA;// a CallEvent or a SignalEvent) then an EventTriggeredExecution is provided. This&#xA;// execution wraps the original execution and ensures passing of event data to the&#xA;// wrapped execution.&#xA;//Execution execution = null;&#xA;//if(behavior != null){&#xA;//&#x9;Execution originalExecution = this.getExecutionLocus().factory.createExecution(behavior, this.getExecutionContext());&#xA;//&#x9;if(eventOccurrence != null){&#xA;//&#x9;&#x9;EventTriggeredExecution containerExecution = new EventTriggeredExecution();&#xA;//&#x9;&#x9;containerExecution.triggeringEventOccurrence = eventOccurrence;&#xA;//&#x9;&#x9;containerExecution.wrappedExecution = originalExecution;&#xA;//&#x9;&#x9;containerExecution.context = originalExecution.context;&#xA;//&#x9;&#x9;execution = containerExecution;&#xA;//&#x9;}else{&#xA;//&#x9;&#x9;execution = originalExecution;&#xA;//&#x9;}&#xA;//}&#xA;// return execution;"/>
+            <details key="body" value="&#x9;std::shared_ptr&lt;fUML::Execution> execution = nullptr;&#xA;&#x9;if(behavior != nullptr) {&#xA;&#x9;&#x9;std::shared_ptr&lt;fUML::Execution> originalExecution = this->getExecutionLocus()->m_factory->createExecution(behavior, this->getExecutionContext()); //??&#xA;&#x9;&#x9;if(eventOccurrence != nullptr) {&#xA;&#x9;&#x9;&#x9;std::shared_ptr&lt;PSSM::Semantics::CommonBehavior::EventTriggeredExecution> containerExecution = new PSSM::Semantics::CommonBehavior::EventTriggeredExecution();&#xA;&#x9;&#x9;&#x9;containerExecution->m_triggeringEventOccurrence = eventOccurrence;&#xA;&#x9;&#x9;&#x9;containerExecution->m_wrappedExecution = originalExecution;&#xA;&#x9;&#x9;&#x9;containerExecution->m&#xA;&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;//Execution execution = null;&#xA;//if(behavior != null){&#xA;//&#x9;Execution originalExecution = this.getExecutionLocus().factory.createExecution(behavior, this.getExecutionContext());&#xA;//&#x9;if(eventOccurrence != null){&#xA;//&#x9;&#x9;EventTriggeredExecution containerExecution = new EventTriggeredExecution();&#xA;//&#x9;&#x9;containerExecution.triggeringEventOccurrence = eventOccurrence;&#xA;//&#x9;&#x9;containerExecution.wrappedExecution = originalExecution;&#xA;//&#x9;&#x9;containerExecution.context = originalExecution.context;&#xA;//&#x9;&#x9;execution = containerExecution;&#xA;//&#x9;}else{&#xA;//&#x9;&#x9;execution = originalExecution;&#xA;//&#x9;}&#xA;//}&#xA;// return execution;"/>
           </eAnnotations>
           <eParameters name="behavior" ordered="false" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Behavior"/>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
@@ -663,58 +663,58 @@
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="StateActivation" eSuperTypes="#//Semantics/StateMachines/VertexActivation">
         <eOperations name="notifyCompletion" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// The notification of a completion event consists in sending in the execution&#xA;// context of the state-machine a completion event occurrence. This event is&#xA;// placed in the pool before any other event&#xA;Object_ context = this.getExecutionContext();&#xA;((SM_ObjectActivation)context.objectActivation).registerCompletionEvent(this);&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="releaseDeferredEvents" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// If events have been deferred by that state then these latter return to the&#xA;// regular event pool.&#xA;Object_ context = this.getExecutionContext();&#xA;if(context.objectActivation != null){&#xA;&#x9;((SM_ObjectActivation)context.objectActivation).releaseDeferredEvents(this); &#xA;}&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="hasCompleted" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/uml2/5.0.0/Types#//Boolean">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// A state can only be considered as being completed under the following circumstances&#xA;// 1 - If the state is simple, both its entry and doActivity have finished their execution&#xA;// 2 - If the state is composite, the same rules than used for the simple state, but additionally&#xA;//     all the region of the state must have completed by reaching their final states&#xA;// When the operation returns true then the generation of a completion event is allowed&#xA;// for that particular state&#xA;boolean stateCompleted = this.isEntryCompleted &amp; this.isDoActivityCompleted;&#xA;int i = 0;&#xA;while(stateCompleted &amp;&amp; i &lt; this.regionActivation.size()){&#xA;&#x9;stateCompleted = stateCompleted &amp;&amp; this.regionActivation.get(i).isCompleted; &#xA;&#x9;i = i + 1;&#xA;}&#xA;return stateCompleted;&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="defer" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Postpone the time at which this event occurrence will be available at the event pool.&#xA;// The given event occurrence is placed in the deferred event pool and will be released&#xA;// only when the current state activation will leave the state-machine configuration.&#xA;Object_ context = this.getExecutionContext();&#xA;if(context.objectActivation != null){&#xA;&#x9;((SM_ObjectActivation)context.objectActivation).registerDeferredEvent(eventOccurrence, this); &#xA;}&#xA;"/>
           </eAnnotations>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
         </eOperations>
         <eOperations name="getRegionActivation" ordered="false" upperBound="-1" eType="#//Semantics/StateMachines/RegionActivation">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="return this.regionActivation;&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="tryExecuteExit" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Execute the exit behavior if any. If no exit behavior is&#xA;// specified but the state redefines another state which provides an&#xA;// exit behavior then this latter is executed instead. The rule applies&#xA;// recursively.&#xA;Behavior exit = this.getExit();&#xA;if(exit != null){&#xA;&#x9;Execution execution = this.getExecutionFor(exit, eventOccurrence);&#xA;&#x9;if(execution!=null){&#xA;&#x9;&#x9;execution.execute();&#xA;&#x9;}&#xA;}&#xA;super.exit(null, eventOccurrence, null);&#xA;"/>
           </eAnnotations>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
         </eOperations>
         <eOperations name="tryExecuteEntry" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// If an entry behavior is specified for that state then it is executed.&#xA;// If no entry behavior is specified but the state redefines another state&#xA;// and this latter provides an entry behavior then this behavior is executed&#xA;// instead. The rule applies recursively.&#xA;if(!this.isEntryCompleted){&#xA;&#x9;Behavior entry = this.getEntry(); &#xA;&#x9;if(entry != null){&#xA;&#x9;&#x9;Execution execution = this.getExecutionFor(entry, eventOccurrence);&#xA;&#x9;&#x9;if(execution!=null){&#xA;&#x9;&#x9;&#x9;execution.execute();&#xA;&#x9;&#x9;&#x9;this.isEntryCompleted = true;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;// If state has completed then generate a completion event&#xA;&#x9;&#x9;if(this.hasCompleted()){&#xA;&#x9;&#x9;&#x9;this.notifyCompletion();&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;}&#xA;"/>
           </eAnnotations>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
         </eOperations>
         <eOperations name="canDefer" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/uml2/5.0.0/Types#//Boolean">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Return true if current state activation is capable of deferring the given&#xA;// event occurrence; false otherwise. Note that false is returned in case where&#xA;// the deferring constraint is overridden by an outgoing transition&#xA;// &#xA;// Note: for the moment the evaluation is done with the assumption that the&#xA;// received event occurrence is a signal event occurrence. This will change&#xA;// as soon as other kind of event (e.g. call event) will be supported in fUML.&#xA;State state = (State) this.node;&#xA;boolean deferred = this.match(eventOccurrence, state.getDeferrableTriggers());&#xA;while(!deferred &amp;&amp; state.getRedefinedState() != null){&#xA;&#x9;state = state.getRedefinedState();&#xA;&#x9;deferred = this.match(eventOccurrence, state.getDeferrableTriggers());&#xA;}&#xA;if(deferred){&#xA;&#x9;int i = 0;&#xA;&#x9;TransitionActivation overridingTransitionActivation = null;&#xA;&#x9;while(overridingTransitionActivation == null &amp;&amp; i &lt; this.outgoingTransitionActivations.size()){&#xA;&#x9;&#x9;TransitionActivation currentTransitionActivation = this.outgoingTransitionActivations.get(i);&#xA;&#x9;&#x9;if(currentTransitionActivation.canFireOn(eventOccurrence)){&#xA;&#x9;&#x9;&#x9;overridingTransitionActivation = currentTransitionActivation;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;i++;&#xA;&#x9;}&#xA;&#x9;deferred = overridingTransitionActivation == null;&#xA;}&#xA;return deferred;&#xA;"/>
           </eAnnotations>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
         </eOperations>
         <eOperations name="tryInvokeDoActivity" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// If an doActivity behavior is specified for that state then it is executed.&#xA;// If no doActivity is specified but the state redefines another state which&#xA;// provides a doActivity then this latter is executed instead. The rule applies&#xA;// recursively.&#xA;if(!this.isDoActivityCompleted){&#xA;&#x9;Behavior doActivity = this.getDoActivity();&#xA;&#x9;if(doActivity!=null){&#xA;&#x9;&#x9;// Create, initialize and register to the locus the doActivityContextObject. &#xA;&#x9;&#x9;this.doActivityContextObject = new DoActivityContextObject();&#xA;&#x9;&#x9;this.getExecutionLocus().add(this.doActivityContextObject);&#xA;&#x9;&#x9;this.doActivityContextObject.initialize(this.getExecutionContext());&#xA;&#x9;&#x9;this.doActivityContextObject.owner = this;&#xA;&#x9;&#x9;// Extract data from triggering event occurrence if possible. Reuse event occurrence&#xA;&#x9;&#x9;// embedded data extraction logic provided by EventTriggeredExecution.&#xA;&#x9;&#x9;List&lt;ParameterValue> inputs = null;&#xA;&#x9;&#x9;Execution doActivityExecution = this.getExecutionFor(doActivity, eventOccurrence);&#xA;&#x9;&#x9;if(doActivityExecution instanceof EventTriggeredExecution){&#xA;&#x9;&#x9;&#x9;((EventTriggeredExecution)doActivityExecution).initialize();&#xA;&#x9;&#x9;&#x9;inputs = new ArrayList&lt;ParameterValue>(((EventTriggeredExecution)doActivityExecution).wrappedExecution.parameterValues);&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;// Start doActivity execution on its own thread of execution (i.e., this&#xA;&#x9;&#x9;// a different thread of execution than the one used for the state machine).&#xA;&#x9;&#x9;this.doActivityContextObject.startBehavior(doActivity, inputs);&#xA;&#x9;}&#xA;}&#xA;"/>
           </eAnnotations>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
         </eOperations>
         <eOperations name="getConnectionPointActivation" ordered="false" upperBound="-1"
             eType="#//Semantics/StateMachines/ConnectionPointActivation">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Return the activation for the exit point or the entry point.&#xA;ConnectionPointActivation activation = null;&#xA;int i = 0;&#xA;while(i &lt; this.connectionPointActivation.size() &amp;&amp; activation==null){&#xA;&#x9;if(this.connectionPointActivation.get(i).getNode()==vertex){&#xA;&#x9;&#x9;activation = this.connectionPointActivation.get(i);&#xA;&#x9;}&#xA;&#x9;i++;&#xA;}&#xA;return activation;&#xA;"/>
           </eAnnotations>
         </eOperations>
@@ -723,20 +723,20 @@
         </eOperations>
         <eOperations name="getFireableTransitions" ordered="false" upperBound="-1"
             eType="#//Semantics/StateMachines/TransitionActivation">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Return the set of transitions that can fire using the the given event occurrence&#xA;List&lt;TransitionActivation> fireableTransitions = new ArrayList&lt;TransitionActivation>();&#xA;for(int i=0; i &lt; this.outgoingTransitionActivations.size(); i++){&#xA;&#x9;TransitionActivation outgoingTransitionActivation = this.outgoingTransitionActivations.get(i);&#xA;&#x9;if(outgoingTransitionActivation.canFireOn(eventOccurrence)){&#xA;&#x9;&#x9;fireableTransitions.add(outgoingTransitionActivation);&#xA;&#x9;}&#xA;}&#xA;return fireableTransitions;&#xA;"/>
           </eAnnotations>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
         </eOperations>
         <eOperations name="enterRegions" ordered="false" lowerBound="1">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Regions can be entered either implicitly or explicitly. &#xA;// A region is typically entered implicitly when its activation is triggered&#xA;// by a transition terminating on the edge of its containing state.&#xA;// A region is typically entered explicitly when one of its contained&#xA;// state is targeted by a transition coming from the outside.&#xA;// *** Regions are entered concurrently ***&#xA;List&lt;Vertex> targetedVertices = new ArrayList&lt;Vertex>();&#xA;VertexActivation sourceActivation = enteringTransition.getSourceActivation();&#xA;if(sourceActivation instanceof ForkPseudostateActivation){&#xA;&#x9;Pseudostate fork = (Pseudostate)sourceActivation.getNode(); &#xA;&#x9;for(int i = 0; i &lt; fork.getOutgoings().size(); i++){&#xA;&#x9;&#x9;targetedVertices.add(fork.getOutgoings().get(i).getTarget());&#xA;&#x9;}&#xA;}else{&#xA;&#x9;VertexActivation targetActivation = enteringTransition.getTargetActivation();&#xA;&#x9;if(targetActivation instanceof EntryPointPseudostateActivation){&#xA;&#x9;&#x9;Pseudostate entryPoint = (Pseudostate)targetActivation.getNode();&#xA;&#x9;&#x9;for(int i = 0; i &lt; entryPoint.getOutgoings().size(); i++){&#xA;&#x9;&#x9;&#x9;targetedVertices.add(entryPoint.getOutgoings().get(i).getTarget());&#xA;&#x9;&#x9;}&#xA;&#x9;}else{&#xA;&#x9;&#x9;if(!(targetActivation instanceof HistoryPseudostateActivation)){&#xA;&#x9;&#x9;&#x9;targetedVertices.add((Vertex)targetActivation.getNode());&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;}&#x9;&#x9;&#xA;for(int i=0; i &lt; this.regionActivation.size(); i++){&#xA;&#x9;RegionActivation regionActivation = this.regionActivation.get(i);&#xA;&#x9;int j = 0;&#xA;&#x9;boolean found = false;&#xA;&#x9;while(j &lt; targetedVertices.size() &amp;&amp; !found){&#xA;&#x9;&#x9;found = regionActivation.getVertexActivation(targetedVertices.get(j)) != null;&#xA;&#x9;&#x9;j++;&#xA;&#x9;}&#xA;&#x9;if(!found){&#xA;&#x9;&#x9;regionActivation.enter(enteringTransition, eventOccurrence);&#xA;&#x9;}&#xA;}&#xA;"/>
           </eAnnotations>
           <eParameters name="enteringTransition" ordered="false" lowerBound="1" eType="#//Semantics/StateMachines/TransitionActivation"/>
           <eParameters name="eventOccurrence" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
         </eOperations>
         <eOperations name="getEntry" ordered="false" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Behavior">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Return the entry behavior of the state or one inherited&#xA;// from a redefined state. If no entry can be found null is&#xA;// returned.&#xA;State state = (State) this.getNode();&#xA;Behavior entry = state.getEntry();&#xA;while(entry  == null &amp;&amp; state.getRedefinedState() != null){&#xA;&#x9;state = state.getRedefinedState();&#xA;&#x9;entry = state.getEntry();&#xA;}&#xA;return entry;&#xA;"/>
           </eAnnotations>
         </eOperations>
@@ -746,7 +746,7 @@
           </eAnnotations>
         </eOperations>
         <eOperations name="getDoActivity" ordered="false" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Behavior">
-          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Return the doActivity behavior of the state or one inherited&#xA;// from a redefined state. If no doActivity can be found null is&#xA;// returned.&#xA;State state = (State) this.getNode();&#xA;Behavior doActivity = state.getDoActivity();&#xA;while(doActivity == null &amp;&amp; state.getRedefinedState() != null){&#xA;&#x9;state = state.getRedefinedState();&#xA;&#x9;doActivity = state.getDoActivity();&#xA;}&#xA;return doActivity;&#xA;"/>
           </eAnnotations>
         </eOperations>

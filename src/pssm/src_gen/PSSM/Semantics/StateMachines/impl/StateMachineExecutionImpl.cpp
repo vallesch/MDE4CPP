@@ -24,6 +24,7 @@
 #include "ecore/EAnnotation.hpp"
 #include "ecore/EClass.hpp"
 #include "PSSM/impl/PSSMPackageImpl.hpp"
+#include "fUML/FUMLFactory.hpp"
 
 //Forward declaration includes
 #include "persistence/interfaces/XLoadHandler.hpp" // used for Persistence
@@ -65,8 +66,6 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
-
-#include "fUML/FUMLFactory.hpp"
 
 using namespace PSSM::Semantics::StateMachines;
 

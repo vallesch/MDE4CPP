@@ -29,6 +29,7 @@
 #include "PSSM/Semantics/CommonBehavior/EventTriggeredExecution.hpp"
 #include "fUML/FUMLFactory.hpp"
 #include "PSSM/Semantics/StateMachines/StateMachineExecution.hpp"
+#include "uml/CallEvent.hpp"
 
 //Forward declaration includes
 #include "persistence/interfaces/XLoadHandler.hpp" // used for Persistence
@@ -206,10 +207,17 @@ Any StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavi
 {
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
-	// Execution, if the behavior execution is triggered by the dispatching of an event (i.e.
-// a CallEvent or a SignalEvent) then an EventTriggeredExecution is provided. This
-// execution wraps the original execution and ensures passing of event data to the
-// wrapped execution.
+		std::shared_ptr<fUML::Execution> execution = nullptr;
+	if(behavior != nullptr) {
+		std::shared_ptr<fUML::Execution> originalExecution = this->getExecutionLocus()->m_factory->createExecution(behavior, this->getExecutionContext()); //??
+		if(eventOccurrence != nullptr) {
+			std::shared_ptr<PSSM::Semantics::CommonBehavior::EventTriggeredExecution> containerExecution = new PSSM::Semantics::CommonBehavior::EventTriggeredExecution();
+			containerExecution->m_triggeringEventOccurrence = eventOccurrence;
+			containerExecution->m_wrappedExecution = originalExecution;
+			containerExecution->setContext(originalExecution->getContext());
+
+		}
+	}
 //Execution execution = null;
 //if(behavior != null){
 //	Execution originalExecution = this.getExecutionLocus().factory.createExecution(behavior, this.getExecutionContext());
@@ -276,7 +284,7 @@ bool StateMachineSemanticVisitorImpl::match(std::shared_ptr<fUML::EventOccurrenc
 {
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
-	// Check if the event occurrence matches one of the trigger in the list.
+		// Check if the event occurrence matches one of the trigger in the list.
 // The matching rule are the following:
 // 		1. If the event occurrence is a signal event occurrence then type
 //		   of the signal must conforms to the type referenced by the event
@@ -290,6 +298,23 @@ bool StateMachineSemanticVisitorImpl::match(std::shared_ptr<fUML::EventOccurrenc
 // introduced by a limitation in the current PSCS semantic model.
 // 
 // If a match is found then true is returned, false otherwise.
+	bool match = false;
+	int i = 0;
+	std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> callEventOccurrence = std::dynamic_pointer_cast<PSSM::Semantics::CommonBehavior::CallEventOccurrence>(eventOccurrence);
+	while(!match && i < triggers->size()) {
+		uml::Trigger trigger = triggers->at(i);
+		//SignalEventOccurence check
+		if(callEventOccurrence != nullptr) {
+			std::shared_ptr<uml::CallEvent> callEvent = std::dynamic_pointer_cast<uml::CallEvent>(trigger.getEvent());
+			if(callEvent != nullptr) {
+				if(callEvent->getOperation() == callEventOccurrence->getExecution()->getOperation()) {
+					match = true;
+				}
+			}
+		}
+		i++;
+	}
+	return match;
 //boolean match = false;
 //int i = 0;
 //while(!match && i < triggers.size()){
@@ -325,7 +350,6 @@ bool StateMachineSemanticVisitorImpl::match(std::shared_ptr<fUML::EventOccurrenc
 //	i++;
 //}
 //return match;
-return false;
 	//end of body
 }
 

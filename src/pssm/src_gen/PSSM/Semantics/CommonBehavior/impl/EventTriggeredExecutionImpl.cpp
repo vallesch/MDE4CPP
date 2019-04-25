@@ -18,6 +18,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "abstractDataTypes/Bag.hpp"
 
 #include "abstractDataTypes/SubsetUnion.hpp"
 #include "ecore/EAnnotation.hpp"
@@ -32,7 +33,21 @@
 
 #include <exception> // used in Persistence
 
+#include "uml/Classifier.hpp"
+
 #include "fUML/EventOccurrence.hpp"
+
+#include "fUML/Execution.hpp"
+
+#include "fUML/FeatureValue.hpp"
+
+#include "fUML/Locus.hpp"
+
+#include "fUML/Object.hpp"
+
+#include "fUML/ObjectActivation.hpp"
+
+#include "fUML/ParameterValue.hpp"
 
 #include "fUML/Value.hpp"
 
@@ -87,13 +102,43 @@ EventTriggeredExecutionImpl::EventTriggeredExecutionImpl(const EventTriggeredExe
 
 	//copy references with no containment (soft copy)
 	
+	m_context  = obj.getContext();
+
+	m_locus  = obj.getLocus();
+
 	m_triggeringEventOccurrence  = obj.getTriggeringEventOccurrence();
+
+	std::shared_ptr<Bag<uml::Classifier>> _types = obj.getTypes();
+	m_types.reset(new Bag<uml::Classifier>(*(obj.getTypes().get())));
 
 	m_wrappedExecution  = obj.getWrappedExecution();
 
 
 	//Clone references with containment (deep copy)
 
+	std::shared_ptr<Bag<fUML::FeatureValue>> _featureValuesList = obj.getFeatureValues();
+	for(std::shared_ptr<fUML::FeatureValue> _featureValues : *_featureValuesList)
+	{
+		this->getFeatureValues()->add(std::shared_ptr<fUML::FeatureValue>(std::dynamic_pointer_cast<fUML::FeatureValue>(_featureValues->copy())));
+	}
+	#ifdef SHOW_SUBSET_UNION
+		std::cout << "Copying the Subset: " << "m_featureValues" << std::endl;
+	#endif
+	if(obj.getObjectActivation()!=nullptr)
+	{
+		m_objectActivation = std::dynamic_pointer_cast<fUML::ObjectActivation>(obj.getObjectActivation()->copy());
+	}
+	#ifdef SHOW_SUBSET_UNION
+		std::cout << "Copying the Subset: " << "m_objectActivation" << std::endl;
+	#endif
+	std::shared_ptr<Bag<fUML::ParameterValue>> _parameterValuesList = obj.getParameterValues();
+	for(std::shared_ptr<fUML::ParameterValue> _parameterValues : *_parameterValuesList)
+	{
+		this->getParameterValues()->add(std::shared_ptr<fUML::ParameterValue>(std::dynamic_pointer_cast<fUML::ParameterValue>(_parameterValues->copy())));
+	}
+	#ifdef SHOW_SUBSET_UNION
+		std::cout << "Copying the Subset: " << "m_parameterValues" << std::endl;
+	#endif
 
 }
 
@@ -181,6 +226,7 @@ std::shared_ptr<EventTriggeredExecution> EventTriggeredExecutionImpl::getThisEve
 void EventTriggeredExecutionImpl::setThisEventTriggeredExecutionPtr(std::weak_ptr<EventTriggeredExecution> thisEventTriggeredExecutionPtr)
 {
 	m_thisEventTriggeredExecutionPtr = thisEventTriggeredExecutionPtr;
+	setThisExecutionPtr(thisEventTriggeredExecutionPtr);
 }
 std::shared_ptr<ecore::EObject> EventTriggeredExecutionImpl::eContainer() const
 {
@@ -195,22 +241,22 @@ Any EventTriggeredExecutionImpl::eGet(int featureID, bool resolve, bool coreType
 	switch(featureID)
 	{
 		case PSSM::PSSMPackage::EVENTTRIGGEREDEXECUTION_EREFERENCE_TRIGGERINGEVENTOCCURRENCE:
-			return eAny(getTriggeringEventOccurrence()); //131
+			return eAny(getTriggeringEventOccurrence()); //137
 		case PSSM::PSSMPackage::EVENTTRIGGEREDEXECUTION_EREFERENCE_WRAPPEDEXECUTION:
-			return eAny(getWrappedExecution()); //130
+			return eAny(getWrappedExecution()); //136
 	}
-	return ecore::EObjectImpl::eGet(featureID, resolve, coreType);
+	return fUML::ExecutionImpl::eGet(featureID, resolve, coreType);
 }
 bool EventTriggeredExecutionImpl::internalEIsSet(int featureID) const
 {
 	switch(featureID)
 	{
 		case PSSM::PSSMPackage::EVENTTRIGGEREDEXECUTION_EREFERENCE_TRIGGERINGEVENTOCCURRENCE:
-			return getTriggeringEventOccurrence() != nullptr; //131
+			return getTriggeringEventOccurrence() != nullptr; //137
 		case PSSM::PSSMPackage::EVENTTRIGGEREDEXECUTION_EREFERENCE_WRAPPEDEXECUTION:
-			return getWrappedExecution() != nullptr; //130
+			return getWrappedExecution() != nullptr; //136
 	}
-	return ecore::EObjectImpl::internalEIsSet(featureID);
+	return fUML::ExecutionImpl::internalEIsSet(featureID);
 }
 bool EventTriggeredExecutionImpl::eSet(int featureID, Any newValue)
 {
@@ -220,19 +266,19 @@ bool EventTriggeredExecutionImpl::eSet(int featureID, Any newValue)
 		{
 			// BOOST CAST
 			std::shared_ptr<fUML::EventOccurrence> _triggeringEventOccurrence = newValue->get<std::shared_ptr<fUML::EventOccurrence>>();
-			setTriggeringEventOccurrence(_triggeringEventOccurrence); //131
+			setTriggeringEventOccurrence(_triggeringEventOccurrence); //137
 			return true;
 		}
 		case PSSM::PSSMPackage::EVENTTRIGGEREDEXECUTION_EREFERENCE_WRAPPEDEXECUTION:
 		{
 			// BOOST CAST
 			std::shared_ptr<fUML::EventOccurrence> _wrappedExecution = newValue->get<std::shared_ptr<fUML::EventOccurrence>>();
-			setWrappedExecution(_wrappedExecution); //130
+			setWrappedExecution(_wrappedExecution); //136
 			return true;
 		}
 	}
 
-	return ecore::EObjectImpl::eSet(featureID, newValue);
+	return fUML::ExecutionImpl::eSet(featureID, newValue);
 }
 
 //*********************************
@@ -284,14 +330,14 @@ void EventTriggeredExecutionImpl::loadAttributes(std::shared_ptr<persistence::in
 		std::cout << "| ERROR    | " <<  "Exception occurred" << std::endl;
 	}
 
-	ecore::EObjectImpl::loadAttributes(loadHandler, attr_list);
+	fUML::ExecutionImpl::loadAttributes(loadHandler, attr_list);
 }
 
 void EventTriggeredExecutionImpl::loadNode(std::string nodeName, std::shared_ptr<persistence::interfaces::XLoadHandler> loadHandler, std::shared_ptr<PSSM::PSSMFactory> modelFactory)
 {
 
 
-	ecore::EObjectImpl::loadNode(nodeName, loadHandler, ecore::EcoreFactory::eInstance());
+	fUML::ExecutionImpl::loadNode(nodeName, loadHandler, fUML::FUMLFactory::eInstance());
 }
 
 void EventTriggeredExecutionImpl::resolveReferences(const int featureID, std::list<std::shared_ptr<ecore::EObject> > references)
@@ -322,15 +368,34 @@ void EventTriggeredExecutionImpl::resolveReferences(const int featureID, std::li
 			return;
 		}
 	}
-	ecore::EObjectImpl::resolveReferences(featureID, references);
+	fUML::ExecutionImpl::resolveReferences(featureID, references);
 }
 
 void EventTriggeredExecutionImpl::save(std::shared_ptr<persistence::interfaces::XSaveHandler> saveHandler) const
 {
 	saveContent(saveHandler);
 
+	fUML::ExecutionImpl::saveContent(saveHandler);
+	
+	fUML::ObjectImpl::saveContent(saveHandler);
+	
+	fUML::ExtensionalValueImpl::saveContent(saveHandler);
+	
+	fUML::CompoundValueImpl::saveContent(saveHandler);
+	
+	fUML::StructuredValueImpl::saveContent(saveHandler);
+	
+	fUML::ValueImpl::saveContent(saveHandler);
+	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
 	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
+	
+	
+	
+	
+	
 	
 }
 

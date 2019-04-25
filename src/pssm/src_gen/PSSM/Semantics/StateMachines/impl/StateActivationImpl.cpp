@@ -209,26 +209,115 @@ bool StateActivationImpl::getIsExitCompleted() const
 //*********************************
 bool StateActivationImpl::canDefer(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Return true if current state activation is capable of deferring the given
+// event occurrence; false otherwise. Note that false is returned in case where
+// the deferring constraint is overridden by an outgoing transition
+// 
+// Note: for the moment the evaluation is done with the assumption that the
+// received event occurrence is a signal event occurrence. This will change
+// as soon as other kind of event (e.g. call event) will be supported in fUML.
+State state = (State) this.node;
+boolean deferred = this.match(eventOccurrence, state.getDeferrableTriggers());
+while(!deferred && state.getRedefinedState() != null){
+	state = state.getRedefinedState();
+	deferred = this.match(eventOccurrence, state.getDeferrableTriggers());
+}
+if(deferred){
+	int i = 0;
+	TransitionActivation overridingTransitionActivation = null;
+	while(overridingTransitionActivation == null && i < this.outgoingTransitionActivations.size()){
+		TransitionActivation currentTransitionActivation = this.outgoingTransitionActivations.get(i);
+		if(currentTransitionActivation.canFireOn(eventOccurrence)){
+			overridingTransitionActivation = currentTransitionActivation;
+		}
+		i++;
+	}
+	deferred = overridingTransitionActivation == null;
+}
+return deferred;
+
+	//end of body
 }
 
 void StateActivationImpl::defer(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Postpone the time at which this event occurrence will be available at the event pool.
+// The given event occurrence is placed in the deferred event pool and will be released
+// only when the current state activation will leave the state-machine configuration.
+Object_ context = this.getExecutionContext();
+if(context.objectActivation != null){
+	((SM_ObjectActivation)context.objectActivation).registerDeferredEvent(eventOccurrence, this); 
+}
+
+	//end of body
 }
 
 void StateActivationImpl::enterRegions(std::shared_ptr<PSSM::Semantics::StateMachines::TransitionActivation>  enteringTransition,std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Regions can be entered either implicitly or explicitly. 
+// A region is typically entered implicitly when its activation is triggered
+// by a transition terminating on the edge of its containing state.
+// A region is typically entered explicitly when one of its contained
+// state is targeted by a transition coming from the outside.
+// *** Regions are entered concurrently ***
+List<Vertex> targetedVertices = new ArrayList<Vertex>();
+VertexActivation sourceActivation = enteringTransition.getSourceActivation();
+if(sourceActivation instanceof ForkPseudostateActivation){
+	Pseudostate fork = (Pseudostate)sourceActivation.getNode(); 
+	for(int i = 0; i < fork.getOutgoings().size(); i++){
+		targetedVertices.add(fork.getOutgoings().get(i).getTarget());
+	}
+}else{
+	VertexActivation targetActivation = enteringTransition.getTargetActivation();
+	if(targetActivation instanceof EntryPointPseudostateActivation){
+		Pseudostate entryPoint = (Pseudostate)targetActivation.getNode();
+		for(int i = 0; i < entryPoint.getOutgoings().size(); i++){
+			targetedVertices.add(entryPoint.getOutgoings().get(i).getTarget());
+		}
+	}else{
+		if(!(targetActivation instanceof HistoryPseudostateActivation)){
+			targetedVertices.add((Vertex)targetActivation.getNode());
+		}
+	}
+}		
+for(int i=0; i < this.regionActivation.size(); i++){
+	RegionActivation regionActivation = this.regionActivation.get(i);
+	int j = 0;
+	boolean found = false;
+	while(j < targetedVertices.size() && !found){
+		found = regionActivation.getVertexActivation(targetedVertices.get(j)) != null;
+		j++;
+	}
+	if(!found){
+		regionActivation.enter(enteringTransition, eventOccurrence);
+	}
+}
+
+	//end of body
 }
 
 std::shared_ptr<Bag<PSSM::Semantics::StateMachines::ConnectionPointActivation> > StateActivationImpl::getConnectionPointActivation()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Return the activation for the exit point or the entry point.
+ConnectionPointActivation activation = null;
+int i = 0;
+while(i < this.connectionPointActivation.size() && activation==null){
+	if(this.connectionPointActivation.get(i).getNode()==vertex){
+		activation = this.connectionPointActivation.get(i);
+	}
+	i++;
+}
+return activation;
+
+	//end of body
 }
 
 std::shared_ptr<PSSM::Semantics::StateMachines::ConnectionPointActivation> StateActivationImpl::getConnectionPointActivation(std::shared_ptr<uml::Vertex>  vertex)
@@ -239,14 +328,38 @@ std::shared_ptr<PSSM::Semantics::StateMachines::ConnectionPointActivation> State
 
 std::shared_ptr<uml::Behavior> StateActivationImpl::getDoActivity()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Return the doActivity behavior of the state or one inherited
+// from a redefined state. If no doActivity can be found null is
+// returned.
+State state = (State) this.getNode();
+Behavior doActivity = state.getDoActivity();
+while(doActivity == null && state.getRedefinedState() != null){
+	state = state.getRedefinedState();
+	doActivity = state.getDoActivity();
+}
+return doActivity;
+
+	//end of body
 }
 
 std::shared_ptr<uml::Behavior> StateActivationImpl::getEntry()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Return the entry behavior of the state or one inherited
+// from a redefined state. If no entry can be found null is
+// returned.
+State state = (State) this.getNode();
+Behavior entry = state.getEntry();
+while(entry  == null && state.getRedefinedState() != null){
+	state = state.getRedefinedState();
+	entry = state.getEntry();
+}
+return entry;
+
+	//end of body
 }
 
 std::shared_ptr<uml::Behavior> StateActivationImpl::getExit()
@@ -257,50 +370,155 @@ std::shared_ptr<uml::Behavior> StateActivationImpl::getExit()
 
 std::shared_ptr<Bag<PSSM::Semantics::StateMachines::TransitionActivation> > StateActivationImpl::getFireableTransitions(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Return the set of transitions that can fire using the the given event occurrence
+List<TransitionActivation> fireableTransitions = new ArrayList<TransitionActivation>();
+for(int i=0; i < this.outgoingTransitionActivations.size(); i++){
+	TransitionActivation outgoingTransitionActivation = this.outgoingTransitionActivations.get(i);
+	if(outgoingTransitionActivation.canFireOn(eventOccurrence)){
+		fireableTransitions.add(outgoingTransitionActivation);
+	}
+}
+return fireableTransitions;
+
+	//end of body
 }
 
 std::shared_ptr<Bag<PSSM::Semantics::StateMachines::RegionActivation> > StateActivationImpl::getRegionActivation()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	return this.regionActivation;
+
+	//end of body
 }
 
 bool StateActivationImpl::hasCompleted()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// A state can only be considered as being completed under the following circumstances
+// 1 - If the state is simple, both its entry and doActivity have finished their execution
+// 2 - If the state is composite, the same rules than used for the simple state, but additionally
+//     all the region of the state must have completed by reaching their final states
+// When the operation returns true then the generation of a completion event is allowed
+// for that particular state
+boolean stateCompleted = this.isEntryCompleted & this.isDoActivityCompleted;
+int i = 0;
+while(stateCompleted && i < this.regionActivation.size()){
+	stateCompleted = stateCompleted && this.regionActivation.get(i).isCompleted; 
+	i = i + 1;
+}
+return stateCompleted;
+
+	//end of body
 }
 
 void StateActivationImpl::notifyCompletion()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// The notification of a completion event consists in sending in the execution
+// context of the state-machine a completion event occurrence. This event is
+// placed in the pool before any other event
+Object_ context = this.getExecutionContext();
+((SM_ObjectActivation)context.objectActivation).registerCompletionEvent(this);
+
+	//end of body
 }
 
 void StateActivationImpl::releaseDeferredEvents()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// If events have been deferred by that state then these latter return to the
+// regular event pool.
+Object_ context = this.getExecutionContext();
+if(context.objectActivation != null){
+	((SM_ObjectActivation)context.objectActivation).releaseDeferredEvents(this); 
+}
+
+	//end of body
 }
 
 void StateActivationImpl::tryExecuteEntry(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// If an entry behavior is specified for that state then it is executed.
+// If no entry behavior is specified but the state redefines another state
+// and this latter provides an entry behavior then this behavior is executed
+// instead. The rule applies recursively.
+if(!this.isEntryCompleted){
+	Behavior entry = this.getEntry(); 
+	if(entry != null){
+		Execution execution = this.getExecutionFor(entry, eventOccurrence);
+		if(execution!=null){
+			execution.execute();
+			this.isEntryCompleted = true;
+		}
+		// If state has completed then generate a completion event
+		if(this.hasCompleted()){
+			this.notifyCompletion();
+		}
+	}
+}
+
+	//end of body
 }
 
 void StateActivationImpl::tryExecuteExit(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Execute the exit behavior if any. If no exit behavior is
+// specified but the state redefines another state which provides an
+// exit behavior then this latter is executed instead. The rule applies
+// recursively.
+Behavior exit = this.getExit();
+if(exit != null){
+	Execution execution = this.getExecutionFor(exit, eventOccurrence);
+	if(execution!=null){
+		execution.execute();
+	}
+}
+super.exit(null, eventOccurrence, null);
+
+	//end of body
 }
 
 void StateActivationImpl::tryInvokeDoActivity(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// If an doActivity behavior is specified for that state then it is executed.
+// If no doActivity is specified but the state redefines another state which
+// provides a doActivity then this latter is executed instead. The rule applies
+// recursively.
+if(!this.isDoActivityCompleted){
+	Behavior doActivity = this.getDoActivity();
+	if(doActivity!=null){
+		// Create, initialize and register to the locus the doActivityContextObject. 
+		this.doActivityContextObject = new DoActivityContextObject();
+		this.getExecutionLocus().add(this.doActivityContextObject);
+		this.doActivityContextObject.initialize(this.getExecutionContext());
+		this.doActivityContextObject.owner = this;
+		// Extract data from triggering event occurrence if possible. Reuse event occurrence
+		// embedded data extraction logic provided by EventTriggeredExecution.
+		List<ParameterValue> inputs = null;
+		Execution doActivityExecution = this.getExecutionFor(doActivity, eventOccurrence);
+		if(doActivityExecution instanceof EventTriggeredExecution){
+			((EventTriggeredExecution)doActivityExecution).initialize();
+			inputs = new ArrayList<ParameterValue>(((EventTriggeredExecution)doActivityExecution).wrappedExecution.parameterValues);
+		}
+		// Start doActivity execution on its own thread of execution (i.e., this
+		// a different thread of execution than the one used for the state machine).
+		this.doActivityContextObject.startBehavior(doActivity, inputs);
+	}
+}
+
+	//end of body
 }
 
 //*********************************

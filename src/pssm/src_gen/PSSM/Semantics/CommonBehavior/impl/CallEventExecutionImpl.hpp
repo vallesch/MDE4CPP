@@ -14,14 +14,12 @@
 #include "../CallEventExecution.hpp"
 
 #include "PSSM/impl/PSSMFactoryImpl.hpp"
-
-#include "ecore/impl/EObjectImpl.hpp"
+#include "fUML/impl/ExecutionImpl.hpp"
 
 //*********************************
 namespace PSSM::Semantics::CommonBehavior 
 {
-	class CallEventExecutionImpl :virtual public ecore::EObjectImpl,
-virtual public CallEventExecution 
+	class CallEventExecutionImpl :virtual public fUML::ExecutionImpl, virtual public CallEventExecution 
 	{
 		public: 
 			CallEventExecutionImpl(const CallEventExecutionImpl & obj);

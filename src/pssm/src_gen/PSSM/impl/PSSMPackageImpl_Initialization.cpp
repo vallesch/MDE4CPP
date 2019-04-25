@@ -42,12 +42,15 @@ void PSSMPackageImpl::initializePackageContents()
 	setNsURI(eNS_URI);
 	
 	// Add supertypes to classes
+	m_callEventExecution_EClass->getESuperTypes()->push_back(fUML::FUMLPackage::eInstance()->getExecution_EClass());
+	m_callEventOccurrence_EClass->getESuperTypes()->push_back(fUML::FUMLPackage::eInstance()->getEventOccurrence_EClass());
 	m_choicePseudostateActivation_EClass->getESuperTypes()->push_back(getConditionalPseudostateActivation_EClass());
 	m_conditionalPseudostateActivation_EClass->getESuperTypes()->push_back(getPseudostateActivation_EClass());
 	m_connectionPointActivation_EClass->getESuperTypes()->push_back(getPseudostateActivation_EClass());
 	m_deepHistoryPseudostateActivation_EClass->getESuperTypes()->push_back(getHistoryPseudostateActivation_EClass());
 	m_deferredEventOccurrence_EClass->getESuperTypes()->push_back(fUML::FUMLPackage::eInstance()->getEventOccurrence_EClass());
 	m_entryPointPseudostateActivation_EClass->getESuperTypes()->push_back(getConnectionPointActivation_EClass());
+	m_eventTriggeredExecution_EClass->getESuperTypes()->push_back(fUML::FUMLPackage::eInstance()->getExecution_EClass());
 	m_exitPointPseudostateActivation_EClass->getESuperTypes()->push_back(getConnectionPointActivation_EClass());
 	m_externalTransitionActivation_EClass->getESuperTypes()->push_back(getTransitionActivation_EClass());
 	m_finalStateActivation_EClass->getESuperTypes()->push_back(getStateActivation_EClass());

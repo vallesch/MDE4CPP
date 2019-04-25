@@ -14,14 +14,12 @@
 #include "../EventTriggeredExecution.hpp"
 
 #include "PSSM/impl/PSSMFactoryImpl.hpp"
-
-#include "ecore/impl/EObjectImpl.hpp"
+#include "fUML/impl/ExecutionImpl.hpp"
 
 //*********************************
 namespace PSSM::Semantics::CommonBehavior 
 {
-	class EventTriggeredExecutionImpl :virtual public ecore::EObjectImpl,
-virtual public EventTriggeredExecution 
+	class EventTriggeredExecutionImpl :virtual public fUML::ExecutionImpl, virtual public EventTriggeredExecution 
 	{
 		public: 
 			EventTriggeredExecutionImpl(const EventTriggeredExecutionImpl & obj);

@@ -36,9 +36,44 @@ namespace PSSM
 }
 
 //Forward Declaration for used types
+namespace uml 
+{
+	class Classifier;
+}
+
 namespace fUML 
 {
 	class EventOccurrence;
+}
+
+namespace fUML 
+{
+	class Execution;
+}
+
+namespace fUML 
+{
+	class FeatureValue;
+}
+
+namespace fUML 
+{
+	class Locus;
+}
+
+namespace fUML 
+{
+	class Object;
+}
+
+namespace fUML 
+{
+	class ObjectActivation;
+}
+
+namespace fUML 
+{
+	class ParameterValue;
 }
 
 namespace fUML 
@@ -47,18 +82,17 @@ namespace fUML
 }
 
 // base class includes
+#include "fUML/Execution.hpp"
 
 // enum includes
 
-#include "ecore/EObject.hpp"
 
 //*********************************
 namespace PSSM::Semantics::CommonBehavior 
 {
 	/*!
 	 */
-	class EventTriggeredExecution : virtual public ecore::EObject 
-
+	class EventTriggeredExecution:virtual public fUML::Execution
 	{
 		public:
  			EventTriggeredExecution(const EventTriggeredExecution &) {}
