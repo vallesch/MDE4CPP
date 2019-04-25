@@ -62,6 +62,8 @@
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
 
+#include "uml/ParameterDirectionKind.hpp"
+
 using namespace PSSM::Semantics::CommonBehavior;
 
 //*********************************
@@ -183,40 +185,98 @@ bool CallEventExecutionImpl::getCallerSuspended() const
 //*********************************
 void CallEventExecutionImpl::_send(std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Place the call event occurrence within the event pool of
+// the target object
+//	if(this.context.objectActivation != null){
+//		this.context.objectActivation.eventPool.add(eventOccurrence);
+//		this.context.objectActivation._send(new ArrivalSignal());
+	if(this->m_context->getObjectActivation() != nullptr) {
+//		this->m_context->getObjectActivation()->getEventPool()->add(eventOccurrence); //has to be SignalInstance, doesnt make any sense
+		this->m_context->getObjectActivation()->_send(std::make_shared<fUML::SignalInstance>()); //Should be the replacement for ArrivalSignal
+
+	}
+
+	//end of body
 }
 
 void CallEventExecutionImpl::_suspend()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	while(this->m_callerSuspended);
+
+	//end of body
 }
 
 void CallEventExecutionImpl::execute()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// The execution consists in placing a new CallEventOccurrence
+// within the event pool of the target active object. Not that
+// the call will not be executed if the target is not an active
+// object. This is due to the fact that the call event could
+// not placed anywhere since a passive object has no event pool.
+// The caller is expected to be suspended until the RTC step using
+// the event occurrence terminates.
+//CallEventOccurrence eventOccurrence = new CallEventOccurrence();
+//eventOccurrence.execution = this;
+//this.callerSuspended = true;
+//this._send(eventOccurrence);
+//this._suspend();
+	std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> eventOccurrence = new PSSM::Semantics::CommonBehavior::CallEventOccurrence();
+	this->m_callerSuspended = true;
+	this->_send(eventOccurrence);
+	this->_suspend();
+
+	//end of body
 }
 
 
 
 std::shared_ptr<Bag<fUML::ParameterValue> > CallEventExecutionImpl::getInputParameterValues()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Return input parameter values for this execution
+//List<ParameterValue> parameterValues = new ArrayList<ParameterValue>();
+//for(int i=0; i < this.parameterValues.size(); i++){
+//	ParameterValue parameterValue = this.parameterValues.get(i);
+//	if(parameterValue.parameter.getDirection() == ParameterDirectionKind.IN_LITERAL
+//			| parameterValue.parameter.getDirection() == ParameterDirectionKind.INOUT_LITERAL){
+//		parameterValues.add(parameterValue);
+//	}
+//}
+//return parameterValues;
+	std::shared_ptr<Bag<fUML::ParameterValue>> parameterValues = new Bag<fUML::ParameterValue>();
+	for(int i=0; i < this->m_parameterValues->size(); i++) {
+		std::shared_ptr<fUML::ParameterValue> parameterValue = this->m_parameterValues->at(i);
+		if(parameterValue->getParameter()->getDirection() == uml::ParameterDirectionKind::IN |
+				parameterValue->getParameter()->getDirection() == uml::ParameterDirectionKind::INOUT) {
+			parameterValues->add(parameterValue);
+		}
+	}
+	return parameterValues;
+	//end of body
 }
 
 std::shared_ptr<fUML::Value> CallEventExecutionImpl::new_()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	return std::make_shared<PSSM::Semantics::CommonBehavior::CallEventExecution>();
+
+	//end of body
 }
 
 void CallEventExecutionImpl::releaseCaller()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	this->m_callerSuspended = false;
+	//end of body
 }
 
 //*********************************

@@ -14,14 +14,12 @@
 #include "../CallEventOccurrence.hpp"
 
 #include "PSSM/impl/PSSMFactoryImpl.hpp"
-
-#include "ecore/impl/EObjectImpl.hpp"
+#include "fUML/impl/EventOccurrenceImpl.hpp"
 
 //*********************************
 namespace PSSM::Semantics::CommonBehavior 
 {
-	class CallEventOccurrenceImpl :virtual public ecore::EObjectImpl,
-virtual public CallEventOccurrence 
+	class CallEventOccurrenceImpl :virtual public fUML::EventOccurrenceImpl, virtual public CallEventOccurrence 
 	{
 		public: 
 			CallEventOccurrenceImpl(const CallEventOccurrenceImpl & obj);

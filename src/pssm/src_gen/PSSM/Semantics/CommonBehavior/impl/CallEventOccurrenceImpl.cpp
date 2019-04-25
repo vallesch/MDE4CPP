@@ -34,6 +34,8 @@
 
 #include "PSSM/Semantics/CommonBehavior/CallEventExecution.hpp"
 
+#include "fUML/EventOccurrence.hpp"
+
 #include "ecore/EcorePackage.hpp"
 #include "ecore/EcoreFactory.hpp"
 #include "PSSM/PSSMPackage.hpp"
@@ -134,6 +136,7 @@ std::shared_ptr<CallEventOccurrence> CallEventOccurrenceImpl::getThisCallEventOc
 void CallEventOccurrenceImpl::setThisCallEventOccurrencePtr(std::weak_ptr<CallEventOccurrence> thisCallEventOccurrencePtr)
 {
 	m_thisCallEventOccurrencePtr = thisCallEventOccurrencePtr;
+	setThisEventOccurrencePtr(thisCallEventOccurrencePtr);
 }
 std::shared_ptr<ecore::EObject> CallEventOccurrenceImpl::eContainer() const
 {
@@ -150,7 +153,7 @@ Any CallEventOccurrenceImpl::eGet(int featureID, bool resolve, bool coreType) co
 		case PSSM::PSSMPackage::CALLEVENTOCCURRENCE_EREFERENCE_EXECUTION:
 			return eAny(getExecution()); //20
 	}
-	return ecore::EObjectImpl::eGet(featureID, resolve, coreType);
+	return fUML::EventOccurrenceImpl::eGet(featureID, resolve, coreType);
 }
 bool CallEventOccurrenceImpl::internalEIsSet(int featureID) const
 {
@@ -159,7 +162,7 @@ bool CallEventOccurrenceImpl::internalEIsSet(int featureID) const
 		case PSSM::PSSMPackage::CALLEVENTOCCURRENCE_EREFERENCE_EXECUTION:
 			return getExecution() != nullptr; //20
 	}
-	return ecore::EObjectImpl::internalEIsSet(featureID);
+	return fUML::EventOccurrenceImpl::internalEIsSet(featureID);
 }
 bool CallEventOccurrenceImpl::eSet(int featureID, Any newValue)
 {
@@ -174,7 +177,7 @@ bool CallEventOccurrenceImpl::eSet(int featureID, Any newValue)
 		}
 	}
 
-	return ecore::EObjectImpl::eSet(featureID, newValue);
+	return fUML::EventOccurrenceImpl::eSet(featureID, newValue);
 }
 
 //*********************************
@@ -219,14 +222,14 @@ void CallEventOccurrenceImpl::loadAttributes(std::shared_ptr<persistence::interf
 		std::cout << "| ERROR    | " <<  "Exception occurred" << std::endl;
 	}
 
-	ecore::EObjectImpl::loadAttributes(loadHandler, attr_list);
+	fUML::EventOccurrenceImpl::loadAttributes(loadHandler, attr_list);
 }
 
 void CallEventOccurrenceImpl::loadNode(std::string nodeName, std::shared_ptr<persistence::interfaces::XLoadHandler> loadHandler, std::shared_ptr<PSSM::PSSMFactory> modelFactory)
 {
 
 
-	ecore::EObjectImpl::loadNode(nodeName, loadHandler, ecore::EcoreFactory::eInstance());
+	fUML::EventOccurrenceImpl::loadNode(nodeName, loadHandler, fUML::FUMLFactory::eInstance());
 }
 
 void CallEventOccurrenceImpl::resolveReferences(const int featureID, std::list<std::shared_ptr<ecore::EObject> > references)
@@ -245,13 +248,14 @@ void CallEventOccurrenceImpl::resolveReferences(const int featureID, std::list<s
 			return;
 		}
 	}
-	ecore::EObjectImpl::resolveReferences(featureID, references);
+	fUML::EventOccurrenceImpl::resolveReferences(featureID, references);
 }
 
 void CallEventOccurrenceImpl::save(std::shared_ptr<persistence::interfaces::XSaveHandler> saveHandler) const
 {
 	saveContent(saveHandler);
 
+	fUML::EventOccurrenceImpl::saveContent(saveHandler);
 	
 	ecore::EObjectImpl::saveContent(saveHandler);
 	

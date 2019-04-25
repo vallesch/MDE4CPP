@@ -46,9 +46,34 @@ namespace PSSM::Semantics::CommonBehavior
 	class CallEventOccurrence;
 }
 
+namespace uml 
+{
+	class Classifier;
+}
+
+namespace fUML 
+{
+	class Execution;
+}
+
+namespace fUML 
+{
+	class FeatureValue;
+}
+
+namespace fUML 
+{
+	class Locus;
+}
+
 namespace fUML 
 {
 	class Object;
+}
+
+namespace fUML 
+{
+	class ObjectActivation;
 }
 
 namespace uml 
@@ -67,18 +92,17 @@ namespace fUML
 }
 
 // base class includes
+#include "fUML/Execution.hpp"
 
 // enum includes
 
-#include "ecore/EObject.hpp"
 
 //*********************************
 namespace PSSM::Semantics::CommonBehavior 
 {
 	/*!
 	 */
-	class CallEventExecution : virtual public ecore::EObject 
-
+	class CallEventExecution:virtual public fUML::Execution
 	{
 		public:
  			CallEventExecution(const CallEventExecution &) {}
@@ -106,9 +130,6 @@ namespace PSSM::Semantics::CommonBehavior
 			virtual void _suspend() = 0;
 			
 			/*!
-			 Execute the behavior given by the type of this execution. 
-			The parameterValues for any input (in or in-out) parameters of the behavior should be set before the execution.
-			The parameteValues for any output (in-out, out or return) parameters of the behavior will be set by the execution.
 			 */ 
 			virtual void execute() = 0;
 			
@@ -119,7 +140,6 @@ namespace PSSM::Semantics::CommonBehavior
 			virtual std::shared_ptr<Bag<fUML::ParameterValue> > getInputParameterValues() = 0;
 			
 			/*!
-			 Create a new execution with no behavior or parameterValues.
 			 */ 
 			virtual std::shared_ptr<fUML::Value> new_() = 0;
 			

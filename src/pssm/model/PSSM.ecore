@@ -149,6 +149,9 @@
             ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//EventOccurrence"/>
       </eClassifiers>
       <eClassifiers xsi:type="ecore:EClass" name="CallEventExecution" eSuperTypes="../../fuml/model/fUML.ecore#//Execution">
+        <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
+          <details key="includes" value="#include &quot;PSSM/Semantics/CommonBehavior/CallEventOccurrence.hpp&quot;&#xA;"/>
+        </eAnnotations>
         <eOperations name="_send" ordered="false" lowerBound="1">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="body" value="// Place the call event occurrence within the event pool of&#xA;// the target object&#xA;if(this.context.objectActivation != null){&#xA;&#x9;this.context.objectActivation.eventPool.add(eventOccurrence);&#xA;&#x9;this.context.objectActivation._send(new ArrivalSignal());&#xA;}&#xA;"/>
@@ -157,13 +160,13 @@
         </eOperations>
         <eOperations name="_suspend" ordered="false" lowerBound="1">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
-            <details key="body" value="while(this.callerSuspended);&#xA;"/>
+            <details key="body" value="while(this->m_callerSuspended);"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="execute" ordered="false" lowerBound="1">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="documentation" value="Execute the behavior given by the type of this execution. &#xD;&#xA;The parameterValues for any input (in or in-out) parameters of the behavior should be set before the execution.&#xD;&#xA;The parameteValues for any output (in-out, out or return) parameters of the behavior will be set by the execution.&#xD;&#xA;"/>
-            <details key="body" value="// The execution consists in placing a new CallEventOccurrence&#xA;// within the event pool of the target active object. Not that&#xA;// the call will not be executed if the target is not an active&#xA;// object. This is due to the fact that the call event could&#xA;// not placed anywhere since a passive object has no event pool.&#xA;// The caller is expected to be suspended until the RTC step using&#xA;// the event occurrence terminates.&#xA;CallEventOccurrence eventOccurrence = new CallEventOccurrence();&#xA;eventOccurrence.execution = this;&#xA;this.callerSuspended = true;&#xA;this._send(eventOccurrence);&#xA;this._suspend();&#xA;&#xA;"/>
+            <details key="body" value="// The execution consists in placing a new CallEventOccurrence&#xA;// within the event pool of the target active object. Not that&#xA;// the call will not be executed if the target is not an active&#xA;// object. This is due to the fact that the call event could&#xA;// not placed anywhere since a passive object has no event pool.&#xA;// The caller is expected to be suspended until the RTC step using&#xA;// the event occurrence terminates.&#xA;//CallEventOccurrence eventOccurrence = new CallEventOccurrence();&#xA;//eventOccurrence.execution = this;&#xA;//this.callerSuspended = true;&#xA;//this._send(eventOccurrence);&#xA;//this._suspend();&#xA;&#xA;std::shared_ptr&lt;PSSM::Semantics::CommonBehavior::CallEventOccurrence> eventOccurrence = new PSSM::Semantics::CommonBehavior::CallEventOccurrence();&#xA;&#x9;this->m_callerSuspended = true;&#xA;&#x9;this->_send(eventOccurrence);&#xA;&#x9;this->_suspend();"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="getBehavior" ordered="false" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/uml2/5.0.0/UML#//Behavior">
@@ -177,18 +180,18 @@
         <eOperations name="new_" ordered="false" lowerBound="1" eType="ecore:EClass ../../fuml/model/fUML.ecore#//Value">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
             <details key="documentation" value="Create a new execution with no behavior or parameterValues.&#xD;&#xA;"/>
-            <details key="body" value="return new CallEventExecution();&#xA;"/>
+            <details key="body" value="return new PSSM::Semantics::CommonBehavior::CallEventExecution();&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="releaseCaller" ordered="false" lowerBound="1">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
-            <details key="body" value="this.callerSuspended = false;&#xA;"/>
+            <details key="body" value="this->m_callerSuspended = false;"/>
           </eAnnotations>
         </eOperations>
         <eOperations name="getInputParameterValues" ordered="false" upperBound="-1"
             eType="ecore:EClass ../../fuml/model/fUML.ecore#//ParameterValue">
           <eAnnotations source="http://sse.tu-ilmenau.de/codegen">
-            <details key="body" value="// Return input parameter values for this execution&#xA;List&lt;ParameterValue> parameterValues = new ArrayList&lt;ParameterValue>();&#xA;for(int i=0; i &lt; this.parameterValues.size(); i++){&#xA;&#x9;ParameterValue parameterValue = this.parameterValues.get(i);&#xA;&#x9;if(parameterValue.parameter.getDirection() == ParameterDirectionKind.IN_LITERAL&#xA;&#x9;&#x9;&#x9;| parameterValue.parameter.getDirection() == ParameterDirectionKind.INOUT_LITERAL){&#xA;&#x9;&#x9;parameterValues.add(parameterValue);&#xA;&#x9;}&#xA;}&#xA;return parameterValues;&#xA;"/>
+            <details key="body" value="// Return input parameter values for this execution&#xA;//List&lt;ParameterValue> parameterValues = new ArrayList&lt;ParameterValue>();&#xA;//for(int i=0; i &lt; this.parameterValues.size(); i++){&#xA;//&#x9;ParameterValue parameterValue = this.parameterValues.get(i);&#xA;//&#x9;if(parameterValue.parameter.getDirection() == ParameterDirectionKind.IN_LITERAL&#xA;//&#x9;&#x9;&#x9;| parameterValue.parameter.getDirection() == ParameterDirectionKind.INOUT_LITERAL){&#xA;//&#x9;&#x9;parameterValues.add(parameterValue);&#xA;//&#x9;}&#xA;//}&#xA;//return parameterValues;&#xA;&#x9;std::shared_ptr&lt;Bag&lt;fUML::ParameterValue>> parameterValues = new Bag&lt;fUML::ParameterValue>();&#xA;&#x9;for(int i=0; i &lt; this->m_parameterValues->size(); i++) {&#xA;&#x9;&#x9;std::shared_ptr&lt;fUML::ParameterValue> parameterValue = this->m_parameterValues->at(i);&#xA;&#x9;&#x9;if(parameterValue->getParameter()->getDirection() == uml::ParameterDirectionKind::IN |&#xA;&#x9;&#x9;&#x9;&#x9;parameterValue->getParameter()->getDirection() == uml::ParameterDirectionKind::INOUT) {&#xA;&#x9;&#x9;&#x9;parameterValues->add(parameterValue);&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;&#x9;return parameterValues;&#xA;"/>
           </eAnnotations>
         </eOperations>
         <eStructuralFeatures xsi:type="ecore:EAttribute" name="callerSuspended" ordered="false"

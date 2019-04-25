@@ -41,19 +41,23 @@ namespace PSSM::Semantics::CommonBehavior
 	class CallEventExecution;
 }
 
+namespace fUML 
+{
+	class EventOccurrence;
+}
+
 // base class includes
+#include "fUML/EventOccurrence.hpp"
 
 // enum includes
 
-#include "ecore/EObject.hpp"
 
 //*********************************
 namespace PSSM::Semantics::CommonBehavior 
 {
 	/*!
 	 */
-	class CallEventOccurrence : virtual public ecore::EObject 
-
+	class CallEventOccurrence:virtual public fUML::EventOccurrence
 	{
 		public:
  			CallEventOccurrence(const CallEventOccurrence &) {}

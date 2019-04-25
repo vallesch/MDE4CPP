@@ -52,9 +52,6 @@ namespace PSSM::Semantics::CommonBehavior
 			virtual void _suspend() ;
 			
 			/*!
-			 Execute the behavior given by the type of this execution. 
-			The parameterValues for any input (in or in-out) parameters of the behavior should be set before the execution.
-			The parameteValues for any output (in-out, out or return) parameters of the behavior will be set by the execution.
 			 */ 
 			virtual void execute() ;
 			
@@ -65,7 +62,6 @@ namespace PSSM::Semantics::CommonBehavior
 			virtual std::shared_ptr<Bag<fUML::ParameterValue> > getInputParameterValues() ;
 			
 			/*!
-			 Create a new execution with no behavior or parameterValues.
 			 */ 
 			virtual std::shared_ptr<fUML::Value> new_() ;
 			
