@@ -42,6 +42,36 @@ namespace uml
 	class Class;
 }
 
+namespace uml 
+{
+	class Classifier;
+}
+
+namespace fUML 
+{
+	class Execution;
+}
+
+namespace fUML 
+{
+	class FeatureValue;
+}
+
+namespace fUML 
+{
+	class Locus;
+}
+
+namespace fUML 
+{
+	class Object;
+}
+
+namespace fUML 
+{
+	class ObjectActivation;
+}
+
 namespace fUML 
 {
 	class ParameterValue;
@@ -73,18 +103,17 @@ namespace PSSM::Semantics::StateMachines
 }
 
 // base class includes
+#include "fUML/Execution.hpp"
 
 // enum includes
 
-#include "ecore/EObject.hpp"
 
 //*********************************
 namespace PSSM::Semantics::StateMachines 
 {
 	/*!
 	 */
-	class StateMachineExecution : virtual public ecore::EObject 
-
+	class StateMachineExecution:virtual public fUML::Execution
 	{
 		public:
  			StateMachineExecution(const StateMachineExecution &) {}

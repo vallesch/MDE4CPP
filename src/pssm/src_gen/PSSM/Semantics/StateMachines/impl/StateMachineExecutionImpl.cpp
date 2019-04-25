@@ -35,6 +35,18 @@
 
 #include "uml/Class.hpp"
 
+#include "uml/Classifier.hpp"
+
+#include "fUML/Execution.hpp"
+
+#include "fUML/FeatureValue.hpp"
+
+#include "fUML/Locus.hpp"
+
+#include "fUML/Object.hpp"
+
+#include "fUML/ObjectActivation.hpp"
+
 #include "fUML/ParameterValue.hpp"
 
 #include "PSSM/Semantics/StateMachines/RegionActivation.hpp"
@@ -53,6 +65,8 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
+
+#include "fUML/FUMLFactory.hpp"
 
 using namespace PSSM::Semantics::StateMachines;
 
@@ -101,6 +115,13 @@ StateMachineExecutionImpl::StateMachineExecutionImpl(const StateMachineExecution
 
 	//copy references with no containment (soft copy)
 	
+	m_context  = obj.getContext();
+
+	m_locus  = obj.getLocus();
+
+	std::shared_ptr<Bag<uml::Classifier>> _types = obj.getTypes();
+	m_types.reset(new Bag<uml::Classifier>(*(obj.getTypes().get())));
+
 
 	//Clone references with containment (deep copy)
 
@@ -110,6 +131,29 @@ StateMachineExecutionImpl::StateMachineExecutionImpl(const StateMachineExecution
 	}
 	#ifdef SHOW_SUBSET_UNION
 		std::cout << "Copying the Subset: " << "m_configuration" << std::endl;
+	#endif
+	std::shared_ptr<Bag<fUML::FeatureValue>> _featureValuesList = obj.getFeatureValues();
+	for(std::shared_ptr<fUML::FeatureValue> _featureValues : *_featureValuesList)
+	{
+		this->getFeatureValues()->add(std::shared_ptr<fUML::FeatureValue>(std::dynamic_pointer_cast<fUML::FeatureValue>(_featureValues->copy())));
+	}
+	#ifdef SHOW_SUBSET_UNION
+		std::cout << "Copying the Subset: " << "m_featureValues" << std::endl;
+	#endif
+	if(obj.getObjectActivation()!=nullptr)
+	{
+		m_objectActivation = std::dynamic_pointer_cast<fUML::ObjectActivation>(obj.getObjectActivation()->copy());
+	}
+	#ifdef SHOW_SUBSET_UNION
+		std::cout << "Copying the Subset: " << "m_objectActivation" << std::endl;
+	#endif
+	std::shared_ptr<Bag<fUML::ParameterValue>> _parameterValuesList = obj.getParameterValues();
+	for(std::shared_ptr<fUML::ParameterValue> _parameterValues : *_parameterValuesList)
+	{
+		this->getParameterValues()->add(std::shared_ptr<fUML::ParameterValue>(std::dynamic_pointer_cast<fUML::ParameterValue>(_parameterValues->copy())));
+	}
+	#ifdef SHOW_SUBSET_UNION
+		std::cout << "Copying the Subset: " << "m_parameterValues" << std::endl;
 	#endif
 	std::shared_ptr<Bag<PSSM::Semantics::StateMachines::RegionActivation>> _regionActivationsList = obj.getRegionActivations();
 	for(std::shared_ptr<PSSM::Semantics::StateMachines::RegionActivation> _regionActivations : *_regionActivationsList)
@@ -221,6 +265,7 @@ std::shared_ptr<StateMachineExecution> StateMachineExecutionImpl::getThisStateMa
 void StateMachineExecutionImpl::setThisStateMachineExecutionPtr(std::weak_ptr<StateMachineExecution> thisStateMachineExecutionPtr)
 {
 	m_thisStateMachineExecutionPtr = thisStateMachineExecutionPtr;
+	setThisExecutionPtr(thisStateMachineExecutionPtr);
 }
 std::shared_ptr<ecore::EObject> StateMachineExecutionImpl::eContainer() const
 {
@@ -235,22 +280,22 @@ Any StateMachineExecutionImpl::eGet(int featureID, bool resolve, bool coreType) 
 	switch(featureID)
 	{
 		case PSSM::PSSMPackage::STATEMACHINEEXECUTION_EREFERENCE_CONFIGURATION:
-			return eAny(getConfiguration()); //381
+			return eAny(getConfiguration()); //387
 		case PSSM::PSSMPackage::STATEMACHINEEXECUTION_EREFERENCE_REGIONACTIVATIONS:
-			return eAny(getRegionActivations()); //380
+			return eAny(getRegionActivations()); //386
 	}
-	return ecore::EObjectImpl::eGet(featureID, resolve, coreType);
+	return fUML::ExecutionImpl::eGet(featureID, resolve, coreType);
 }
 bool StateMachineExecutionImpl::internalEIsSet(int featureID) const
 {
 	switch(featureID)
 	{
 		case PSSM::PSSMPackage::STATEMACHINEEXECUTION_EREFERENCE_CONFIGURATION:
-			return getConfiguration() != nullptr; //381
+			return getConfiguration() != nullptr; //387
 		case PSSM::PSSMPackage::STATEMACHINEEXECUTION_EREFERENCE_REGIONACTIVATIONS:
-			return getRegionActivations() != nullptr; //380
+			return getRegionActivations() != nullptr; //386
 	}
-	return ecore::EObjectImpl::internalEIsSet(featureID);
+	return fUML::ExecutionImpl::internalEIsSet(featureID);
 }
 bool StateMachineExecutionImpl::eSet(int featureID, Any newValue)
 {
@@ -260,12 +305,12 @@ bool StateMachineExecutionImpl::eSet(int featureID, Any newValue)
 		{
 			// BOOST CAST
 			std::shared_ptr<PSSM::Semantics::StateMachines::StateMachineConfiguration> _configuration = newValue->get<std::shared_ptr<PSSM::Semantics::StateMachines::StateMachineConfiguration>>();
-			setConfiguration(_configuration); //381
+			setConfiguration(_configuration); //387
 			return true;
 		}
 	}
 
-	return ecore::EObjectImpl::eSet(featureID, newValue);
+	return fUML::ExecutionImpl::eSet(featureID, newValue);
 }
 
 //*********************************
@@ -291,7 +336,7 @@ void StateMachineExecutionImpl::load(std::shared_ptr<persistence::interfaces::XL
 void StateMachineExecutionImpl::loadAttributes(std::shared_ptr<persistence::interfaces::XLoadHandler> loadHandler, std::map<std::string, std::string> attr_list)
 {
 
-	ecore::EObjectImpl::loadAttributes(loadHandler, attr_list);
+	fUML::ExecutionImpl::loadAttributes(loadHandler, attr_list);
 }
 
 void StateMachineExecutionImpl::loadNode(std::string nodeName, std::shared_ptr<persistence::interfaces::XLoadHandler> loadHandler, std::shared_ptr<PSSM::PSSMFactory> modelFactory)
@@ -340,20 +385,39 @@ void StateMachineExecutionImpl::loadNode(std::string nodeName, std::shared_ptr<p
 		std::cout << "| ERROR    | " <<  "Exception occurred" << std::endl;
 	}
 
-	ecore::EObjectImpl::loadNode(nodeName, loadHandler, ecore::EcoreFactory::eInstance());
+	fUML::ExecutionImpl::loadNode(nodeName, loadHandler, fUML::FUMLFactory::eInstance());
 }
 
 void StateMachineExecutionImpl::resolveReferences(const int featureID, std::list<std::shared_ptr<ecore::EObject> > references)
 {
-	ecore::EObjectImpl::resolveReferences(featureID, references);
+	fUML::ExecutionImpl::resolveReferences(featureID, references);
 }
 
 void StateMachineExecutionImpl::save(std::shared_ptr<persistence::interfaces::XSaveHandler> saveHandler) const
 {
 	saveContent(saveHandler);
 
+	fUML::ExecutionImpl::saveContent(saveHandler);
+	
+	fUML::ObjectImpl::saveContent(saveHandler);
+	
+	fUML::ExtensionalValueImpl::saveContent(saveHandler);
+	
+	fUML::CompoundValueImpl::saveContent(saveHandler);
+	
+	fUML::StructuredValueImpl::saveContent(saveHandler);
+	
+	fUML::ValueImpl::saveContent(saveHandler);
+	
+	fUML::SemanticVisitorImpl::saveContent(saveHandler);
 	
 	ecore::EObjectImpl::saveContent(saveHandler);
+	
+	
+	
+	
+	
+	
 	
 }
 

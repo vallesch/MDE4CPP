@@ -24,9 +24,16 @@
 #include "ecore/EAnnotation.hpp"
 #include "ecore/EClass.hpp"
 #include "PSSM/impl/PSSMPackageImpl.hpp"
-
 #include "fUML/FUMLFactory.hpp"
-
+#include "uml/StateMachine.hpp"
+#include "uml/Pseudostate.hpp"
+#include "PSSM/Semantics/StateMachines/StateMachineExecution.hpp"
+#include "uml/State.hpp"
+#include "uml/FinalState.hpp"
+#include "uml/OpaqueExpression.hpp"
+#include "uml/ReadSelfAction.hpp"
+#include "uml/Transition.hpp"
+#include "uml/Region.hpp"
 
 //Forward declaration includes
 #include "persistence/interfaces/XLoadHandler.hpp" // used for Persistence
@@ -143,8 +150,101 @@ std::shared_ptr<ecore::EClass> SM_ExecutionFactoryImpl::eStaticClass() const
 //*********************************
 std::shared_ptr<fUML::SemanticVisitor> SM_ExecutionFactoryImpl::instantiateVisitor(std::shared_ptr<uml::Element>  element)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	std::shared_ptr<fUML::SemanticVisitor> visitor = nullptr;
+
+	std::shared_ptr<uml::StateMachine> is_sm = std::dynamic_pointer_cast<uml::StateMachine>(element);
+	std::shared_ptr<uml::Pseudostate> is_pseudoState = std::dynamic_pointer_cast<uml::Pseudostate>(element);
+	std::shared_ptr<uml::State> is_state = std::dynamic_pointer_cast<uml::State>(element);
+	std::shared_ptr<uml::FinalState> is_final_state = std::dynamic_pointer_cast<uml::FinalState>(element);
+	std::shared_ptr<uml::Transition> is_transition = std::dynamic_pointer_cast<uml::Transition>(element);
+	std::shared_ptr<uml::Region> is_region = std::dynamic_pointer_cast<uml::Region>(element);
+	std::shared_ptr<uml::OpaqueExpression> is_opaque_expression = std::dynamic_pointer_cast<uml::OpaqueExpression>(element);
+	std::shared_ptr<uml::ReadSelfAction> is_read_self_action = std::dynamic_pointer_cast <uml::ReadSelfAction>(element);
+
+	if(is_sm != nullptr) {
+		//visitor = new PSSM::Semantics::StateMachines::StateMachineExecution()
+	}
+	else if(is_pseudoState != nullptr) {
+		std::shared_ptr<uml::Pseudostate> pseudostate = is_pseudoState;
+//		switch(pseudostate->getKind()){
+//			case uml::PseudostateKind::INITIAL: visitor = new PSSM::Semantics::StateMachines::InitialPseudostateActivation(); break;
+//			case uml::PseudostateKind::ENTRYPOINT:
+//			case uml::PseudostateKind::EXITPOINT:
+//			case uml::PseudostateKind::CHOICE:
+//			case uml::PseudostateKind::FORK:
+//			case uml::PseudostateKind::JOIN:
+//			case uml::PseudostateKind::TERMINATE:
+//			case uml::PseudostateKind::DEEPHISTORY:
+//			case uml::PseudostateKind::SHALLOWHISTORY:
+//			case uml::PseudostateKind::JUNCTION:
+//		}
+	} else if(is_state != nullptr) {
+//		if(is_final_state != nullptr){
+//			visitor = new PSSM::Semantics::StateMachines::FinalStateActivation();
+//		} else {
+//			visitor = new PSSM::Semantics::StateMachines::StateActivation();
+//		}
+	} else if (is_transition != nullptr) {
+		std::shared_ptr<uml::Transition> transition = is_transition;
+//		switch(transition->getKind()){
+//			case uml::TransitionKind::EXTERNAL:
+//			case uml::TransitionKind::INTERNAL:
+//			case uml::TransitionKind::LOCAL:
+//		}
+	} else if(is_region != nullptr) {
+		//visitor = new PSSM::Semantics::StateMachines::RegionActivation();
+	} else if(is_opaque_expression != nullptr) {
+		//visitor = new PSSM::Semantics::Values::SM_OpaqueExpressionEvaluation();
+	} else if(is_read_self_action) {
+		//visitor = new PSSM::Semantics::Actions::SM_ReadSelfActionActivation();
+	} else {
+		visitor = this->instantiateVisitor(element);
+	}
+
+	return visitor;
+//SemanticVisitor visitor = null ;
+//if(element instanceof StateMachine){
+//	visitor = new StateMachineExecution();
+//}else if (element instanceof Pseudostate) {
+//	Pseudostate pseudostate = (Pseudostate) element;
+//	switch(pseudostate.getKind()){
+//		case INITIAL_LITERAL: visitor = new InitialPseudostateActivation(); break;
+//		case ENTRY_POINT_LITERAL: visitor = new EntryPointPseudostateActivation(); break;
+//		case EXIT_POINT_LITERAL: visitor = new ExitPointPseudostateActivation(); break;
+//		case CHOICE_LITERAL: visitor = new ChoicePseudostateActivation(); break;
+//		case FORK_LITERAL: visitor = new ForkPseudostateActivation(); break;
+//		case JOIN_LITERAL: visitor = new JoinPseudostateActivation(); break;
+//		case TERMINATE_LITERAL: visitor = new TerminatePseudostateActivation(); break;
+//		case DEEP_HISTORY_LITERAL: visitor = new DeepHistoryPseudostateActivation(); break;
+//		case SHALLOW_HISTORY_LITERAL: visitor = new ShallowHistoryPseudostateActivation(); break;
+//		case JUNCTION_LITERAL: visitor = new JunctionPseudostateActivation(); break;
+//	}
+//}else if (element instanceof State) {
+//	if(element instanceof FinalState){
+//		visitor = new FinalStateActivation();
+//	}else{
+//		visitor = new StateActivation() ;
+//	}
+//}else if (element instanceof Transition) {
+//	Transition transition = (Transition) element;
+//	switch(transition.getKind()){
+//		case EXTERNAL_LITERAL: visitor = new ExternalTransitionActivation(); break;
+//		case INTERNAL_LITERAL: visitor = new InternalTransitionActivation(); break;
+//		case LOCAL_LITERAL: visitor = new LocalTransitionActivation(); break;
+//	}
+//}else if (element instanceof Region) {
+//	visitor = new RegionActivation();
+//}else if(element instanceof OpaqueExpression) {
+//	visitor = new SM_OpaqueExpressionEvaluation();
+//}else if(element instanceof ReadSelfAction){
+//	visitor = new SM_ReadSelfActionActivation();
+//}else {
+//	visitor = super.instantiateVisitor(element);
+//}
+//return visitor;
+	//end of body
 }
 
 //*********************************

@@ -66,6 +66,7 @@ void PSSMPackageImpl::initializePackageContents()
 	m_sM_ObjectActivation_EClass->getESuperTypes()->push_back(fUML::FUMLPackage::eInstance()->getObjectActivation_EClass());
 	m_shallowHistoryPseudostateActivation_EClass->getESuperTypes()->push_back(getHistoryPseudostateActivation_EClass());
 	m_stateActivation_EClass->getESuperTypes()->push_back(getVertexActivation_EClass());
+	m_stateMachineExecution_EClass->getESuperTypes()->push_back(fUML::FUMLPackage::eInstance()->getExecution_EClass());
 	m_stateMachineSemanticVisitor_EClass->getESuperTypes()->push_back(fUML::FUMLPackage::eInstance()->getSemanticVisitor_EClass());
 	m_terminatePseudostateActivation_EClass->getESuperTypes()->push_back(getPseudostateActivation_EClass());
 	m_transitionActivation_EClass->getESuperTypes()->push_back(getStateMachineSemanticVisitor_EClass());

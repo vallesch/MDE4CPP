@@ -14,14 +14,12 @@
 #include "../StateMachineExecution.hpp"
 
 #include "PSSM/impl/PSSMFactoryImpl.hpp"
-
-#include "ecore/impl/EObjectImpl.hpp"
+#include "fUML/impl/ExecutionImpl.hpp"
 
 //*********************************
 namespace PSSM::Semantics::StateMachines 
 {
-	class StateMachineExecutionImpl :virtual public ecore::EObjectImpl,
-virtual public StateMachineExecution 
+	class StateMachineExecutionImpl :virtual public fUML::ExecutionImpl, virtual public StateMachineExecution 
 	{
 		public: 
 			StateMachineExecutionImpl(const StateMachineExecutionImpl & obj);

@@ -27,6 +27,8 @@
 #include "PSSM/impl/PSSMPackageImpl.hpp"
 #include "fUML/Execution.hpp"
 #include "PSSM/Semantics/CommonBehavior/EventTriggeredExecution.hpp"
+#include "fUML/FUMLFactory.hpp"
+#include "PSSM/Semantics/StateMachines/StateMachineExecution.hpp"
 
 //Forward declaration includes
 #include "persistence/interfaces/XLoadHandler.hpp" // used for Persistence
@@ -58,10 +60,6 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
-
-#include "fUML/FUMLFactory.hpp"
-
-#include "PSSM/Semantics/StateMachines/StateMachineExecution.hpp"
 
 using namespace PSSM::Semantics::StateMachines;
 
@@ -208,8 +206,7 @@ Any StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavi
 {
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
-	// Create an Execution for the specified behavior. In addition to the creation of this
-// Execution, if the behavior execution is triggered by the dispatching of an event (i.e.
+	// Execution, if the behavior execution is triggered by the dispatching of an event (i.e.
 // a CallEvent or a SignalEvent) then an EventTriggeredExecution is provided. This
 // execution wraps the original execution and ensures passing of event data to the
 // wrapped execution.
@@ -227,8 +224,6 @@ Any StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavi
 //	}
 //}
 // return execution;
-	return nullptr;
-
 	//end of body
 }
 
@@ -272,11 +267,8 @@ bool StateMachineSemanticVisitorImpl::isVisitorFor(std::shared_ptr<uml::NamedEle
 {
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
-	// A visitor is the interpreter for a model if the node given as parameter is the
-// this model element.
 	//return this.node == node;
 	return this->m_node == node;
-
 	//end of body
 }
 
@@ -332,8 +324,8 @@ bool StateMachineSemanticVisitorImpl::match(std::shared_ptr<fUML::EventOccurrenc
 //	}
 //	i++;
 //}
+//return match;
 return false;
-
 	//end of body
 }
 
