@@ -24,6 +24,8 @@
 #include "ecore/EAnnotation.hpp"
 #include "ecore/EClass.hpp"
 #include "PSSM/impl/PSSMPackageImpl.hpp"
+#include "PSSM/Semantics/CommonBehavior/CallEventOccurrence.hpp"
+
 
 //Forward declaration includes
 #include "persistence/interfaces/XLoadHandler.hpp" // used for Persistence
@@ -61,8 +63,6 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
-
-#include "uml/ParameterDirectionKind.hpp"
 
 using namespace PSSM::Semantics::CommonBehavior;
 
@@ -189,14 +189,10 @@ void CallEventExecutionImpl::_send(std::shared_ptr<PSSM::Semantics::CommonBehavi
 	//generated from body annotation
 	// Place the call event occurrence within the event pool of
 // the target object
-//	if(this.context.objectActivation != null){
-//		this.context.objectActivation.eventPool.add(eventOccurrence);
-//		this.context.objectActivation._send(new ArrivalSignal());
-	if(this->m_context->getObjectActivation() != nullptr) {
-//		this->m_context->getObjectActivation()->getEventPool()->add(eventOccurrence); //has to be SignalInstance, doesnt make any sense
-		this->m_context->getObjectActivation()->_send(std::make_shared<fUML::SignalInstance>()); //Should be the replacement for ArrivalSignal
-
-	}
+if(this.context.objectActivation != null){
+	this.context.objectActivation.eventPool.add(eventOccurrence);
+	this.context.objectActivation._send(new ArrivalSignal());
+}
 
 	//end of body
 }
@@ -206,7 +202,6 @@ void CallEventExecutionImpl::_suspend()
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
 	while(this->m_callerSuspended);
-
 	//end of body
 }
 
@@ -226,11 +221,11 @@ void CallEventExecutionImpl::execute()
 //this.callerSuspended = true;
 //this._send(eventOccurrence);
 //this._suspend();
-	std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> eventOccurrence = new PSSM::Semantics::CommonBehavior::CallEventOccurrence();
+
+std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> eventOccurrence = new PSSM::Semantics::CommonBehavior::CallEventOccurrence();
 	this->m_callerSuspended = true;
 	this->_send(eventOccurrence);
 	this->_suspend();
-
 	//end of body
 }
 
@@ -259,6 +254,7 @@ std::shared_ptr<Bag<fUML::ParameterValue> > CallEventExecutionImpl::getInputPara
 		}
 	}
 	return parameterValues;
+
 	//end of body
 }
 
@@ -266,7 +262,7 @@ std::shared_ptr<fUML::Value> CallEventExecutionImpl::new_()
 {
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
-	return std::make_shared<PSSM::Semantics::CommonBehavior::CallEventExecution>();
+	return new PSSM::Semantics::CommonBehavior::CallEventExecution();
 
 	//end of body
 }

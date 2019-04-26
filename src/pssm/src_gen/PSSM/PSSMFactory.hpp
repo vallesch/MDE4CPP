@@ -82,10 +82,7 @@ namespace PSSM::Semantics::Values
 	class SM_OpaqueExpressionEvaluation;
 }
 
-namespace fUML
-{
-	class Locus;
-}
+
 
 
 namespace PSSM 

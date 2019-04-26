@@ -30,6 +30,11 @@
 #include "fUML/FUMLFactory.hpp"
 #include "PSSM/Semantics/StateMachines/StateMachineExecution.hpp"
 #include "uml/CallEvent.hpp"
+#include "PSSM/Semantics/StateMachines/ExitPointPseudostateActivation.hpp"
+#include "PSSM/Semantics/StateMachines/EntryPointPseudostateActivation.hpp"
+#include "PSSM/Semantics/CommonBehavior/CallEventOccurrence.hpp"
+#include "fUML/ExecutionFactory.hpp"
+#include "PSSM/Semantics/CommonBehavior/CallEventExecution.hpp"
 
 //Forward declaration includes
 #include "persistence/interfaces/XLoadHandler.hpp" // used for Persistence
@@ -163,9 +168,9 @@ std::shared_ptr<Bag<fUML::SemanticVisitor> > StateMachineSemanticVisitorImpl::ge
 {
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
-		// Return the hierarchy of visitors that need to be traversed to access
-	// the visitor that called context chain. The caller is part of the returned
-	// context chain.
+	// Return the hierarchy of visitors that need to be traversed to access
+// the visitor that called context chain. The caller is part of the returned
+// context chain.
 //	List<SemanticVisitor> contextChain = new ArrayList<SemanticVisitor>();
 //	if(!(this instanceof ExitPointPseudostateActivation) && !(this instanceof EntryPointPseudostateActivation)){
 //		contextChain.add(this);
@@ -180,16 +185,23 @@ std::shared_ptr<Bag<fUML::SemanticVisitor> > StateMachineSemanticVisitorImpl::ge
 //	return contextChain;
 	std::shared_ptr<Bag<fUML::SemanticVisitor>> contextChain = std::shared_ptr<Bag<fUML::SemanticVisitor>>();
 
-//	std::shared_ptr<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation> exitPseudoState = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation>(this);
-//	std::shared_ptr<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation> entryPseudoState = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation>(this);
-//	if(exitPseudoState == nullptr && entryPseudoState == nullptr)
-//	{
-//		contextChain->add(std::dynamic_pointer_cast<fUML::SemanticVisitor>(this));
-//	}
-//	else
-//	{
-//		contextChain->insert((std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::StateMachineSemanticVisitor>(this->m_parent))->getContextChain());
-//	}
+	std::shared_ptr<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation> entryPointActivation = dynamic_cast<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation>(this);
+	std::shared_ptr<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation> exitPointActivation = dynamic_cast<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation>(this);
+
+	std::shared_ptr<PSSM::Semantics::StateMachines::StateMachineExecution> parentStateMachineExecution = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::StateMachineExecution>(this->getParent());
+
+	if(entryPointActivation == nullptr && exitPointActivation == nullptr) {
+		std::shared_ptr<fUML::SemanticVisitor> tmp = static_cast<fUML::SemanticVisitor>(this);
+		contextChain->add(tmp);
+	}
+	if(this->getParent() != nullptr) {
+		if(parentStateMachineExecution != nullptr) {
+			contextChain->add(this->getParent());
+		} else {
+			std::shared_ptr<Bag<fUML::SemanticVisitor>> parentContextChain = std::static_pointer_cast<PSSM::Semantics::StateMachines::StateMachineSemanticVisitor>(this->getParent())->getContextChain();
+			contextChain->insert(*parentContextChain);
+		}
+	}
 
 	return contextChain;
 	//end of body
@@ -209,15 +221,18 @@ Any StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavi
 	//generated from body annotation
 		std::shared_ptr<fUML::Execution> execution = nullptr;
 	if(behavior != nullptr) {
-		std::shared_ptr<fUML::Execution> originalExecution = this->getExecutionLocus()->m_factory->createExecution(behavior, this->getExecutionContext()); //??
+		std::shared_ptr<fUML::Execution> originalExecution = this->getExecutionLocus()->getFactory()->createExecution(behavior, this->getExecutionContext());
 		if(eventOccurrence != nullptr) {
-			std::shared_ptr<PSSM::Semantics::CommonBehavior::EventTriggeredExecution> containerExecution = new PSSM::Semantics::CommonBehavior::EventTriggeredExecution();
+			std::shared_ptr<PSSM::Semantics::CommonBehavior::EventTriggeredExecution> containerExecution =std::make_shared<PSSM::Semantics::CommonBehavior::EventTriggeredExecution>();
 			containerExecution->m_triggeringEventOccurrence = eventOccurrence;
 			containerExecution->m_wrappedExecution = originalExecution;
 			containerExecution->setContext(originalExecution->getContext());
 
+		} else {
+			execution = originalExecution;
 		}
 	}
+	return execution;
 //Execution execution = null;
 //if(behavior != null){
 //	Execution originalExecution = this.getExecutionLocus().factory.createExecution(behavior, this.getExecutionContext());
@@ -284,7 +299,7 @@ bool StateMachineSemanticVisitorImpl::match(std::shared_ptr<fUML::EventOccurrenc
 {
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
-		// Check if the event occurrence matches one of the trigger in the list.
+			// Check if the event occurrence matches one of the trigger in the list.
 // The matching rule are the following:
 // 		1. If the event occurrence is a signal event occurrence then type
 //		   of the signal must conforms to the type referenced by the event
@@ -302,12 +317,33 @@ bool StateMachineSemanticVisitorImpl::match(std::shared_ptr<fUML::EventOccurrenc
 	int i = 0;
 	std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> callEventOccurrence = std::dynamic_pointer_cast<PSSM::Semantics::CommonBehavior::CallEventOccurrence>(eventOccurrence);
 	while(!match && i < triggers->size()) {
-		uml::Trigger trigger = triggers->at(i);
-		//SignalEventOccurence check
+		std::shared_ptr<uml::Trigger> trigger = triggers->at(i);
+		//TODO: add SignaEventOCcurrence check as per commented Java code, once fUML is implemented
+		//if(eventOccurrence instanceof SignalEventOccurrence
+		//			&& trigger.getEvent() instanceof SignalEvent){
+		//		SignalEventOccurrence signalEventOccurrence = (SignalEventOccurrence) eventOccurrence;
+		//		SignalEvent event = (SignalEvent) trigger.getEvent();
+		//		if(event.getSignal() == signalEventOccurrence.signalInstance.type){
+		//			match = true;
+		//		}
+		//		if(match  && trigger.getPorts().size() > 0){
+		//			int j = 0;
+		//			boolean matchingPort = false;
+		//			while(j < trigger.getPorts().size() & !matchingPort){
+		//				if(((CS_SignalInstance)signalEventOccurrence.signalInstance).interactionPoint.definingPort == trigger.getPorts().get(j)){
+		//					matchingPort = true;
+		//				}
+		//				j = j + 1;
+		//			}
+		//			if(!matchingPort){
+		//				match = matchingPort;
+		//			}
+		//		}
 		if(callEventOccurrence != nullptr) {
-			std::shared_ptr<uml::CallEvent> callEvent = std::dynamic_pointer_cast<uml::CallEvent>(trigger.getEvent());
-			if(callEvent != nullptr) {
-				if(callEvent->getOperation() == callEventOccurrence->getExecution()->getOperation()) {
+			std::shared_ptr<uml::CallEvent> triggerEvent = std::dynamic_pointer_cast<uml::CallEvent>(trigger->getEvent());
+			if(triggerEvent != nullptr) {
+				std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> callEventOccurrence = std::static_pointer_cast<PSSM::Semantics::CommonBehavior::CallEventOccurrence>(eventOccurrence);
+				if(triggerEvent->getOperation() == callEventOccurrence->getExecution()->getOperation()) {
 					match = true;
 				}
 			}
