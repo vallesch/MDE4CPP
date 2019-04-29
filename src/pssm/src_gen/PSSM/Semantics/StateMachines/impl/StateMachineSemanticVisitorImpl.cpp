@@ -185,13 +185,13 @@ std::shared_ptr<Bag<fUML::SemanticVisitor> > StateMachineSemanticVisitorImpl::ge
 //	return contextChain;
 	std::shared_ptr<Bag<fUML::SemanticVisitor>> contextChain = std::shared_ptr<Bag<fUML::SemanticVisitor>>();
 
-	std::shared_ptr<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation> entryPointActivation = dynamic_cast<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation>(this);
-	std::shared_ptr<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation> exitPointActivation = dynamic_cast<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation>(this);
+	std::shared_ptr<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation> entryPointActivation = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation>(this->getThisStateMachineSemanticVisitorPtr());
+	std::shared_ptr<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation> exitPointActivation = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation>(this->getThisStateMachineSemanticVisitorPtr());
 
 	std::shared_ptr<PSSM::Semantics::StateMachines::StateMachineExecution> parentStateMachineExecution = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::StateMachineExecution>(this->getParent());
 
 	if(entryPointActivation == nullptr && exitPointActivation == nullptr) {
-		std::shared_ptr<fUML::SemanticVisitor> tmp = static_cast<fUML::SemanticVisitor>(this);
+		std::shared_ptr<fUML::SemanticVisitor> tmp = this->getThisSemanticVisitorPtr();
 		contextChain->add(tmp);
 	}
 	if(this->getParent() != nullptr) {
@@ -223,9 +223,9 @@ Any StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavi
 	if(behavior != nullptr) {
 		std::shared_ptr<fUML::Execution> originalExecution = this->getExecutionLocus()->getFactory()->createExecution(behavior, this->getExecutionContext());
 		if(eventOccurrence != nullptr) {
-			std::shared_ptr<PSSM::Semantics::CommonBehavior::EventTriggeredExecution> containerExecution =std::make_shared<PSSM::Semantics::CommonBehavior::EventTriggeredExecution>();
-			containerExecution->m_triggeringEventOccurrence = eventOccurrence;
-			containerExecution->m_wrappedExecution = originalExecution;
+			std::shared_ptr<PSSM::Semantics::CommonBehavior::EventTriggeredExecution> containerExecution = PSSM::PSSMFactory::eInstance()->createEventTriggeredExecution();
+			containerExecution->setTriggeringEventOccurrence(eventOccurrence);
+			containerExecution->setWrappedExecution(originalExecution);
 			containerExecution->setContext(originalExecution->getContext());
 
 		} else {

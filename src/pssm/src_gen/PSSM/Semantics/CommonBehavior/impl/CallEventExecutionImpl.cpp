@@ -25,7 +25,7 @@
 #include "ecore/EClass.hpp"
 #include "PSSM/impl/PSSMPackageImpl.hpp"
 #include "PSSM/Semantics/CommonBehavior/CallEventOccurrence.hpp"
-
+#include "fUML/FUMLFactory.hpp"
 
 //Forward declaration includes
 #include "persistence/interfaces/XLoadHandler.hpp" // used for Persistence
@@ -63,6 +63,9 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
+
+#include "uml/ParameterDirectionKind.hpp"
+#include "uml/Parameter.hpp"
 
 using namespace PSSM::Semantics::CommonBehavior;
 
@@ -189,11 +192,13 @@ void CallEventExecutionImpl::_send(std::shared_ptr<PSSM::Semantics::CommonBehavi
 	//generated from body annotation
 	// Place the call event occurrence within the event pool of
 // the target object
-if(this.context.objectActivation != null){
-	this.context.objectActivation.eventPool.add(eventOccurrence);
-	this.context.objectActivation._send(new ArrivalSignal());
-}
-
+//if(this.context.objectActivation != null){
+//	this.context.objectActivation.eventPool.add(eventOccurrence);
+//	this.context.objectActivation._send(new ArrivalSignal());
+//}
+	// empty body because:
+	// a) fUML::ObjectActivation::eventPool contains fUML::SignalInstance, not fUML::EventOccurrence (no common parent classes)
+	// b) fUML::ObjectActvation::_send has an empty body too
 	//end of body
 }
 
@@ -221,8 +226,8 @@ void CallEventExecutionImpl::execute()
 //this.callerSuspended = true;
 //this._send(eventOccurrence);
 //this._suspend();
-
-std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> eventOccurrence = new PSSM::Semantics::CommonBehavior::CallEventOccurrence();
+	std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> eventOccurrence = PSSM::PSSMFactory::eInstance()->createCallEventOccurrence();
+	eventOccurrence->setExecution(this->getThisCallEventExecutionPtr());
 	this->m_callerSuspended = true;
 	this->_send(eventOccurrence);
 	this->_suspend();
@@ -245,7 +250,7 @@ std::shared_ptr<Bag<fUML::ParameterValue> > CallEventExecutionImpl::getInputPara
 //	}
 //}
 //return parameterValues;
-	std::shared_ptr<Bag<fUML::ParameterValue>> parameterValues = new Bag<fUML::ParameterValue>();
+	std::shared_ptr<Bag<fUML::ParameterValue>> parameterValues(new Bag<fUML::ParameterValue>());
 	for(int i=0; i < this->m_parameterValues->size(); i++) {
 		std::shared_ptr<fUML::ParameterValue> parameterValue = this->m_parameterValues->at(i);
 		if(parameterValue->getParameter()->getDirection() == uml::ParameterDirectionKind::IN |
@@ -262,8 +267,7 @@ std::shared_ptr<fUML::Value> CallEventExecutionImpl::new_()
 {
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
-	return new PSSM::Semantics::CommonBehavior::CallEventExecution();
-
+	return PSSM::PSSMFactory::eInstance()->createCallEventExecution();
 	//end of body
 }
 
