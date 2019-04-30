@@ -152,11 +152,11 @@ namespace PSSM::Semantics::CommonBehavior
 			virtual void setTriggeringEventOccurrence(std::shared_ptr<fUML::EventOccurrence> _triggeringEventOccurrence_triggeringEventOccurrence) = 0;
 			/*!
 			 */
-			virtual std::shared_ptr<fUML::EventOccurrence > getWrappedExecution() const = 0;
+			virtual std::shared_ptr<fUML::Execution > getWrappedExecution() const = 0;
 			
 			/*!
 			 */
-			virtual void setWrappedExecution(std::shared_ptr<fUML::EventOccurrence> _wrappedExecution_wrappedExecution) = 0;
+			virtual void setWrappedExecution(std::shared_ptr<fUML::Execution> _wrappedExecution_wrappedExecution) = 0;
 			
 
 		protected:
@@ -173,7 +173,7 @@ namespace PSSM::Semantics::CommonBehavior
 			std::shared_ptr<fUML::EventOccurrence > m_triggeringEventOccurrence;
 			/*!
 			 */
-			std::shared_ptr<fUML::EventOccurrence > m_wrappedExecution;
+			std::shared_ptr<fUML::Execution > m_wrappedExecution;
 			
 
 		public:

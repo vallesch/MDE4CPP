@@ -205,12 +205,12 @@ void EventTriggeredExecutionImpl::setTriggeringEventOccurrence(std::shared_ptr<f
     m_triggeringEventOccurrence = _triggeringEventOccurrence;
 }
 
-std::shared_ptr<fUML::EventOccurrence > EventTriggeredExecutionImpl::getWrappedExecution() const
+std::shared_ptr<fUML::Execution > EventTriggeredExecutionImpl::getWrappedExecution() const
 {
 //assert(m_wrappedExecution);
     return m_wrappedExecution;
 }
-void EventTriggeredExecutionImpl::setWrappedExecution(std::shared_ptr<fUML::EventOccurrence> _wrappedExecution)
+void EventTriggeredExecutionImpl::setWrappedExecution(std::shared_ptr<fUML::Execution> _wrappedExecution)
 {
     m_wrappedExecution = _wrappedExecution;
 }
@@ -273,7 +273,7 @@ bool EventTriggeredExecutionImpl::eSet(int featureID, Any newValue)
 		case PSSM::PSSMPackage::EVENTTRIGGEREDEXECUTION_EREFERENCE_WRAPPEDEXECUTION:
 		{
 			// BOOST CAST
-			std::shared_ptr<fUML::EventOccurrence> _wrappedExecution = newValue->get<std::shared_ptr<fUML::EventOccurrence>>();
+			std::shared_ptr<fUML::Execution> _wrappedExecution = newValue->get<std::shared_ptr<fUML::Execution>>();
 			setWrappedExecution(_wrappedExecution); //136
 			return true;
 		}
@@ -362,7 +362,7 @@ void EventTriggeredExecutionImpl::resolveReferences(const int featureID, std::li
 			if (references.size() == 1)
 			{
 				// Cast object to correct type
-				std::shared_ptr<fUML::EventOccurrence> _wrappedExecution = std::dynamic_pointer_cast<fUML::EventOccurrence>( references.front() );
+				std::shared_ptr<fUML::Execution> _wrappedExecution = std::dynamic_pointer_cast<fUML::Execution>( references.front() );
 				setWrappedExecution(_wrappedExecution);
 			}
 			

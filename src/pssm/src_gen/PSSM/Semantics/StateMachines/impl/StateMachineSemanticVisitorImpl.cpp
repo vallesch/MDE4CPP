@@ -183,7 +183,7 @@ std::shared_ptr<Bag<fUML::SemanticVisitor> > StateMachineSemanticVisitorImpl::ge
 //		}
 //	}
 //	return contextChain;
-	std::shared_ptr<Bag<fUML::SemanticVisitor>> contextChain = std::shared_ptr<Bag<fUML::SemanticVisitor>>();
+std::shared_ptr<Bag<fUML::SemanticVisitor>> contextChain = std::shared_ptr<Bag<fUML::SemanticVisitor>>();
 
 	std::shared_ptr<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation> entryPointActivation = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation>(this->getThisStateMachineSemanticVisitorPtr());
 	std::shared_ptr<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation> exitPointActivation = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::ExitPointPseudostateActivation>(this->getThisStateMachineSemanticVisitorPtr());
@@ -198,7 +198,7 @@ std::shared_ptr<Bag<fUML::SemanticVisitor> > StateMachineSemanticVisitorImpl::ge
 		if(parentStateMachineExecution != nullptr) {
 			contextChain->add(this->getParent());
 		} else {
-			std::shared_ptr<Bag<fUML::SemanticVisitor>> parentContextChain = std::static_pointer_cast<PSSM::Semantics::StateMachines::StateMachineSemanticVisitor>(this->getParent())->getContextChain();
+			std::shared_ptr<Bag<fUML::SemanticVisitor>> parentContextChain = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::StateMachineSemanticVisitor>(this->getParent())->getContextChain();
 			contextChain->insert(*parentContextChain);
 		}
 	}
@@ -215,7 +215,7 @@ std::shared_ptr<fUML::Object> StateMachineSemanticVisitorImpl::getExecutionConte
 	//end of body
 }
 
-Any StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavior>  behavior,std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
+std::shared_ptr<fUML::Execution> StateMachineSemanticVisitorImpl::getExecutionFor(std::shared_ptr<uml::Behavior>  behavior,std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
@@ -342,7 +342,7 @@ bool StateMachineSemanticVisitorImpl::match(std::shared_ptr<fUML::EventOccurrenc
 		if(callEventOccurrence != nullptr) {
 			std::shared_ptr<uml::CallEvent> triggerEvent = std::dynamic_pointer_cast<uml::CallEvent>(trigger->getEvent());
 			if(triggerEvent != nullptr) {
-				std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> callEventOccurrence = std::static_pointer_cast<PSSM::Semantics::CommonBehavior::CallEventOccurrence>(eventOccurrence);
+				std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> callEventOccurrence = std::dynamic_pointer_cast<PSSM::Semantics::CommonBehavior::CallEventOccurrence>(eventOccurrence);
 				if(triggerEvent->getOperation() == callEventOccurrence->getExecution()->getOperation()) {
 					match = true;
 				}

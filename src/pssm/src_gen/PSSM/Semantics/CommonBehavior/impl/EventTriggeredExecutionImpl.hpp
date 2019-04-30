@@ -86,11 +86,11 @@ namespace PSSM::Semantics::CommonBehavior
 			virtual void setTriggeringEventOccurrence(std::shared_ptr<fUML::EventOccurrence> _triggeringEventOccurrence_triggeringEventOccurrence) ;
 			/*!
 			 */
-			virtual std::shared_ptr<fUML::EventOccurrence > getWrappedExecution() const ;
+			virtual std::shared_ptr<fUML::Execution > getWrappedExecution() const ;
 			
 			/*!
 			 */
-			virtual void setWrappedExecution(std::shared_ptr<fUML::EventOccurrence> _wrappedExecution_wrappedExecution) ;
+			virtual void setWrappedExecution(std::shared_ptr<fUML::Execution> _wrappedExecution_wrappedExecution) ;
 							
 			
 			//*********************************

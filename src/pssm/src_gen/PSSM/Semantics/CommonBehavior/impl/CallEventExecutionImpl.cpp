@@ -26,6 +26,8 @@
 #include "PSSM/impl/PSSMPackageImpl.hpp"
 #include "PSSM/Semantics/CommonBehavior/CallEventOccurrence.hpp"
 #include "fUML/FUMLFactory.hpp"
+#include "uml/ParameterDirectionKind.hpp"
+#include "uml/Parameter.hpp"
 
 //Forward declaration includes
 #include "persistence/interfaces/XLoadHandler.hpp" // used for Persistence
@@ -63,9 +65,6 @@
 #include "PSSM/PSSMFactory.hpp"
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
-
-#include "uml/ParameterDirectionKind.hpp"
-#include "uml/Parameter.hpp"
 
 using namespace PSSM::Semantics::CommonBehavior;
 

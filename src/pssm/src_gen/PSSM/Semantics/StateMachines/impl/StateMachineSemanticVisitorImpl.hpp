@@ -61,7 +61,7 @@ namespace PSSM::Semantics::StateMachines
 			
 			/*!
 			 */ 
-			virtual Any getExecutionFor(std::shared_ptr<uml::Behavior>  behavior,std::shared_ptr<fUML::EventOccurrence>  eventOccurrence) ;
+			virtual std::shared_ptr<fUML::Execution> getExecutionFor(std::shared_ptr<uml::Behavior>  behavior,std::shared_ptr<fUML::EventOccurrence>  eventOccurrence) ;
 			
 			/*!
 			 */ 

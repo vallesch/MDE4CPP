@@ -87,6 +87,7 @@ namespace fUML
 	class Locus;
 }
 
+
 namespace PSSM 
 {
 	class PSSMFactory : virtual public ecore::EFactory 

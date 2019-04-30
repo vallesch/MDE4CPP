@@ -250,7 +250,7 @@ void StateActivationImpl::defer(std::shared_ptr<fUML::EventOccurrence>  eventOcc
 // only when the current state activation will leave the state-machine configuration.
 //Object_ context = this.getExecutionContext();
 //if(context.objectActivation != null){
-//	((SM_ObjectActivation)context.objectActivation).registerDeferredEvent(eventOccurrence, this);
+//	((SM_ObjectActivation)context.objectActivation).registerDeferredEvent(eventOccurrence, this); 
 //}
 
 	//end of body
@@ -316,7 +316,6 @@ std::shared_ptr<Bag<PSSM::Semantics::StateMachines::ConnectionPointActivation> >
 //	i++;
 //}
 	return nullptr;
-
 	//end of body
 }
 
@@ -341,6 +340,7 @@ std::shared_ptr<uml::Behavior> StateActivationImpl::getDoActivity()
 //}
 //return doActivity;
 	return nullptr;
+
 	//end of body
 }
 
@@ -390,8 +390,9 @@ std::shared_ptr<Bag<PSSM::Semantics::StateMachines::RegionActivation> > StateAct
 {
 	//ADD_COUNT(__PRETTY_FUNCTION__)
 	//generated from body annotation
-//	return this.regionActivation;
-	return nullptr;
+	//return this.regionActivation;
+return nullptr;
+
 	//end of body
 }
 
@@ -408,11 +409,12 @@ bool StateActivationImpl::hasCompleted()
 //boolean stateCompleted = this.isEntryCompleted & this.isDoActivityCompleted;
 //int i = 0;
 //while(stateCompleted && i < this.regionActivation.size()){
-//	stateCompleted = stateCompleted && this.regionActivation.get(i).isCompleted;
+//	stateCompleted = stateCompleted && this.regionActivation.get(i).isCompleted; 
 //	i = i + 1;
 //}
 //return stateCompleted;
-	return false;
+return false;
+
 	//end of body
 }
 
@@ -437,7 +439,7 @@ void StateActivationImpl::releaseDeferredEvents()
 // regular event pool.
 //Object_ context = this.getExecutionContext();
 //if(context.objectActivation != null){
-//	((SM_ObjectActivation)context.objectActivation).releaseDeferredEvents(this);
+//	((SM_ObjectActivation)context.objectActivation).releaseDeferredEvents(this); 
 //}
 
 	//end of body
@@ -452,14 +454,14 @@ void StateActivationImpl::tryExecuteEntry(std::shared_ptr<fUML::EventOccurrence>
 // and this latter provides an entry behavior then this behavior is executed
 // instead. The rule applies recursively.
 //if(!this.isEntryCompleted){
-//	Behavior entry = this.getEntry();
+//	Behavior entry = this.getEntry(); 
 //	if(entry != null){
 //		Execution execution = this.getExecutionFor(entry, eventOccurrence);
 //		if(execution!=null){
 //			execution.execute();
 //			this.isEntryCompleted = true;
 //		}
-//		// If state has completed then generate a completion event
+		// If state has completed then generate a completion event
 //		if(this.hasCompleted()){
 //			this.notifyCompletion();
 //		}
@@ -485,7 +487,6 @@ void StateActivationImpl::tryExecuteExit(std::shared_ptr<fUML::EventOccurrence> 
 //	}
 //}
 //super.exit(null, eventOccurrence, null);
-
 	//end of body
 }
 

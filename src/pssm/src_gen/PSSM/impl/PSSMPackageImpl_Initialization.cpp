@@ -979,7 +979,7 @@ void PSSMPackageImpl::initializeEventTriggeredExecutionContent()
 	    }
 	}
 	m_eventTriggeredExecution_EReference_wrappedExecution->setName("wrappedExecution");
-	m_eventTriggeredExecution_EReference_wrappedExecution->setEType(fUML::FUMLPackage::eInstance()->getEventOccurrence_EClass());
+	m_eventTriggeredExecution_EReference_wrappedExecution->setEType(fUML::FUMLPackage::eInstance()->getExecution_EClass());
 	m_eventTriggeredExecution_EReference_wrappedExecution->setLowerBound(1);
 	m_eventTriggeredExecution_EReference_wrappedExecution->setUpperBound(1);
 	m_eventTriggeredExecution_EReference_wrappedExecution->setTransient(false);
@@ -3375,7 +3375,7 @@ void PSSMPackageImpl::initializeStateMachineSemanticVisitorContent()
 	m_stateMachineSemanticVisitor_EOperation_getExecutionContext->setOrdered(false);
 	
 	
-	m_stateMachineSemanticVisitor_EOperation_getExecutionFor_Behavior_EventOccurrence->setEType(ecore::EcorePackage::eInstance()->getEJavaObject_EDataType());
+	m_stateMachineSemanticVisitor_EOperation_getExecutionFor_Behavior_EventOccurrence->setEType(fUML::FUMLPackage::eInstance()->getExecution_EClass());
 	m_stateMachineSemanticVisitor_EOperation_getExecutionFor_Behavior_EventOccurrence->setName("getExecutionFor");
 	m_stateMachineSemanticVisitor_EOperation_getExecutionFor_Behavior_EventOccurrence->setLowerBound(1);
 	m_stateMachineSemanticVisitor_EOperation_getExecutionFor_Behavior_EventOccurrence->setUpperBound(1);
