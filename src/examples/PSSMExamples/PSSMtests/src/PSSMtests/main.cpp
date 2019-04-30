@@ -35,7 +35,20 @@ SOFTWARE.
 #include "PSSM/PSSMFactory.hpp"
 #include "PSSM/PSSMPackage.hpp"
 #include "PSSM/Semantics/Loci/SM_Locus.hpp"
+#include "PSSM/Semantics/Loci/SM_ExecutionFactory.hpp"
 #include "PSSM/Semantics/StateMachines/StateMachineConfiguration.hpp"
+#include "PSSM/Semantics/StateMachines/StateConfiguration.hpp"
+
+#include "uml/Region.hpp"
+#include "uml/State.hpp"
+#include "uml/Transition.hpp"
+#include "uml/Activity.hpp"
+#include "uml/Model.hpp"
+#include "uml/umlfactory.hpp"
+#include "uml/umlpackage.hpp"
+#include "uml/statemachine.hpp"
+
+#include "umlReflection/UMLPackage.hpp"
 
 using namespace std;
 
@@ -44,9 +57,30 @@ int main()
 	std::shared_ptr<PSSM::PSSMFactory> factory = PSSM::PSSMFactory::eInstance();
 	std::shared_ptr<PSSM::PSSMPackage> package = PSSM::PSSMPackage::eInstance();
 
-	std::shared_ptr<PSSM::Semantics::Loci::SM_Locus> locus(factory->createSM_Locus());
+	// MODEL
 
-	std::shared_ptr<PSSM::Semantics::StateMachines::RegionActivation> region = factory->createRegionActivation();
+	std::shared_ptr<uml::UmlFactory> umlFactory = uml::UmlFactory::eInstance();
+	std::shared_ptr<uml::UmlPackage> umlPackage = uml::UmlPackage::eInstance();
+
+	std::shared_ptr<uml::Model> model = umlFactory->createModel();
+	model->setName("PSSM_Test");
+
+	std::shared_ptr<uml::StateMachine> stateMachine = umlFactory->createStateMachine_in_Package(model);
+	stateMachine->setName("StateMachine");
+
+	std::shared_ptr<uml::Region> region = umlFactory->createRegion_in_StateMachine(stateMachine);
+	region->setName("MainRegion");
+
+	std::shared_ptr<uml::State> s1 = umlFactory->createState_in_Container(region);
+	s1->setName("S1");
+
+	std::shared_ptr<uml::State> s2 = umlFactory->createFinalState_in_Container(region);
+	s1->setName("S2");
+
+	std::shared_ptr<uml::Transition> t1 = umlFactory->createTransition_in_Container(region);
+	t1->setName("T1");
+	t1->setSource(std::dynamic_pointer_cast<uml::Vertex>(s1));
+	t1->setTarget(std::dynamic_pointer_cast<uml::Vertex>(s2));
 
 
     return 0;

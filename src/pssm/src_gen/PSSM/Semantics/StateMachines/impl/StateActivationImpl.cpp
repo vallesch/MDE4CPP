@@ -60,6 +60,14 @@
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
 
+#include "uml/Trigger.hpp"
+#include "uml/State.hpp"
+#include "fUML/Object.hpp"
+#include "PSSM/Semantics/CommonBehavior/SM_ObjectActivation.hpp"
+#include "PSSM/Semantics/StateMachines/EntryPointPseudostateActivation.hpp"
+#include "uml/Pseudostate.hpp"
+#include "uml/Transition.hpp"
+
 using namespace PSSM::Semantics::StateMachines;
 
 //*********************************
@@ -237,7 +245,28 @@ bool StateActivationImpl::canDefer(std::shared_ptr<fUML::EventOccurrence>  event
 //	deferred = overridingTransitionActivation == null;
 //}
 //return deferred;
-	return false;
+	std::shared_ptr<uml::State> state = std::dynamic_pointer_cast<uml::State>(this->getNode());
+
+	bool deferred = this->match(eventOccurrence, std::dynamic_pointer_cast<Bag<uml::Trigger>>(state->getDeferrableTrigger()));
+
+	while(!deferred && state->getRedefinedState() != nullptr) {
+		state = state->getRedefinedState();
+		deferred = this->match(eventOccurrence, std::dynamic_pointer_cast<Bag<uml::Trigger>>(state->getDeferrableTrigger()));
+	}
+
+	if(deferred) {
+		int i = 0;
+		std::shared_ptr<PSSM::Semantics::StateMachines::TransitionActivation> overridingTransitionActivation = nullptr;
+		while(overridingTransitionActivation == nullptr && i < this->m_outgoingTransitionActivations->size()) {
+			std::shared_ptr<PSSM::Semantics::StateMachines::TransitionActivation> currentTransitionActivation = this->m_outgoingTransitionActivations->at(i);
+			if(currentTransitionActivation->canFireOn(eventOccurrence)) {
+				overridingTransitionActivation = currentTransitionActivation;
+			}
+			i++;
+		}
+		deferred = overridingTransitionActivation == nullptr;
+	}
+	return deferred;
 	//end of body
 }
 
@@ -252,6 +281,11 @@ void StateActivationImpl::defer(std::shared_ptr<fUML::EventOccurrence>  eventOcc
 //if(context.objectActivation != null){
 //	((SM_ObjectActivation)context.objectActivation).registerDeferredEvent(eventOccurrence, this); 
 //}
+	std::shared_ptr<fUML::Object> context = this->getExecutionContext();
+	if(context->getObjectActivation() != nullptr) {
+		std::dynamic_pointer_cast<PSSM::Semantics::CommonBehavior::SM_ObjectActivation>(context->getObjectActivation())->registerDeferredEvent(eventOccurrence, this->getThisStateActivationPtr());
+	}
+
 
 	//end of body
 }
@@ -298,6 +332,32 @@ void StateActivationImpl::enterRegions(std::shared_ptr<PSSM::Semantics::StateMac
 //		regionActivation.enter(enteringTransition, eventOccurrence);
 //	}
 //}
+	std::shared_ptr<Bag<uml::Vertex>> targetedVertices(new Bag<uml::Vertex>());
+	std::shared_ptr<PSSM::Semantics::StateMachines::VertexActivation> sourceActivation = enteringTransition->getSourceActivation();
+
+	//Fork
+
+	//Else
+	std::shared_ptr<PSSM::Semantics::StateMachines::VertexActivation> targetActivation = enteringTransition->getTargetActivation();
+	if(std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::EntryPointPseudostateActivation>(targetActivation) != nullptr) {
+		std::shared_ptr<uml::Pseudostate> entryPoint = std::dynamic_pointer_cast<uml::Pseudostate>(targetActivation->getNode());
+		for(int i=0;i < entryPoint->getOutgoings()->size(); i++) {
+			targetedVertices->add(entryPoint->getOutgoings()->at(i)->getTarget());
+		}
+	} // else history
+
+	for(int i=0;i < this->m_regionActivations->size(); i++) {
+		std::shared_ptr<PSSM::Semantics::StateMachines::RegionActivation> regionActivation = this->m_regionActivations->at(i);
+		int j=0;
+		bool found = false;
+		while(j < targetedVertices->size() && !found) {
+			found = regionActivation->getVertexActivation(targetedVertices->at(j)) != nullptr;
+			j++;
+		}
+		if(!found) {
+			regionActivation->enter(enteringTransition, eventOccurrence);
+		}
+	}
 
 	//end of body
 }
