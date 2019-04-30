@@ -52,6 +52,24 @@
 #include "ecore/EAttribute.hpp"
 #include "ecore/EStructuralFeature.hpp"
 
+#include "uml/Transition.hpp"
+#include "PSSM/Semantics/StateMachines/CompletionEventOccurrence.hpp"
+#include "PSSM/Semantics/CommonBehavior/CallEventOccurrence.hpp"
+#include "PSSM/Semantics/StateMachines/VertexActivation.hpp"
+#include "PSSM/Semantics/StateMachines/StateActivation.hpp"
+#include "uml/ValueSpecification.hpp"
+#include "uml/Constraint.hpp"
+#include "fUML/Evaluation.hpp"
+#include "fUML/ExecutionFactory.hpp"
+#include "fUML/Locus.hpp"
+#include "uml/OpaqueExpression.hpp"
+#include "PSSM/Semantics/Values/SM_OpaqueExpressionEvaluation.hpp"
+#include "fUML/BooleanValue.hpp"
+#include "fUML/FUMLFactory.hpp"
+#include "PSSM/Semantics/StateMachines/TransitionMetadata.hpp"
+#include "uml/Behavior.hpp"
+#include "fUML/Execution.hpp"
+
 using namespace PSSM::Semantics::StateMachines;
 
 //*********************************
@@ -177,14 +195,82 @@ TransitionMetadata TransitionActivationImpl::getStatus() const
 //*********************************
 bool TransitionActivationImpl::canFireOn(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// A transition is can fire when:
+//
+// A completion event is being dispatched and this transition has no trigger
+// but its eventual guard evaluates to true. Note: the scope of a completion
+// event is the state from which it was generated
+//
+// A signal event is being dispatched and this transition has a trigger
+// that matches the signal and its eventual guard evaluates to true
+//boolean reactive = true;
+//if(eventOccurrence instanceof CompletionEventOccurrence){
+//	reactive = !this.isTriggered() &&
+//				this.getSourceActivation()==((CompletionEventOccurrence)eventOccurrence).stateActivation &&
+//				this.evaluateGuard(eventOccurrence) &&
+//				this.canPropagateExecution(eventOccurrence);
+//}else if(eventOccurrence instanceof SignalEventOccurrence | eventOccurrence instanceof CallEventOccurrence){
+//	reactive = this.hasTrigger(eventOccurrence) &&
+//			   this.evaluateGuard(eventOccurrence) &&
+//			   this.canPropagateExecution(eventOccurrence);
+//}else{
+//	reactive = false;
+//}
+//return reactive;
+	bool reactive = true;
+	std::shared_ptr<PSSM::Semantics::CommonBehavior::CallEventOccurrence> callEventOccurrence = std::dynamic_pointer_cast<PSSM::Semantics::CommonBehavior::CallEventOccurrence>(eventOccurrence);
+	std::shared_ptr<PSSM::Semantics::StateMachines::CompletionEventOccurrence> completionEventOccurrence = std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::CompletionEventOccurrence>(eventOccurrence);
+	if(completionEventOccurrence != nullptr) {
+
+		reactive = !this->isTriggered(false) &&
+				this->getSourceActivation() == std::dynamic_pointer_cast<PSSM::Semantics::StateMachines::VertexActivation>(completionEventOccurrence->getStateActivation()) &&
+				this->evaluateGuard(eventOccurrence) &&
+				this->canPropagateExecution(eventOccurrence);
+	} else if(callEventOccurrence != nullptr) {
+		reactive = this->hasTrigger(eventOccurrence) &&
+				this->evaluateGuard(eventOccurrence) &&
+				this->canPropagateExecution(eventOccurrence);
+	}
+
+	return reactive;
+
+	//end of body
 }
 
 bool TransitionActivationImpl::canPropagateExecution(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Evaluate the possibility to propagate the static analysis through this transition activation.
+// Two situations can occur:
+// 1. The transition has already been "traversed" with using the same event occurrence. This means
+//    we already know the execution can be propagated through the transiton activation. Hence true
+//    is returned and the propagation stops.
+// 2. The transition has not already been "traversed" using this event occurrence. The consequence
+//    is that the analysis is propagated through the target vertex activation. 
+//boolean propagate = true;
+//if(this.lastTriggeringEventOccurrence != eventOccurrence){
+//	propagate = this.vertexTargetActivation.canPropagateExecution(this, eventOccurrence, this.getLeastCommonAncestor());
+//	this.lastTriggeringEventOccurrence = eventOccurrence;
+//	this.lastPropagation = propagate;
+//}else{
+//	propagate = this.lastPropagation;
+//}
+//return propagate;
+	bool propagate = true;
+	if(this->getLastTriggeringEventOccurrence() != eventOccurrence) {
+		propagate = this->getTargetVertexActivation()->canPropagateExecution(this->getThisTransitionActivationPtr(), eventOccurrence, this->getLeastCommonAncestor());
+		this->setLastTriggeringEventOccurrence(eventOccurrence);
+		this->setLastPropagation(propagate);
+	} else {
+		propagate = this->getLastPropagation();
+	}
+
+	return propagate;
+
+	//end of body
 }
 
 void TransitionActivationImpl::enterTarget(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
@@ -195,8 +281,61 @@ void TransitionActivationImpl::enterTarget(std::shared_ptr<fUML::EventOccurrence
 
 bool TransitionActivationImpl::evaluateGuard(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Evaluate the guard specification thanks to an evaluation.
+// The evaluation does not presume of the type of the guard specification.
+//boolean result = true;
+//Transition transition = (Transition) this.node;
+//Constraint guard = transition.getGuard();
+//while(guard == null && transition.getRedefinedTransition() != null){
+//	transition = transition.getRedefinedTransition();
+//	guard = transition.getGuard();
+//}
+//if (guard != null) {
+//	ValueSpecification specification = guard.getSpecification() ;
+//	if(specification!=null){
+//		Evaluation evaluation = this.getExecutionLocus().factory.createEvaluation(specification);
+//		if (specification instanceof OpaqueExpression) {
+//			((SM_OpaqueExpressionEvaluation)evaluation).context = this.getExecutionContext() ;
+//			((SM_OpaqueExpressionEvaluation)evaluation).initialize(eventOccurrence);
+//		}
+//		if(evaluation!=null){
+//			BooleanValue evaluationResult = (BooleanValue)evaluation.evaluate() ;
+//			result = evaluationResult.value ;
+//		}
+//	}
+//
+//}
+//return result;
+
+	bool result = true;
+	std::shared_ptr<uml::Transition> transition = std::dynamic_pointer_cast<uml::Transition>(this->getNode());
+	std::shared_ptr<uml::Constraint> guard = transition->getGuard();
+	while(guard == nullptr && transition->getRedefinedTransition() != nullptr) {
+		transition = transition->getRedefinedTransition();
+		guard = transition->getGuard();
+	}
+
+	if(guard != nullptr) {
+		std::shared_ptr<uml::ValueSpecification> specification =  guard->getSpecification();
+		if(specification != nullptr) {
+			std::shared_ptr<fUML::Evaluation> evaluation = this->getExecutionLocus()->getFactory()->createEvaluation(specification);
+			std::shared_ptr<uml::OpaqueExpression> opaqueExpression = std::dynamic_pointer_cast<uml::OpaqueExpression>(specification);
+			if(opaqueExpression != nullptr) {
+				std::shared_ptr<PSSM::Semantics::Values::SM_OpaqueExpressionEvaluation> opaqueExpressionEvaluation = std::dynamic_pointer_cast<PSSM::Semantics::Values::SM_OpaqueExpressionEvaluation>(evaluation);
+				opaqueExpressionEvaluation->setContext(this->getExecutionContext());
+				opaqueExpressionEvaluation->initialize(eventOccurrence);
+			}
+			if(evaluation != nullptr) {
+				std::shared_ptr<fUML::BooleanValue> evaluationResult = std::dynamic_pointer_cast<fUML::BooleanValue>(evaluation->evaluate());
+				result = evaluationResult->isValue();
+			}
+		}
+
+	}
+	return result;
+	//end of body
 }
 
 void TransitionActivationImpl::exitSource(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
@@ -207,78 +346,259 @@ void TransitionActivationImpl::exitSource(std::shared_ptr<fUML::EventOccurrence>
 
 void TransitionActivationImpl::fire(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// The fire sequence is broken into the following set of actions
+// 1 - Exit the source (depends on the kind of transition that is currently used)
+// 2 - Execute the effect (if one exists for that transition)
+// 3 - Enter the target (depends on the kind of transition that is currently used)
+//this.exitSource(eventOccurrence);
+//FUMLExecutionEngine.eInstance.getControlDelegate().control(this);
+//this.tryExecuteEffect(eventOccurrence);
+//this.setStatus(TransitionMetadata.TRAVERSED);
+//logger.info(this.getNode().getName()+" => TRAVERSED");
+//this.enterTarget(eventOccurrence);
+	this->exitSource(eventOccurrence);
+	//ExecutionEngine ?
+	this->tryExecuteEffect(eventOccurrence);
+	this->setStatus(PSSM::Semantics::StateMachines::TransitionMetadata::TRAVERSED);
+	this->enterTarget(eventOccurrence);
+	//end of body
 }
 
 std::shared_ptr<PSSM::Semantics::StateMachines::RegionActivation> TransitionActivationImpl::getLeastCommonAncestor()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Return the common ancestor of the source and the target. This common ancestor is
+// a region activation
+//if(this.vertexSourceActivation.getParentVertexActivation()!=this.vertexTargetActivation.getParentVertexActivation()){
+//	if(this.leastCommonAncestor==null){
+//		this.leastCommonAncestor = this.vertexSourceActivation.getLeastCommonAncestor(this.vertexTargetActivation, ((Transition)this.getNode()).getKind());
+//	}
+//}
+//return this.leastCommonAncestor;
+	if(this->getSourceVertexActivation()->getParentVertexActivation() != this->getTargetVertexActivation()->getParentVertexActivation()){
+		if(this->getLeastCommonAncestor() == nullptr) {
+			uml::TransitionKind transitionKind = std::dynamic_pointer_cast<uml::Transition>(this->getNode())->getKind();
+			this->setLeastCommonAncestor(this->getSourceVertexActivation()->getLeastCommonAncestor(this->getTargetVertexActivation()));
+		}
+	}
+	return this->m_leastCommonAncestor;
+	//end of body
 }
 
 std::shared_ptr<PSSM::Semantics::StateMachines::VertexActivation> TransitionActivationImpl::getSourceActivation()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+//	return vertexSourceActivation;
+	return this->m_sourceVertexActivation;
+	//end of body
 }
 
 
 
 std::shared_ptr<PSSM::Semantics::StateMachines::VertexActivation> TransitionActivationImpl::getTargetActivation()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+//	return vertexTargetActivation;
+	return this->m_targetVertexActivation;
+	//end of body
 }
 
 bool TransitionActivationImpl::hasTrigger(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Return true if the event occurrence matches a trigger of this transition.
+// false otherwise. If the transition declares no trigger but redefines another
+// transition then if that transition has a trigger that matches the event occurrence
+// the redefining transition is considered has being able to react to the event occurrence.
+// The rule applies recursively.
+//Transition transition = (Transition) this.node;
+//boolean match = this.match(eventOccurrence, transition.getTriggers());
+//while(!match && transition.getRedefinedTransition() != null){
+//	transition = transition.getRedefinedTransition();
+//	match = this.match(eventOccurrence, transition.getTriggers());
+//}
+//return match;
+	std::shared_ptr<uml::Transition> transition = std::dynamic_pointer_cast<uml::Transition>(this->getNode());
+	bool match = this->match(eventOccurrence, std::dynamic_pointer_cast<Bag<uml::Trigger>>(transition->getTrigger()));
+	while(!match && transition->getRedefinedTransition() != nullptr) {
+		transition = transition->getRedefinedTransition();
+		match = this->match(eventOccurrence, std::dynamic_pointer_cast<Bag<uml::Trigger>>(transition->getTrigger()));
+	}
+	return match;
+	//end of body
 }
 
 bool TransitionActivationImpl::isGuarded()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Check if the transition is guarded. A transition is guarded if it declares
+// a guard or if a redefine transition that itself declares a guar. This check
+// applies recursively on the redefinition hierarchy
+//Transition transition = (Transition) this.node;
+//boolean isGuarded = false;
+//if(transition.getGuard() != null){
+//	isGuarded = true;
+//}
+//while(!isGuarded && transition.getRedefinedTransition() != null){
+//	transition = transition.getRedefinedTransition();
+//	if(transition.getGuard() != null){
+//		isGuarded = true;
+//	}
+//}
+//return isGuarded;
+	std::shared_ptr<uml::Transition> transition = std::dynamic_pointer_cast<uml::Transition>(this->getNode());
+	bool isGuarded = false;
+	if(transition->getGuard() != nullptr) {
+		isGuarded = true;
+	}
+	while(!isGuarded && transition->getRedefinedTransition() != nullptr) {
+		transition = transition->getRedefinedTransition();
+		if(transition->getGuard() != nullptr) {
+			isGuarded = true;
+		}
+	}
+	return isGuarded;
+	//end of body
 }
 
 bool TransitionActivationImpl::isReached()
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	/// Convenience operation which returns true if the status of this transition
+// is REACHED; false otherwise.
+//boolean reached = true;
+//if(staticCheck){
+//	reached = this.analyticalStatus.equals(TransitionMetadata.REACHED);
+//}else{
+//	reached = this.status.equals(TransitionMetadata.REACHED);
+//}
+//return reached;
+	return this->getStatus() == PSSM::Semantics::StateMachines::TransitionMetadata::REACHED;
+	//end of body
 }
 
 bool TransitionActivationImpl::isTraversed(bool staticCheck)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Convenience operation which returns true if the status of this transition
+// is TRAVERSED; false otherwise.
+//boolean traversed = true;
+//if(staticCheck){
+//	traversed = this.analyticalStatus.equals(TransitionMetadata.TRAVERSED);
+//}else{
+//	traversed = this.status.equals(TransitionMetadata.TRAVERSED);
+//}
+//return traversed;
+	bool traversed = true;
+	if(staticCheck) {
+		traversed = this->getAnalyticalStatus() == PSSM::Semantics::StateMachines::TransitionMetadata::TRAVERSED;
+	} else {
+		traversed = this->getStatus() == PSSM::Semantics::StateMachines::TransitionMetadata::TRAVERSED;
+	}
+	return traversed;
+	//end of body
 }
 
 bool TransitionActivationImpl::isTriggered(bool staticCheck)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Check if the transition is triggered. A transition is triggered
+// if it declares triggers or if it redefines a transition that itself
+// declares triggers. This check applies recursively on the redefinition
+// hierarchy.
+//Transition transition = (Transition) this.node;
+//boolean isTriggered = false;
+//if(!transition.getTriggers().isEmpty()){
+//	isTriggered = true;
+//}
+//while(!isTriggered && transition.getRedefinedTransition() != null){
+//	transition = transition.getRedefinedTransition();
+//	if(!transition.getTriggers().isEmpty()){
+//		isTriggered = true;
+//	}
+//}
+//return isTriggered;
+	std::shared_ptr<uml::Transition> transition = std::dynamic_pointer_cast<uml::Transition>(this->m_node);
+	bool isTriggered = true;
+
+	if(transition->getTrigger()->size() != 0) {
+		isTriggered = true;
+	}
+	while(!isTriggered && transition->getRedefinedTransition() != nullptr) {
+		transition = transition->getRedefinedTransition();
+		if(transition->getTrigger()->size() != 0) {
+			isTriggered = true;
+		}
+	}
+	return isTriggered;
+	//end of body
 }
 
 void TransitionActivationImpl::setSourceActivation(std::shared_ptr<PSSM::Semantics::StateMachines::VertexActivation>  _)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+//	this.vertexSourceActivation = vertexSourceActivation;
+	this->m_sourceVertexActivation = _;
+	//end of body
 }
 
 
 
 void TransitionActivationImpl::setTargetActivation(std::shared_ptr<PSSM::Semantics::StateMachines::VertexActivation>  _)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+//	this.vertexTargetActivation = vertexTargetActivation;
+	this->m_targetVertexActivation = _;
+	//end of body
 }
 
 void TransitionActivationImpl::tryExecuteEffect(std::shared_ptr<fUML::EventOccurrence>  eventOccurrence)
 {
-	std::cout << __PRETTY_FUNCTION__  << std::endl;
-	throw "UnsupportedOperationException";
+	//ADD_COUNT(__PRETTY_FUNCTION__)
+	//generated from body annotation
+	// Execute the effect owned by the transition (if any). If there
+// is no effect but the transition redefines another transition, then
+// the effect of this transition is executed instead. This rule
+// applies recursively.
+//Transition transition = (Transition) this.getNode();
+//Behavior effect = transition.getEffect();
+//while(effect == null && transition.getRedefinedTransition() != null){
+//	transition = transition.getRedefinedTransition();
+//	effect = transition.getEffect();
+//}
+//if(effect != null){
+//	Execution execution = this.getExecutionFor(transition.getEffect(), eventOccurrence);
+//	if(execution!=null){
+//		execution.execute();
+//	}
+//}
+	std::shared_ptr<uml::Transition> transition = std::dynamic_pointer_cast<uml::Transition>(this->getNode());
+	std::shared_ptr<uml::Behavior> effect = transition->getEffect();
+
+	while(effect == nullptr && transition->getRedefinedTransition() != nullptr) {
+		transition = transition->getRedefinedTransition();
+		effect = transition->getEffect();
+	}
+
+	if(effect != nullptr) {
+		std::shared_ptr<fUML::Execution> execution = this->getExecutionFor(transition->getEffect(), eventOccurrence);
+		if(execution != nullptr) {
+			execution->execute();
+		}
+	}
+	//end of body
 }
 
 //*********************************
